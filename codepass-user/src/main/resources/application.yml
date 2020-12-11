@@ -1,7 +1,12 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/codepass?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
-    username: test
-    password: test
+    url: jdbc:mysql://katty.top:3306/codepass?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: codepass
+    password: codepass
   data:
-    mongodb: null
+    mongodb:
+      host: katty.top
+      port: 27017
+      database: codepass
+      username: codepass
+      password: codepass
