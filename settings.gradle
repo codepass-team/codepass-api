@@ -1,1 +1,3 @@
 rootProject.name = 'codepass'
+include 'codepass-common'
+include 'codepass-user'
