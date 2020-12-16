@@ -1,6 +1,7 @@
 package com.codepass.user.controller;
 
 import com.codepass.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/follow/{user_id}")
+    @Operation(description = "关注用户")
     public ResponseEntity<?> follow_user(@PathParam("user_id") int userId) {
         userService.followUser(userId, userId);
         return ResponseEntity.ok("Ok");

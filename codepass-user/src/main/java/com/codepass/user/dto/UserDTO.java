@@ -3,6 +3,7 @@ package com.codepass.user.dto;
 public class UserDTO {
     private String email;
     private String password;
+    private String nickname;
 
     public String getEmail() {
         return email;
@@ -18,5 +19,13 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
