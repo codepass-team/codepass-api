@@ -1,17 +1,16 @@
-package com.codepass.user.entity;
+package com.codepass.user.dao.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Question", schema = "codepass", catalog = "")
-public class QuestionEntity {
+@Table(name = "Answer", schema = "codepass", catalog = "")
+public class AnswerEntity {
     private int id;
-    private String title;
+    private Integer answerer;
     private String content;
-    private Integer questioner;
-    private Timestamp raiseTime;
+    private Timestamp answerTime;
     private String dockerId;
     private Integer likeCount;
 
@@ -26,13 +25,13 @@ public class QuestionEntity {
     }
 
     @Basic
-    @Column(name = "title")
-    public String getTitle() {
-        return title;
+    @Column(name = "answerer")
+    public Integer getAnswerer() {
+        return answerer;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setAnswerer(Integer answerer) {
+        this.answerer = answerer;
     }
 
     @Basic
@@ -46,23 +45,13 @@ public class QuestionEntity {
     }
 
     @Basic
-    @Column(name = "questioner")
-    public Integer getQuestioner() {
-        return questioner;
+    @Column(name = "answerTime")
+    public Timestamp getAnswerTime() {
+        return answerTime;
     }
 
-    public void setQuestioner(Integer questioner) {
-        this.questioner = questioner;
-    }
-
-    @Basic
-    @Column(name = "raiseTime")
-    public Timestamp getRaiseTime() {
-        return raiseTime;
-    }
-
-    public void setRaiseTime(Timestamp raiseTime) {
-        this.raiseTime = raiseTime;
+    public void setAnswerTime(Timestamp answerTime) {
+        this.answerTime = answerTime;
     }
 
     @Basic
@@ -89,12 +78,12 @@ public class QuestionEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        QuestionEntity that = (QuestionEntity) o;
-        return id == that.id && Objects.equals(title, that.title) && Objects.equals(content, that.content) && Objects.equals(questioner, that.questioner) && Objects.equals(raiseTime, that.raiseTime) && Objects.equals(dockerId, that.dockerId) && Objects.equals(likeCount, that.likeCount);
+        AnswerEntity that = (AnswerEntity) o;
+        return id == that.id && Objects.equals(answerer, that.answerer) && Objects.equals(content, that.content) && Objects.equals(answerTime, that.answerTime) && Objects.equals(dockerId, that.dockerId) && Objects.equals(likeCount, that.likeCount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, content, questioner, raiseTime, dockerId, likeCount);
+        return Objects.hash(id, answerer, content, answerTime, dockerId, likeCount);
     }
 }

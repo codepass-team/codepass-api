@@ -1,11 +1,11 @@
-package com.codepass.user.entity;
+package com.codepass.user.dao.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class LikeAnswerEntityPK implements Serializable {
+public class CollectAnswerEntityPK implements Serializable {
     private int user;
     private int answerId;
 
@@ -33,7 +33,7 @@ public class LikeAnswerEntityPK implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        LikeAnswerEntityPK that = (LikeAnswerEntityPK) o;
+        CollectAnswerEntityPK that = (CollectAnswerEntityPK) o;
         return user == that.user && answerId == that.answerId;
     }
 

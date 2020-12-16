@@ -4,6 +4,8 @@ import com.codepass.user.config.JwtTokenUtil;
 import com.codepass.user.dto.JwtResponse;
 import com.codepass.user.dto.UserDTO;
 import com.codepass.user.service.JwtUserDetailsService;
+import com.codepass.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,7 +31,12 @@ public class JwtAuthenticationController {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
+    @Autowired
+    private UserService userService;
+
+
     @PostMapping("/login")
+    @Operation(description = "用户登录接口")
     public ResponseEntity<?> login(@RequestBody UserDTO user) throws Exception {
 
         authenticate(user.getEmail(), user.getPassword());
@@ -42,8 +49,9 @@ public class JwtAuthenticationController {
     }
 
     @PostMapping("/register")
+    @Operation(description = "用户注册接口")
     public ResponseEntity<?> register(@RequestBody UserDTO user) throws Exception {
-        return ResponseEntity.ok(userDetailsService.save(user));
+        return ResponseEntity.ok(userService.createNewUser(user));
     }
 
     private void authenticate(String username, String password) throws Exception {

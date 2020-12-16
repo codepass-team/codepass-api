@@ -72,6 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/hello1").permitAll() // for test
                 .antMatchers("/api/hello2").authenticated() // for test
                 .antMatchers("/api/login", "/api/register").permitAll()
+                .antMatchers("/swagger-ui.html", "/swagger-ui/**").permitAll() // swagger doc
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
                 .and().logout().logoutUrl("/api/logout").permitAll()

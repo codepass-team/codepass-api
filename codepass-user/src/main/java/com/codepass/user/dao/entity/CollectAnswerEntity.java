@@ -1,4 +1,4 @@
-package com.codepass.user.entity;
+package com.codepass.user.dao.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

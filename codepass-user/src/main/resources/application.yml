@@ -14,6 +14,7 @@ spring:
     url: jdbc:mysql://katty.top:3306/codepass?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: codepass
     password: codepass
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       auto-commit: false
       connection-timeout: 3000

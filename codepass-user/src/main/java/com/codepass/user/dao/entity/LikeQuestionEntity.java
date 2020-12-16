@@ -1,16 +1,16 @@
-package com.codepass.user.entity;
+package com.codepass.user.dao.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "FollowQuestion", schema = "codepass", catalog = "")
-@IdClass(FollowQuestionEntityPK.class)
-public class FollowQuestionEntity {
+@Table(name = "LikeQuestion", schema = "codepass", catalog = "")
+@IdClass(LikeQuestionEntityPK.class)
+public class LikeQuestionEntity {
     private int user;
     private int questionId;
-    private Timestamp followTime;
+    private Timestamp likeTime;
 
     @Id
     @Column(name = "user")
@@ -33,25 +33,25 @@ public class FollowQuestionEntity {
     }
 
     @Basic
-    @Column(name = "followTime")
-    public Timestamp getFollowTime() {
-        return followTime;
+    @Column(name = "likeTime")
+    public Timestamp getLikeTime() {
+        return likeTime;
     }
 
-    public void setFollowTime(Timestamp followTime) {
-        this.followTime = followTime;
+    public void setLikeTime(Timestamp likeTime) {
+        this.likeTime = likeTime;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FollowQuestionEntity that = (FollowQuestionEntity) o;
-        return user == that.user && questionId == that.questionId && Objects.equals(followTime, that.followTime);
+        LikeQuestionEntity that = (LikeQuestionEntity) o;
+        return user == that.user && questionId == that.questionId && Objects.equals(likeTime, that.likeTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user, questionId, followTime);
+        return Objects.hash(user, questionId, likeTime);
     }
 }
