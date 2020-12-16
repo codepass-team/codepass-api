@@ -1,16 +1,16 @@
-package com.codepass.persistent;
+package com.codepass.user.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "CollectAnswer", schema = "codepass", catalog = "")
-@IdClass(CollectAnswerEntityPK.class)
-public class CollectAnswerEntity {
+@Table(name = "LikeAnswer", schema = "codepass", catalog = "")
+@IdClass(LikeAnswerEntityPK.class)
+public class LikeAnswerEntity {
     private int user;
     private int answerId;
-    private Timestamp collectTime;
+    private Timestamp likeTime;
 
     @Id
     @Column(name = "user")
@@ -33,25 +33,25 @@ public class CollectAnswerEntity {
     }
 
     @Basic
-    @Column(name = "collectTime")
-    public Timestamp getCollectTime() {
-        return collectTime;
+    @Column(name = "likeTime")
+    public Timestamp getLikeTime() {
+        return likeTime;
     }
 
-    public void setCollectTime(Timestamp collectTime) {
-        this.collectTime = collectTime;
+    public void setLikeTime(Timestamp likeTime) {
+        this.likeTime = likeTime;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CollectAnswerEntity that = (CollectAnswerEntity) o;
-        return user == that.user && answerId == that.answerId && Objects.equals(collectTime, that.collectTime);
+        LikeAnswerEntity that = (LikeAnswerEntity) o;
+        return user == that.user && answerId == that.answerId && Objects.equals(likeTime, that.likeTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user, answerId, collectTime);
+        return Objects.hash(user, answerId, likeTime);
     }
 }

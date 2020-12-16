@@ -1,13 +1,13 @@
-package com.codepass.persistent;
+package com.codepass.user.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class CollectAnswerEntityPK implements Serializable {
+public class FollowQuestionEntityPK implements Serializable {
     private int user;
-    private int answerId;
+    private int questionId;
 
     @Column(name = "user")
     @Id
@@ -19,26 +19,26 @@ public class CollectAnswerEntityPK implements Serializable {
         this.user = user;
     }
 
-    @Column(name = "answerID")
+    @Column(name = "questionID")
     @Id
-    public int getAnswerId() {
-        return answerId;
+    public int getQuestionId() {
+        return questionId;
     }
 
-    public void setAnswerId(int answerId) {
-        this.answerId = answerId;
+    public void setQuestionId(int questionId) {
+        this.questionId = questionId;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CollectAnswerEntityPK that = (CollectAnswerEntityPK) o;
-        return user == that.user && answerId == that.answerId;
+        FollowQuestionEntityPK that = (FollowQuestionEntityPK) o;
+        return user == that.user && questionId == that.questionId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user, answerId);
+        return Objects.hash(user, questionId);
     }
 }

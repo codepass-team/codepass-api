@@ -1,4 +1,4 @@
-package com.codepass.persistent;
+package com.codepass.user.entity;
 
 import javax.persistence.*;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package com.codepass.persistent;
+package com.codepass.user.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Id;

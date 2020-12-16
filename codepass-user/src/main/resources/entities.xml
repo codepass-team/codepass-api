@@ -5,16 +5,16 @@
              version="3.0">
   <persistence-unit name="default">
 
-    <class>com.codepass.persistent.AnswerEntity</class>
-    <class>com.codepass.persistent.AnswerCommentEntity</class>
-    <class>com.codepass.persistent.CollectAnswerEntity</class>
-    <class>com.codepass.persistent.FollowQuestionEntity</class>
-    <class>com.codepass.persistent.FollowUserEntity</class>
-    <class>com.codepass.persistent.LikeAnswerEntity</class>
-    <class>com.codepass.persistent.LikeQuestionEntity</class>
-    <class>com.codepass.persistent.QuestionEntity</class>
-    <class>com.codepass.persistent.QuestionCommentEntity</class>
-    <class>com.codepass.persistent.UserEntity</class>
+    <class>com.codepass.user.entity.AnswerEntity</class>
+    <class>com.codepass.user.entity.AnswerCommentEntity</class>
+    <class>com.codepass.user.entity.CollectAnswerEntity</class>
+    <class>com.codepass.user.entity.FollowQuestionEntity</class>
+    <class>com.codepass.user.entity.FollowUserEntity</class>
+    <class>com.codepass.user.entity.LikeAnswerEntity</class>
+    <class>com.codepass.user.entity.LikeQuestionEntity</class>
+    <class>com.codepass.user.entity.QuestionEntity</class>
+    <class>com.codepass.user.entity.QuestionCommentEntity</class>
+    <class>com.codepass.user.entity.UserEntity</class>
     <properties>
       <property name="hibernate.connection.url" value="jdbc:mysql://katty.top:3306/codepass"/>
       <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>

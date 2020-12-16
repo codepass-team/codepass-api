@@ -1,14 +1,18 @@
 package com.codepass.user.service;
 
+import com.codepass.user.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityManager;
+
+@Component
+@Transactional
 public class UserService {
     @Autowired
-    HibernateTemplate hibernateTemplate;
+    EntityManager entityManager;
 
-    public boolean login(String email, String password){
 
-        return true;
-    }
 }
