@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+  <persistence-unit name="default">
+
+    <class>com.codepass.persistent.AnswerEntity</class>
+    <class>com.codepass.persistent.AnswerCommentEntity</class>
+    <class>com.codepass.persistent.CollectAnswerEntity</class>
+    <class>com.codepass.persistent.FollowQuestionEntity</class>
+    <class>com.codepass.persistent.FollowUserEntity</class>
+    <class>com.codepass.persistent.LikeAnswerEntity</class>
+    <class>com.codepass.persistent.LikeQuestionEntity</class>
+    <class>com.codepass.persistent.QuestionEntity</class>
+    <class>com.codepass.persistent.QuestionCommentEntity</class>
+    <class>com.codepass.persistent.UserEntity</class>
+    <properties>
+      <property name="hibernate.connection.url" value="jdbc:mysql://katty.top:3306/codepass"/>
+      <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+    </properties>
+  </persistence-unit>
+    <persistence-unit name="persistenceUnit"/>
+</persistence>
