@@ -26,7 +26,7 @@ jobs:
           fingerprints:
             - "3a:5b:38:f3:e9:d0:47:89:d0:09:86:63:e0:fc:74:24"
 
-      - run: echo "katty.top ecdsa-sha2-nistp256\n${REMOTE_HOSTKEY}" > ~/.ssh/known_hosts
+      - run: echo "katty.top ecdsa-sha2-nistp256\n${REMOTE_HOSTKEY}" >> ~/.ssh/known_hosts
 
       - checkout
 
@@ -53,4 +53,5 @@ jobs:
       - deploy:
           name: deploy
           command: |
-            scp build/libs/* ${SSH_USER}@${SSH_HOST}:~/codepass/
+            scp build/libs/* ${SSH_USER}@${SSH_HOST}:~/codepass/build/
+            ssh ${SSH_USER}@${SSH_HOST} ~/codepass/reload.sh
