@@ -3,16 +3,15 @@ package com.codepass.user.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * JWT 工具类
@@ -20,31 +19,22 @@ import java.util.Map;
 @Component
 public class JwtTokenUtil implements Serializable {
 
-    private static final String CLAIM_KEY_USERNAME = "__USERNAME__";
-
-    /**
-     * 5天(毫秒)
-     */
-    @Value("${jwt.expire}")
-    private long EXPIRATION_TIME;
-
     /**
      * JWT密码
      */
-    @Value("${jwt.secret}")
-    private String SECRET;
+    private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     /**
      * 签发JWT
      */
     public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>(16);
-        claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
+        long EXPIRATION_TIME = 1000L * 3600 * 24 * 30;
 
-        return Jwts.builder()
-                .setClaims(claims)
+        return Jwts.builder().setSubject("codepass-project")
+                .claim("username", userDetails.getUsername())
+                .setIssuedAt(new Date())
                 .setExpiration(new Date(Instant.now().toEpochMilli() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, SECRET)
+                .signWith(secretKey, SignatureAlgorithm.HS512)
                 .compact();
     }
 
@@ -70,7 +60,7 @@ public class JwtTokenUtil implements Serializable {
      * 根据token获取username
      */
     public String getUsernameFromToken(String token) {
-        return getClaimsFromToken(token).getSubject();
+        return getClaimsFromToken(token).get("username").toString();
     }
 
     /**
@@ -84,8 +74,7 @@ public class JwtTokenUtil implements Serializable {
      * 解析JWT
      */
     private Claims getClaimsFromToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET)
+        return Jwts.parserBuilder().setSigningKey(secretKey).build()
                 .parseClaimsJws(token)
                 .getBody();
     }

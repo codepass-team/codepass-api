@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "FollowUser", schema = "codepass", catalog = "")
+@Table(name = "follow_user", schema = "codepass", catalog = "")
 @IdClass(FollowUserEntityPK.class)
 public class FollowUserEntity {
     private int followUser;

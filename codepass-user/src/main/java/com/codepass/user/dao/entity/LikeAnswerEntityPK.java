@@ -8,6 +8,7 @@ import java.util.Objects;
 public class LikeAnswerEntityPK implements Serializable {
     private int user;
     private int answerId;
+    private int userId;
 
     @Column(name = "user")
     @Id
@@ -19,7 +20,7 @@ public class LikeAnswerEntityPK implements Serializable {
         this.user = user;
     }
 
-    @Column(name = "answerID")
+    @Column(name = "answer_id")
     @Id
     public int getAnswerId() {
         return answerId;
@@ -40,5 +41,15 @@ public class LikeAnswerEntityPK implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(user, answerId);
+    }
+
+    @Column(name = "user_id")
+    @Id
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

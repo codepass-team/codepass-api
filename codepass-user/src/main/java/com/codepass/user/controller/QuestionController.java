@@ -8,18 +8,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/question")
 public class QuestionController {
     @Autowired
     QuestionService questionService;
 
-    @PostMapping("/question/create")
+    @PostMapping("/create")
     public ResponseEntity<?> createQuestion(@RequestBody QuestionDTO questionDTO) {
         QuestionEntity questionEntity = questionService.createQuestion(questionDTO.getTitle(), questionDTO.getContent());
         return ResponseEntity.ok("Ok");
     }
 
-    @PostMapping("/question/delete")
+    @PostMapping("/delete")
     public ResponseEntity<?> deleteQuestion(@RequestParam Integer questionId) {
         questionService.deleteQuestion(questionId);
         return ResponseEntity.ok("Ok");

@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Answer_Comment", schema = "codepass", catalog = "")
+@Table(name = "answer_comment", schema = "codepass", catalog = "")
 public class AnswerCommentEntity {
     private int id;
     private Integer answerId;
@@ -14,7 +14,7 @@ public class AnswerCommentEntity {
     private Timestamp commentTime;
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -24,7 +24,7 @@ public class AnswerCommentEntity {
     }
 
     @Basic
-    @Column(name = "answerID")
+    @Column(name = "answer_id")
     public Integer getAnswerId() {
         return answerId;
     }
@@ -54,7 +54,7 @@ public class AnswerCommentEntity {
     }
 
     @Basic
-    @Column(name = "commentTime")
+    @Column(name = "comment_time")
     public Timestamp getCommentTime() {
         return commentTime;
     }

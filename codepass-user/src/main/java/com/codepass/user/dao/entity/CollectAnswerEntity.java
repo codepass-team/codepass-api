@@ -5,12 +5,13 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "CollectAnswer", schema = "codepass", catalog = "")
+@Table(name = "collect_answer", schema = "codepass", catalog = "")
 @IdClass(CollectAnswerEntityPK.class)
 public class CollectAnswerEntity {
     private int user;
     private int answerId;
     private Timestamp collectTime;
+    private int userId;
 
     @Id
     @Column(name = "user")
@@ -23,7 +24,7 @@ public class CollectAnswerEntity {
     }
 
     @Id
-    @Column(name = "answerID")
+    @Column(name = "answer_id")
     public int getAnswerId() {
         return answerId;
     }
@@ -33,7 +34,7 @@ public class CollectAnswerEntity {
     }
 
     @Basic
-    @Column(name = "collectTime")
+    @Column(name = "collect_time")
     public Timestamp getCollectTime() {
         return collectTime;
     }
@@ -53,5 +54,15 @@ public class CollectAnswerEntity {
     @Override
     public int hashCode() {
         return Objects.hash(user, answerId, collectTime);
+    }
+
+    @Id
+    @Column(name = "user_id")
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Question", schema = "codepass", catalog = "")
+@Table(name = "question", schema = "codepass", catalog = "")
 public class QuestionEntity {
     private int id;
     private String title;
@@ -16,7 +16,7 @@ public class QuestionEntity {
     private Integer likeCount;
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -56,7 +56,7 @@ public class QuestionEntity {
     }
 
     @Basic
-    @Column(name = "raiseTime")
+    @Column(name = "raise_time")
     public Timestamp getRaiseTime() {
         return raiseTime;
     }
@@ -66,7 +66,7 @@ public class QuestionEntity {
     }
 
     @Basic
-    @Column(name = "dockerID")
+    @Column(name = "docker_id")
     public String getDockerId() {
         return dockerId;
     }
@@ -76,7 +76,7 @@ public class QuestionEntity {
     }
 
     @Basic
-    @Column(name = "likeCount")
+    @Column(name = "like_count")
     public Integer getLikeCount() {
         return likeCount;
     }

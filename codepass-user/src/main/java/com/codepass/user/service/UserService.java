@@ -4,7 +4,7 @@ import com.codepass.user.dao.FollowUserRepository;
 import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.FollowUserEntity;
 import com.codepass.user.dao.entity.UserEntity;
-import com.codepass.user.dto.UserDTO;
+import com.codepass.user.dto.UserRegisterParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -22,13 +22,13 @@ public class UserService {
     @Autowired
     private PasswordEncoder bcryptEncoder;
 
-    public UserEntity createNewUser(UserDTO user) {
+    public UserEntity createNewUser(UserRegisterParam user) {
         UserEntity newUser = new UserEntity();
         newUser.setEmail(user.getEmail());
-//        newUser.setPassword(user.getPassword());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-        newUser.setNickname(user.getNickname());
-        return userRepository.save(newUser);
+        newUser.setFollowerCount(0);
+        userRepository.save(newUser);
+        return newUser;
     }
 
     public FollowUserEntity followUser(int followerId, int beFollowerId) {
@@ -38,6 +38,7 @@ public class UserService {
         FollowUserEntity followUserEntity = new FollowUserEntity();
         followUserEntity.setFollowUser(followerId);
         followUserEntity.setBeFollowedUser(beFollowerId);
-        return followUserRepository.save(followUserEntity);
+        followUserRepository.save(followUserEntity);
+        return followUserEntity;
     }
 }

@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "User", schema = "codepass", catalog = "")
+@Table(name = "user", schema = "codepass", catalog = "")
 public class UserEntity {
     private int id;
     private String email;
@@ -14,6 +14,7 @@ public class UserEntity {
     private String job;
     private String tech;
     private Integer age;
+    private Integer followerCount;
 
     @Id
     @Column(name = "id")
@@ -95,16 +96,26 @@ public class UserEntity {
         this.age = age;
     }
 
+    @Basic
+    @Column(name = "follower_count")
+    public Integer getFollowerCount() {
+        return followerCount;
+    }
+
+    public void setFollowerCount(Integer followerCount) {
+        this.followerCount = followerCount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserEntity that = (UserEntity) o;
-        return id == that.id && Objects.equals(email, that.email) && Objects.equals(password, that.password) && Objects.equals(nickname, that.nickname) && Objects.equals(gender, that.gender) && Objects.equals(job, that.job) && Objects.equals(tech, that.tech) && Objects.equals(age, that.age);
+        return id == that.id && Objects.equals(email, that.email) && Objects.equals(password, that.password) && Objects.equals(nickname, that.nickname) && Objects.equals(gender, that.gender) && Objects.equals(job, that.job) && Objects.equals(tech, that.tech) && Objects.equals(age, that.age) && Objects.equals(followerCount, that.followerCount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password, nickname, gender, job, tech, age);
+        return Objects.hash(id, email, password, nickname, gender, job, tech, age, followerCount);
     }
 }

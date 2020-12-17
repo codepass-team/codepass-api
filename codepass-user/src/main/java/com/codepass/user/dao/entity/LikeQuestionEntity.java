@@ -5,12 +5,13 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "LikeQuestion", schema = "codepass", catalog = "")
+@Table(name = "like_question", schema = "codepass", catalog = "")
 @IdClass(LikeQuestionEntityPK.class)
 public class LikeQuestionEntity {
     private int user;
     private int questionId;
     private Timestamp likeTime;
+    private int userId;
 
     @Id
     @Column(name = "user")
@@ -23,7 +24,7 @@ public class LikeQuestionEntity {
     }
 
     @Id
-    @Column(name = "questionID")
+    @Column(name = "question_id")
     public int getQuestionId() {
         return questionId;
     }
@@ -33,7 +34,7 @@ public class LikeQuestionEntity {
     }
 
     @Basic
-    @Column(name = "likeTime")
+    @Column(name = "like_time")
     public Timestamp getLikeTime() {
         return likeTime;
     }
@@ -53,5 +54,15 @@ public class LikeQuestionEntity {
     @Override
     public int hashCode() {
         return Objects.hash(user, questionId, likeTime);
+    }
+
+    @Id
+    @Column(name = "user_id")
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }
