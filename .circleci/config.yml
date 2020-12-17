@@ -53,5 +53,5 @@ jobs:
       - deploy:
           name: deploy
           command: |
-            scp build/libs/* ${SSH_USER}@${SSH_HOST}:~/codepass/build/
+            scp codepass-user/build/libs/* ${SSH_USER}@${SSH_HOST}:~/codepass/build/
             ssh ${SSH_USER}@${SSH_HOST} ~/codepass/reload.sh
