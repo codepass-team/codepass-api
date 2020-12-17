@@ -14,6 +14,7 @@ public class QuestionEntity {
     private Timestamp raiseTime;
     private String dockerId;
     private Integer likeCount;
+    private Integer status;
 
     @Id
     @Column(name = "id")
@@ -96,5 +97,15 @@ public class QuestionEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id, title, content, questioner, raiseTime, dockerId, likeCount);
+    }
+
+    @Basic
+    @Column(name = "status")
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

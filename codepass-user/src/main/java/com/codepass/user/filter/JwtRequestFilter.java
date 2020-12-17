@@ -1,5 +1,6 @@
-package com.codepass.user.config;
+package com.codepass.user.filter;
 
+import com.codepass.user.config.JwtTokenUtil;
 import com.codepass.user.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

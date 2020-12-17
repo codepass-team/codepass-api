@@ -31,7 +31,7 @@ public class UserService {
         return newUser;
     }
 
-    public FollowUserEntity followUser(int followerId, int beFollowerId) {
+    public void followUser(int followerId, int beFollowerId) {
         if (followerId == beFollowerId) {
             throw new RuntimeException("Cannot follow self");
         }
@@ -39,6 +39,12 @@ public class UserService {
         followUserEntity.setFollowUser(followerId);
         followUserEntity.setBeFollowedUser(beFollowerId);
         followUserRepository.save(followUserEntity);
-        return followUserEntity;
+    }
+
+    public void notFollowUser(int followerId, int beFollowerId) {
+        FollowUserEntity followUserEntity = new FollowUserEntity();
+        followUserEntity.setFollowUser(followerId);
+        followUserEntity.setBeFollowedUser(beFollowerId);
+        followUserRepository.delete(followUserEntity);
     }
 }

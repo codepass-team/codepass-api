@@ -10,11 +10,10 @@ public class QuestionService {
     @Autowired
     QuestionRepository questionRepository;
 
-    public QuestionEntity createQuestion(String title, String content) {
+    public QuestionEntity createQuestion(int questionerId, String title) {
         QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setTitle(title);
-        questionEntity.setContent(content);
-//        questionEntity.setQuestioner();
+        questionEntity.setQuestioner(questionerId);
         return questionRepository.save(questionEntity);
     }
 

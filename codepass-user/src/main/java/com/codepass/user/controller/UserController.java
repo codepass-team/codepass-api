@@ -10,16 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.websocket.server.PathParam;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
-    public static final String KEY_USER = "__USER__";
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -29,12 +24,21 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
-    @PostMapping("/follow/{user_id}")
+    @PostMapping("/follow/{userId}")
     @Operation(description = "关注用户")
-    public ResponseEntity<?> follow_user(@PathParam("user_id") int userId) {
+    public ResponseEntity<?> followUser(@PathVariable int userId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
         userService.followUser(userEntity.getId(), userId);
+        return ResponseEntity.ok("Ok");
+    }
+
+    @DeleteMapping("/follow/{userId}")
+    @Operation(description = "取消关注用户")
+    public ResponseEntity<?> notFollowUser(@PathVariable int userId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+        userService.notFollowUser(userEntity.getId(), userId);
         return ResponseEntity.ok("Ok");
     }
 }

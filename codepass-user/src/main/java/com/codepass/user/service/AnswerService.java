@@ -25,7 +25,6 @@ public class AnswerService {
 
     public AnswerEntity createAnswer(int userId, int questionId, String content) {
         AnswerEntity answerEntity = new AnswerEntity();
-        answerEntity.setContent(content);
         String dockerId = questionRepository.findById(questionId).get().getDockerId();
         String newDockerId = dockerService.cloneDocker(dockerId);;
         answerEntity.setAnswerer(userId);
@@ -41,5 +40,14 @@ public class AnswerService {
         likeAnswerEntity.setLikeTime(new Timestamp(System.currentTimeMillis()));
         likeAnswerRepository.save(likeAnswerEntity);
         answerRepository.updateLikeBy(answerId, 1);
+    }
+
+    public AnswerEntity updateAnswer(int answerId, String content) {
+        AnswerEntity answerEntity = new AnswerEntity();
+        answerEntity.setContent(content);
+        answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));
+
+
+        return null;
     }
 }

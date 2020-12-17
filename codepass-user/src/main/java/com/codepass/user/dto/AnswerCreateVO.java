@@ -5,7 +5,7 @@ public class AnswerCreateVO {
     private String dockerId;
     private int answerId;
 
-    public AnswerCreateVO(String status, String dockerId, int answerId) {
+    public AnswerCreateVO(String status, int answerId, String dockerId) {
         this.status = status;
         this.dockerId = dockerId;
         this.answerId = answerId;
