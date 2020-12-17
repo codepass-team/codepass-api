@@ -37,7 +37,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: ./gradlew dependencies
+      - run: gradle dependencies
 
       - save_cache:
           paths:
@@ -48,7 +48,7 @@ jobs:
       # - run: gradle test
 
       # build
-      - run: ./gradlew bootJar
+      - run: gradle bootJar
 
       - deploy:
           name: deploy
