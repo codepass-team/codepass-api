@@ -26,8 +26,7 @@ jobs:
           fingerprints:
             - "3a:5b:38:f3:e9:d0:47:89:d0:09:86:63:e0:fc:74:24"
 
-      - run: |
-        echo "${SSH_HOST} ecdsa-sha2-nistp256\n${REMOTE_HOSTKEY}" >> ~/.ssh/known_hosts
+      - run: echo ${REMOTE_HOSTKEY} >> ~/.ssh/known_hosts
 
       - checkout
 
