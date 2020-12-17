@@ -30,8 +30,11 @@ spring:
       database: codepass
       username: codepass
       password: codepass
-  security:
-    user:
-      name: admin
-      password: admin
-      roles: [ 'admin' ]
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /oa/v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /oa/swagger-ui.html

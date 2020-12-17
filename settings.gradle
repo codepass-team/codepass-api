@@ -1,6 +1,6 @@
 rootProject.name = 'codepass'
 
-include 'codepass-common'
+//include 'codepass-common'
+//include 'codepass-persistent'
 include 'codepass-user'
-include 'codepass-persistent'
 

@@ -2,8 +2,10 @@ plugins {
     id 'org.springframework.boot' version '2.4.0'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java'
+    id 'application'
 }
 
+mainClassName = 'com.codepass.user.CodepassApplication'
 
 configurations {
     compileOnly {
@@ -12,8 +14,6 @@ configurations {
 }
 
 dependencies {
-    compile project(":codepass-common")
-    compile project(":codepass-persistent")
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-mail'

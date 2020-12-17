@@ -4,7 +4,6 @@ import com.codepass.user.dao.FollowUserRepository;
 import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.FollowUserEntity;
 import com.codepass.user.dao.entity.UserEntity;
-import com.codepass.user.dto.UserRegisterParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -22,10 +21,10 @@ public class UserService {
     @Autowired
     private PasswordEncoder bcryptEncoder;
 
-    public UserEntity createNewUser(UserRegisterParam user) {
+    public UserEntity createNewUser(String email, String password) {
         UserEntity newUser = new UserEntity();
-        newUser.setEmail(user.getEmail());
-        newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
+        newUser.setEmail(email);
+        newUser.setPassword(bcryptEncoder.encode(password));
         newUser.setFollowerCount(0);
         userRepository.save(newUser);
         return newUser;
