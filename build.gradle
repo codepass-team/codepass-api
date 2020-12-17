@@ -1,15 +1,18 @@
 allprojects {
     group = 'com.codepass'
     version = '0.0.1'
+
+    repositories {
+        maven {
+            url "http://maven.aliyun.com/nexus/content/groups/public"
+        }
+        mavenLocal()
+        mavenCentral()
+    }
 }
 
 subprojects {
     apply plugin: 'java'
-
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
 
     dependencies {
         testCompile "junit:junit:4.8.2"
