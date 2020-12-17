@@ -15,6 +15,6 @@ jobs:
     steps:
     - name: Deploy
       run: |
-        echo ${SSH_HOST_KEY} >> ~/.ssh/authorized_keys
-        echo ${SSH_KNOWN_HOST} >> ~/.ssh/known_hosts
+        echo ${SSH_HOST_KEY} > ~/.ssh/authorized_keys
+        echo ${SSH_KNOWN_HOST} > ~/.ssh/known_hosts
         ssh ${SSH_HOST} ~/codepass/deploy.sh
