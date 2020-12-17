@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/openjdk:15-jdk
+      - image: circleci/openjdk:11-jdk
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -22,6 +22,12 @@ jobs:
       TERM: dumb
 
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "3a:5b:38:f3:e9:d0:47:89:d0:09:86:63:e0:fc:74:24"
+
+      - run: echo "katty.top ecdsa-sha2-nistp256\n${REMOTE_HOSTKEY}" > ~/.ssh/known_hosts
+
       - checkout
 
       # Download and cache dependencies
@@ -40,3 +46,11 @@ jobs:
 
       # run tests!
       # - run: gradle test
+
+      # build
+      - run: gradle bootJar
+
+      - deploy:
+          name: deploy
+          command: |
+            scp build/libs/* ${SSH_USER}@${SSH_HOST}:~/codepass/
