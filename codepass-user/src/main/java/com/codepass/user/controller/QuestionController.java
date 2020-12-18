@@ -1,42 +1,43 @@
 package com.codepass.user.controller;
 
-import com.codepass.user.dao.entity.QuestionEntity;
 import com.codepass.user.dto.QuestionVO;
 import com.codepass.user.service.QuestionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/question")
+@Tag(name = "Question", description = "问题管理相关API")
 public class QuestionController {
     @Autowired
     QuestionService questionService;
 
     @PostMapping("/")
-    @Operation(description = "创建一个新问题, 需要提供问题标题")
+    @Operation(summary = "创建问题", description = "创建一个新问题, 需要提供问题标题")
     public ResponseEntity<?> createQuestion(@RequestBody String title) {
 //        QuestionEntity questionEntity = questionService.createQuestion(title);
         return ResponseEntity.ok("Ok");
     }
 
     @PostMapping("/save/{questionId}")
-    @Operation(description = "临时保存一个问题")
+    @Operation(summary = "临时保存一个问题", description = "临时保存一个问题")
     public ResponseEntity<?> saveQuestion(@PathVariable int questionId, @RequestBody String title) {
 //        questionService.updateQuestion(questionId, title);
         return ResponseEntity.ok("Ok");
     }
 
     @PostMapping("/submit/{questionId}")
-    @Operation(description = "提交一个问题, 提交后不能再次编辑")
+    @Operation(summary = "提交问题", description = "提交一个问题, 提交后不能再次编辑")
     public ResponseEntity<?> submitQuestion(@PathVariable int questionId) {
 //        questionService.updateQuestion(0);
         return ResponseEntity.ok("Ok");
     }
 
     @DeleteMapping("/{questionId}")
-    @Operation(description = "删除一个问题")
+    @Operation(summary = "删除问题", description = "删除一个问题")
     public ResponseEntity<?> deleteQuestion(@RequestParam Integer questionId) {
         questionService.deleteQuestion(questionId);
         return ResponseEntity.ok("Ok");

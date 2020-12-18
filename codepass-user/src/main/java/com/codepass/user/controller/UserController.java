@@ -4,6 +4,7 @@ import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.UserEntity;
 import com.codepass.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "User", description = "用户管理相关API")
 public class UserController {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
@@ -25,7 +27,7 @@ public class UserController {
     UserRepository userRepository;
 
     @PostMapping("/follow/{userId}")
-    @Operation(description = "关注用户")
+    @Operation(summary = "关注用户", description = "关注用户")
     public ResponseEntity<?> followUser(@PathVariable int userId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
@@ -34,7 +36,7 @@ public class UserController {
     }
 
     @DeleteMapping("/follow/{userId}")
-    @Operation(description = "取消关注用户")
+    @Operation(summary = "取消关注用户", description = "取消关注用户")
     public ResponseEntity<?> notFollowUser(@PathVariable int userId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
