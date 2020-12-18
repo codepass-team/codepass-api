@@ -4,6 +4,7 @@ import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.UserEntity;
 import com.codepass.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,20 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
+    @PostMapping("/updateUserData")
+    @Operation(summary = "修改用户资料", description = "修改用户资料")
+    public ResponseEntity<?> updateUserData(@Parameter int userId, @Parameter(description = "用户邮箱") String email) {
+        //先空着
+        return ResponseEntity.ok("Ok");
+    }
+
+    @GetMapping("/getUserData/{userId}")
+    @Operation(summary = "获取用户资料", description = "获取用户资料")
+    public ResponseEntity<?> getUserData(@PathVariable int userId) {
+        //先空着
+        return ResponseEntity.ok("Ok");
+    }
+
     @PostMapping("/follow/{userId}")
     @Operation(summary = "关注用户", description = "关注用户")
     public ResponseEntity<?> followUser(@PathVariable int userId) {
@@ -34,6 +49,7 @@ public class UserController {
         userService.followUser(userEntity.getId(), userId);
         return ResponseEntity.ok("Ok");
     }
+
 
     @DeleteMapping("/follow/{userId}")
     @Operation(summary = "取消关注用户", description = "取消关注用户")
