@@ -21,6 +21,10 @@ public class UserService {
     @Autowired
     private PasswordEncoder bcryptEncoder;
 
+    public UserEntity getUserByNickname(String nickname) {
+        return userRepository.findByNickname(nickname);
+    }
+
     public UserEntity createNewUser(String email, String password) {
         UserEntity newUser = new UserEntity();
         newUser.setEmail(email);
