@@ -1,7 +1,7 @@
 # Spring Boot 配置
 
 server:
-  port: ${APP_PORT:8080}
+  port: ${APP_PORT:8000}
 
 spring:
   application:
@@ -19,10 +19,9 @@ spring:
       maximum-pool-size: 20
       minimum-idle: 1
   jpa:
-    database: mysql
     show-sql: true
     hibernate:
-      use-new-id-generator-mappings: true
+      ddl-auto: update
   data:
     mongodb:
       host: katty.top
