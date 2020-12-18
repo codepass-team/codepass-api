@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -44,8 +41,8 @@ public class JwtAuthenticationController {
     @PostMapping("/login")
     @Operation(summary = "用户登录", description = "用户登录接口")
     @ApiResponse(responseCode = "200", description = "登录成功", content = @Content(schema = @Schema(implementation = String.class, description = "JWT字符串")))
-    public ResponseEntity<?> login(@Parameter(description = "用户邮箱") @RequestBody String email,
-                                   @Parameter(description = "用户密码") @RequestBody String password) throws Exception {
+    public ResponseEntity<?> login(@Parameter(description = "用户邮箱") @RequestParam String email,
+                                   @Parameter(description = "用户密码") @RequestParam String password) throws Exception {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password)
@@ -67,8 +64,8 @@ public class JwtAuthenticationController {
 
     @PostMapping("/register")
     @Operation(summary = "用户注册", description = "用户注册接口")
-    public ResponseEntity<?> register(@Parameter(description = "用户邮箱") @RequestBody String email,
-                                      @Parameter(description = "用户密码") @RequestBody String password) {
+    public ResponseEntity<?> register(@Parameter(description = "用户邮箱") @RequestParam String email,
+                                      @Parameter(description = "用户密码") @RequestParam String password) {
         UserEntity userEntity = userService.createNewUser(email, password);
         return ResponseEntity.ok(userEntity);
     }
