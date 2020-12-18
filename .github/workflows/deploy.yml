@@ -13,8 +13,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy
-      run: |
-        echo ${SSH_HOST_KEY} > ~/.ssh/authorized_keys
-        echo ${SSH_KNOWN_HOST} > ~/.ssh/known_hosts
-        ssh ${SSH_HOST} ~/codepass/deploy.sh
+    - name: Deploy via ssh
+      uses: garygrossgarten/github-action-ssh@release
+      with:
+        command: ~/codepass/deploy.sh
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
