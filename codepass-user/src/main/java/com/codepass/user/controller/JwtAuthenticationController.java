@@ -2,7 +2,6 @@ package com.codepass.user.controller;
 
 import com.codepass.user.config.JwtTokenUtil;
 import com.codepass.user.dao.entity.UserEntity;
-import com.codepass.user.dto.JwtResponse;
 import com.codepass.user.service.JwtUserDetailsService;
 import com.codepass.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +20,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api")
@@ -60,7 +61,12 @@ public class JwtAuthenticationController {
 
         String token = jwtTokenUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new JwtResponse(token));
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", new HashMap<String, Object>() {{
+                put("token", token);
+            }});
+        }});
     }
 
     @PostMapping("/register")
@@ -68,12 +74,17 @@ public class JwtAuthenticationController {
     public ResponseEntity<?> register(@Parameter(description = "用户邮箱") @RequestParam String email,
                                       @Parameter(description = "用户密码") @RequestParam String password) {
         UserEntity userEntity = userService.createNewUser(email, password);
-        return ResponseEntity.ok(userEntity);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", userEntity);
+        }});
     }
 
     @PostMapping("/logout")
     @Operation(summary = "用户注销", description = "用户注销接口")
     public ResponseEntity<?> logout() {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+        }});
     }
 }
