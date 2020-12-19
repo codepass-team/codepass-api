@@ -9,7 +9,7 @@ public class FollowUserEntityPK implements Serializable {
     private int followUser;
     private int beFollowedUser;
 
-    @Column(name = "followUser")
+    @Column(name = "follow_user")
     @Id
     public int getFollowUser() {
         return followUser;
@@ -19,7 +19,7 @@ public class FollowUserEntityPK implements Serializable {
         this.followUser = followUser;
     }
 
-    @Column(name = "beFollowedUser")
+    @Column(name = "be_followed_user")
     @Id
     public int getBeFollowedUser() {
         return beFollowedUser;

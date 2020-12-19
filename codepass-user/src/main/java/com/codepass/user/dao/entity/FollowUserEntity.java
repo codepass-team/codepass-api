@@ -13,7 +13,7 @@ public class FollowUserEntity {
     private Timestamp followTime;
 
     @Id
-    @Column(name = "followUser")
+    @Column(name = "follow_user")
     public int getFollowUser() {
         return followUser;
     }
@@ -23,7 +23,7 @@ public class FollowUserEntity {
     }
 
     @Id
-    @Column(name = "beFollowedUser")
+    @Column(name = "be_followed_user")
     public int getBeFollowedUser() {
         return beFollowedUser;
     }
@@ -33,7 +33,7 @@ public class FollowUserEntity {
     }
 
     @Basic
-    @Column(name = "followTime")
+    @Column(name = "follow_time")
     public Timestamp getFollowTime() {
         return followTime;
     }
