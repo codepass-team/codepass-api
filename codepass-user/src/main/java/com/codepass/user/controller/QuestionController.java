@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/question")
@@ -83,7 +84,10 @@ public class QuestionController {
     @GetMapping("/listAll")
     @Operation(summary = "获取所有问题", description = "获取所有问题")
     public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
-        return ResponseEntity.ok(questionService.getAllQuestion(page));
+        return ResponseEntity.ok(new HashMap<>(){{
+            put("status", "ok");
+            put("data", questionService.getAllQuestion(page));
+        }});
     }
 
     @PostMapping("/follow/{questionId}")
