@@ -19,8 +19,7 @@ public class QuestionService {
         QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setTitle(title);
         questionEntity.setQuestioner(questionerId);
-        questionRepository.save(questionEntity);
-        questionRepository.refresh(questionEntity);
+        questionRepository.refresh(questionRepository.save(questionEntity));
         return questionEntity;
     }
 

@@ -28,8 +28,7 @@ public class UserService {
         if (job != null) userEntity.setJob(job);
         if (tech != null) userEntity.setTech(tech);
         if (age != null) userEntity.setAge(age);
-        userRepository.save(userEntity);
-        userRepository.refresh(userEntity);
+        userRepository.refresh(userRepository.save(userEntity));
         return userEntity;
     }
 
