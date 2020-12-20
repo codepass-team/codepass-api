@@ -14,6 +14,7 @@ public class AnswerEntity {
     private String dockerId;
     private Integer likeCount;
     private Integer status;
+    private Integer questionId;
 
     @Id
     @Column(name = "id")
@@ -96,5 +97,15 @@ public class AnswerEntity {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    @Basic
+    @Column(name = "question_id")
+    public Integer getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(Integer questionId) {
+        this.questionId = questionId;
     }
 }
