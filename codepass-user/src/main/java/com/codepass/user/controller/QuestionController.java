@@ -6,6 +6,8 @@ import com.codepass.user.dto.PageChunk;
 import com.codepass.user.dto.QuestionPojo;
 import com.codepass.user.service.QuestionService;
 import com.codepass.user.service.UserService;
+import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,8 +19,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.lang.Comparable;
 
 @RestController
 @RequestMapping("/api/question")
@@ -102,6 +107,12 @@ public class QuestionController {
     @Operation(summary = "搜索某个用户提出的问题", description = "获取某用户提出的所有问题")
     public ResponseEntity<?> listQuestion(@Parameter(description = "用户Id") @RequestParam int userId,
                                           @Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
+        List<QuestionEntity> questionEntities = questionService.getUserQuestion(userId, page);
+        Collections.sort(questionEntities, new Comparator<QuestionEntity>(){
+            public int compare(QuestionEntity o1, QuestionEntity o2) {
+                return (int)(o2.getRaiseTime().getTime()-o1.getRaiseTime().getTime());
+            };
+        };
         return ResponseEntity.ok(new HashMap<String,Object>(){{
             put("status", "ok");
             put("data", questionService.getUserQuestion(userId, page));
@@ -119,6 +130,12 @@ public class QuestionController {
             QuestionPojo questionPojo = new QuestionPojo(q, u);
             questionPojos.add(questionPojo);
         }
+        Collections.sort(questionPojos, new Comparator<QuestionPojo>(){//按时间从降序排
+            @Override
+            public int compare(QuestionPojo o1, QuestionPojo o2) {
+                return (int)(o2.getRaiseTime().getTime()-o1.getRaiseTime().getTime());
+            }
+        });
         questions.setContent(questionPojos);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
