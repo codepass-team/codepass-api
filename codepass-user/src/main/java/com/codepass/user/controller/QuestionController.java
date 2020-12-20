@@ -91,7 +91,7 @@ public class QuestionController {
         List<QuestionEntity> questionEntities = questionService.getAllQuestion(page);
         List<QuestionPojo> questionPojos = new ArrayList<>();
         for(QuestionEntity q:questionEntities){
-            UserEntity u = userService.getUserById(q.getQuestioner()));
+            UserEntity u = userService.getUserById(q.getQuestioner());
             QuestionPojo questionPojo = new QuestionPojo(q, u);
             questionPojos.add(questionPojo);
         }
