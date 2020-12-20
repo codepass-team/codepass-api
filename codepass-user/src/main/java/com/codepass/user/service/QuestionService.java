@@ -73,11 +73,11 @@ public class QuestionService {
         return questionRepository.findAll(PageRequest.of(page, 10));
     }
 
-    public void followQuestion(int questionId){
+    public void followQuestion(int questionId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
-        int usid=userEntity.getId();
-        FollowQuestionEntity followQuestionEntity=new FollowQuestionEntity();
+        int usid = userEntity.getId();
+        FollowQuestionEntity followQuestionEntity = new FollowQuestionEntity();
         followQuestionEntity.setQuestionId(questionId);
         followQuestionEntity.setUserId(usid);
         followQuestionEntity.setFollowTime(new Timestamp(System.currentTimeMillis()));

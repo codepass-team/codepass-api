@@ -19,10 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.lang.Comparable;
 
 @RestController
 @RequestMapping("/api/question")
@@ -107,12 +105,8 @@ public class QuestionController {
     public ResponseEntity<?> listQuestion(@Parameter(description = "用户Id") @RequestParam int userId,
                                           @Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
         List<QuestionEntity> questionEntities = questionService.getUserQuestion(userId, page);
-        Collections.sort(questionEntities, new Comparator<QuestionEntity>(){
-            public int compare(QuestionEntity o1, QuestionEntity o2) {
-                return (int)(o2.getRaiseTime().getTime()-o1.getRaiseTime().getTime());
-            };
-        });
-        return ResponseEntity.ok(new HashMap<String,Object>(){{
+        questionEntities.sort((o1, o2) -> (o2.getRaiseTime().compareTo(o1.getRaiseTime())));
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
             put("data", questionEntities);
         }});
@@ -129,12 +123,8 @@ public class QuestionController {
             QuestionPojo questionPojo = new QuestionPojo(q, u);
             questionPojos.add(questionPojo);
         }
-        Collections.sort(questionPojos, new Comparator<QuestionPojo>(){//按时间从降序排
-            @Override
-            public int compare(QuestionPojo o1, QuestionPojo o2) {
-                return (int)(o2.getRaiseTime().getTime()-o1.getRaiseTime().getTime());
-            }
-        });
+        //按时间从降序排
+        questionPojos.sort((o1, o2) -> (o2.getRaiseTime().compareTo(o1.getRaiseTime())));
         questions.setContent(questionPojos);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");

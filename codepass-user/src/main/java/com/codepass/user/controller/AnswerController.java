@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+
 @RestController
 @RequestMapping("/api/answer")
 @Tag(name = "Answer", description = "答案管理相关API")
@@ -44,9 +46,11 @@ public class AnswerController {
     @PostMapping("/submit")
     @Operation(description = "提交回答, 提交后不能再修改")
     @ApiResponse(responseCode = "200", description = "提交成功")
-    public ResponseEntity<?> submitAnswer(@RequestBody int answerId, @RequestBody String content) {
-        int userId = 0;
-        AnswerEntity answerEntity = answerService.updateAnswer(answerId, content);
-        return ResponseEntity.ok("ok");
+    public ResponseEntity<?> submitAnswer(@RequestBody int questionId, @RequestBody String content) {
+        AnswerEntity answerEntity = answerService.updateAnswer(questionId, content);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("answerId", answerEntity.getId());
+        }});
     }
 }
