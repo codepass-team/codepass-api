@@ -21,11 +21,13 @@ public class UserService {
     @Autowired
     private PasswordEncoder bcryptEncoder;
 
-    public UserEntity updateUser(int userId, String nickname, String email, String job) {
+    public UserEntity updateUser(int userId, String nickname, String gender, String job,String tech,Integer age) {
         UserEntity userEntity = userRepository.findById(userId).orElseGet(UserEntity::new);
         if (nickname != null) userEntity.setNickname(nickname);
-        if (email != null) userEntity.setEmail(email);
+        if (gender != null) userEntity.setEmail(gender);
         if (job != null) userEntity.setJob(job);
+        if (tech != null) userEntity.setTech(tech);
+        if (age != null) userEntity.setAge(age);
         userRepository.save(userEntity);
         userRepository.refresh(userEntity);
         return userEntity;
