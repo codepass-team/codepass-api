@@ -109,7 +109,7 @@ public class QuestionController {
     @Operation(summary = "获取所有问题", description = "获取所有问题")
     public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
         Page<QuestionEntity> questionEntities = questionService.getAllQuestion(page);
-        PageChunk<QuestionEntity> questions = new PageChunk<>(questionEntities);
+        PageChunk questions = new PageChunk(questionEntities);
         List<QuestionPojo> questionPojos = new ArrayList<>();
         for (QuestionEntity q : questionEntities) {
             UserEntity u = userService.getUserById(q.getQuestioner());

@@ -19,7 +19,8 @@ public class QuestionService {
         QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setTitle(title);
         questionEntity.setQuestioner(questionerId);
-        return questionRepository.save(questionEntity);
+        questionRepository.save(questionEntity);
+        return questionEntity;
     }
 
     public QuestionEntity changeQuestion(Integer questionId, String title, String content, boolean isFinal) {
