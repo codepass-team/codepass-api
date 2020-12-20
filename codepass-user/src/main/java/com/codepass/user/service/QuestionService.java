@@ -2,8 +2,6 @@ package com.codepass.user.service;
 
 import com.codepass.user.dao.QuestionRepository;
 import com.codepass.user.dao.entity.QuestionEntity;
-import com.codepass.user.dto.QuestionPojo;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -57,7 +55,7 @@ public class QuestionService {
         return questionRepository.findByQuestioner(userId, PageRequest.of(page, 10)).toList();
     }
 
-    public List<QuestionPojo> getAllQuestion(int page) {
-        return questionRepository.findAllWithUsername(PageRequest.of(page, 10));
+    public List<QuestionEntity> getAllQuestion(int page) {
+        return questionRepository.findAll(PageRequest.of(page, 10)).toList();
     }
 }

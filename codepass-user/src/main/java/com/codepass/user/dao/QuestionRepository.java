@@ -16,6 +16,6 @@ public interface QuestionRepository extends JpaRepository<QuestionEntity, Intege
 
     Page<QuestionEntity> findByQuestioner(int questionerId, Pageable pageable);
 
-    @Query("select question.id,title,content,questioner,raise_time,docker_id,like_count,status,email from question,user where question.questioner = user.id")
-    public List<QuestionPojo> findAllWithUsername(Pageable pageable);
+    // @Query("select question.id,title,content,questioner,raise_time,docker_id,like_count,status,email from question,user where question.questioner = user.id")
+    // public List<QuestionPojo> findAllWithUsername(Pageable pageable);
 }

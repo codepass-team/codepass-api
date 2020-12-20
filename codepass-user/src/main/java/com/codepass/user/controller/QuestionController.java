@@ -2,6 +2,7 @@ package com.codepass.user.controller;
 
 import com.codepass.user.dao.entity.QuestionEntity;
 import com.codepass.user.dao.entity.UserEntity;
+import com.codepass.user.dto.QuestionPojo;
 import com.codepass.user.service.QuestionService;
 import com.codepass.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/question")
@@ -35,8 +39,8 @@ public class QuestionController {
     @PostMapping("/save/{questionId}")
     @Operation(summary = "临时保存一个问题", description = "临时保存一个问题")
     public ResponseEntity<?> saveQuestion(@Parameter(description = "问题Id") @PathVariable int questionId,
-                                          @Parameter(description = "新的问题标题") @RequestParam(required = false) String title,
-                                          @Parameter(description = "新的问题描述") @RequestParam(required = false) String content) {
+            @Parameter(description = "新的问题标题") @RequestParam(required = false) String title,
+            @Parameter(description = "新的问题描述") @RequestParam(required = false) String content) {
         questionService.changeQuestion(questionId, title, content, false);
         return ResponseEntity.ok("ok");
     }
@@ -64,7 +68,7 @@ public class QuestionController {
     @GetMapping("/search")
     @Operation(summary = "搜索问题", description = "搜索问题")
     public ResponseEntity<?> searchQuestion(@Parameter(description = "搜索内容") @RequestParam String keywords,
-                                            @Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
+            @Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
         return ResponseEntity.ok(questionService.searchQuestion(keywords, page));
     }
 
@@ -77,17 +81,23 @@ public class QuestionController {
     @GetMapping("/list")
     @Operation(summary = "搜索某个用户提出的问题", description = "获取某用户提出的所有问题")
     public ResponseEntity<?> listQuestion(@Parameter(description = "用户Id") @RequestParam int userId,
-                                          @Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
+            @Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
         return ResponseEntity.ok(questionService.getUserQuestion(userId, page));
     }
 
     @GetMapping("/listAll")
     @Operation(summary = "获取所有问题", description = "获取所有问题")
     public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
-        
+        List<QuestionEntity> questionEntities = questionService.getAllQuestion(page);
+        List<QuestionPojo> questionPojos = new ArrayList<>();
+        for(QuestionEntity q:questionEntities){
+            UserEntity u = userService.getUserById(q.getId());
+            QuestionPojo questionPojo = new QuestionPojo(q, u);
+            questionPojos.add(questionPojo);
+        }
         return ResponseEntity.ok(new HashMap<String,Object>(){{
             put("status", "ok");
-            put("data", questionService.getAllQuestion(page));
+            put("data",questionPojos);
         }});
     }
 
