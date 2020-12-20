@@ -102,7 +102,10 @@ public class QuestionController {
     @Operation(summary = "搜索某个用户提出的问题", description = "获取某用户提出的所有问题")
     public ResponseEntity<?> listQuestion(@Parameter(description = "用户Id") @RequestParam int userId,
                                           @Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
-        return ResponseEntity.ok(questionService.getUserQuestion(userId, page));
+        return ResponseEntity.ok(new HashMap<String,Object>(){{
+            put("status", "ok");
+            put("data", questionService.getUserQuestion(userId, page));
+        }});
     }
 
     @GetMapping("/listAll")
