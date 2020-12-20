@@ -3,21 +3,19 @@ package com.codepass.user.dao.entity;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.Objects;
 
 public class FollowQuestionEntityPK implements Serializable {
-    private int user;
-    private int questionId;
     private int userId;
+    private int questionId;
 
-    @Column(name = "user")
+    @Column(name = "user_id")
     @Id
-    public int getUser() {
-        return user;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser(int user) {
-        this.user = user;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @Column(name = "question_id")
@@ -34,22 +32,19 @@ public class FollowQuestionEntityPK implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         FollowQuestionEntityPK that = (FollowQuestionEntityPK) o;
-        return user == that.user && questionId == that.questionId;
+
+        if (userId != that.userId) return false;
+        if (questionId != that.questionId) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user, questionId);
-    }
-
-    @Column(name = "user_id")
-    @Id
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
+        int result = userId;
+        result = 31 * result + questionId;
+        return result;
     }
 }
