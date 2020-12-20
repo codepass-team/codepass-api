@@ -5,14 +5,14 @@ import org.springframework.data.domain.Page;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PageChunk<T> {
-    private List<? extends T> content = new ArrayList<>();
+public class PageChunk {
+    private List content = new ArrayList();
     private long totalElements;
     private int totalPages;
     private int pageNumber;
     private int numberOfElements;
 
-    public PageChunk(Page<T> page) {
+    public PageChunk(Page page) {
         this.setContent(page.getContent());
         this.setTotalPages(page.getTotalPages());
         this.setTotalElements(page.getTotalElements());
@@ -20,11 +20,11 @@ public class PageChunk<T> {
         this.setNumberOfElements(page.getNumberOfElements());
     }
 
-    public List<? extends T> getContent() {
+    public List getContent() {
         return content;
     }
 
-    public void setContent(List<? extends T> content) {
+    public void setContent(List content) {
         this.content = content;
     }
 
