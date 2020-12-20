@@ -146,6 +146,7 @@ public class QuestionController {
     @PostMapping("/follow/{questionId}")
     @Operation(description = "关注问题, 关注后, 问题有新的回答会收到通知")
     public ResponseEntity<?> follow(@PathVariable int questionId) {
+        questionService.followQuestion(questionId);
         return ResponseEntity.ok("Not implemented");
     }
 }

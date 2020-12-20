@@ -14,16 +14,6 @@ public class FollowQuestionEntity {
     private int userId;
 
     @Id
-    @Column(name = "user")
-    public int getUser() {
-        return user;
-    }
-
-    public void setUser(int user) {
-        this.user = user;
-    }
-
-    @Id
     @Column(name = "question_id")
     public int getQuestionId() {
         return questionId;

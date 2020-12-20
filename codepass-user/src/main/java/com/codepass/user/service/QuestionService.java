@@ -1,10 +1,16 @@
 package com.codepass.user.service;
 
+import com.codepass.user.dao.FollowQuestionRepository;
 import com.codepass.user.dao.QuestionRepository;
+import com.codepass.user.dao.UserRepository;
+import com.codepass.user.dao.entity.FollowQuestionEntity;
 import com.codepass.user.dao.entity.QuestionEntity;
+import com.codepass.user.dao.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,6 +20,10 @@ import java.util.stream.Collectors;
 public class QuestionService {
     @Autowired
     QuestionRepository questionRepository;
+    @Autowired
+    FollowQuestionRepository followQuestionRepository;
+    @Autowired
+    UserRepository userRepository;
 
     public QuestionEntity createQuestion(int questionerId, String title) {
         QuestionEntity questionEntity = new QuestionEntity();
@@ -60,5 +70,15 @@ public class QuestionService {
 
     public Page<QuestionEntity> getAllQuestion(int page) {
         return questionRepository.findAll(PageRequest.of(page, 10));
+    }
+
+    public void followQuestion(int questionId){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+        int usid=userEntity.getId();
+        FollowQuestionEntity followQuestionEntity=new FollowQuestionEntity();
+        followQuestionEntity.setQuestionId(questionId);
+        followQuestionEntity.setUserId(usid);
+        followQuestionRepository.save(followQuestionEntity);
     }
 }
