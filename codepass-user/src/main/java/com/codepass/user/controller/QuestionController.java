@@ -6,7 +6,6 @@ import com.codepass.user.dto.PageChunk;
 import com.codepass.user.dto.QuestionPojo;
 import com.codepass.user.service.QuestionService;
 import com.codepass.user.service.UserService;
-import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
