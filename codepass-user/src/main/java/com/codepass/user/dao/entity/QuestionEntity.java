@@ -1,5 +1,7 @@
 package com.codepass.user.dao.entity;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -18,8 +20,13 @@ public class QuestionEntity {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy=GenerationType.AUTO)
     public int getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setId(int id) {
@@ -101,6 +108,7 @@ public class QuestionEntity {
 
     @Basic
     @Column(name = "status")
+    @ColumnDefault("0")
     public Integer getStatus() {
         return status;
     }

@@ -29,7 +29,7 @@ public class QuestionService {
         QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setTitle(title);
         questionEntity.setQuestioner(questionerId);
-        questionRepository.refresh(questionRepository.save(questionEntity));
+        questionRepository.save(questionEntity);
         return questionEntity;
     }
 
@@ -42,7 +42,6 @@ public class QuestionService {
         if (content != null) questionEntity.setContent(content);
         if (isFinal) questionEntity.setStatus(1);
         questionRepository.save(questionEntity);
-        questionRepository.refresh(questionEntity);
         return questionEntity;
     }
 
@@ -72,13 +71,13 @@ public class QuestionService {
         return questionRepository.findAll(PageRequest.of(page, 10));
     }
 
-    public void followQuestion(int questionId){
+    public void followQuestion(int questionId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
-        int usid=userEntity.getId();
-        FollowQuestionEntity followQuestionEntity=new FollowQuestionEntity();
+        int usid = userEntity.getId();
+        FollowQuestionEntity followQuestionEntity = new FollowQuestionEntity();
         followQuestionEntity.setQuestionId(questionId);
         followQuestionEntity.setUserId(usid);
-        followQuestionRepository.save(followQuestionEntity);
+        followQuestionRepository.saveAndFlush(followQuestionEntity);
     }
 }

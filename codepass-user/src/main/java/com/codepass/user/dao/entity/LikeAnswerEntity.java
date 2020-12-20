@@ -13,10 +13,15 @@ public class LikeAnswerEntity {
     private Timestamp likeTime;
     private int userId;
 
+    @Basic
     @Id
     @Column(name = "user")
     public int getUser() {
         return user;
+    }
+
+    public void setUser(Integer user) {
+        this.user = user;
     }
 
     public void setUser(int user) {
@@ -27,6 +32,10 @@ public class LikeAnswerEntity {
     @Column(name = "answer_id")
     public int getAnswerId() {
         return answerId;
+    }
+
+    public void setAnswerId(Integer answerId) {
+        this.answerId = answerId;
     }
 
     public void setAnswerId(int answerId) {
@@ -60,6 +69,10 @@ public class LikeAnswerEntity {
     @Column(name = "user_id")
     public int getUserId() {
         return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public void setUserId(int userId) {

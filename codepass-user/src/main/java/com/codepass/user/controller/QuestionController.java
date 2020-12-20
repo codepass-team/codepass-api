@@ -1,5 +1,6 @@
 package com.codepass.user.controller;
 
+import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.QuestionEntity;
 import com.codepass.user.dao.entity.UserEntity;
 import com.codepass.user.dto.PageChunk;
@@ -28,6 +29,8 @@ public class QuestionController {
     QuestionService questionService;
     @Autowired
     UserService userService;
+    @Autowired
+    UserRepository userRepository;
 
     @PostMapping("/create")
     @Operation(summary = "创建问题", description = "创建一个新问题, 需要提供问题标题")
@@ -98,11 +101,22 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.getQuestion(questionId));
     }
 
+    @GetMapping("/listMy")
+    @Operation(summary = "获取我提出的问题", description = "获取我提出的所有问题")
+    public ResponseEntity<?> listQuestion(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", questionService.getUserQuestion(userEntity.getId(), page));
+        }});
+    }
+
     @GetMapping("/list")
-    @Operation(summary = "搜索某个用户提出的问题", description = "获取某用户提出的所有问题")
+    @Operation(summary = "获取某个用户提出的问题", description = "获取某用户提出的所有问题")
     public ResponseEntity<?> listQuestion(@Parameter(description = "用户Id") @RequestParam int userId,
                                           @Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
-        return ResponseEntity.ok(new HashMap<String,Object>(){{
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
             put("data", questionService.getUserQuestion(userId, page));
         }});

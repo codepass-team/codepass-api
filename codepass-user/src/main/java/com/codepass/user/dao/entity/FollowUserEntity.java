@@ -18,6 +18,10 @@ public class FollowUserEntity {
         return followUser;
     }
 
+    public void setFollowUser(Integer followUser) {
+        this.followUser = followUser;
+    }
+
     public void setFollowUser(int followUser) {
         this.followUser = followUser;
     }
@@ -26,6 +30,10 @@ public class FollowUserEntity {
     @Column(name = "be_followed_user")
     public int getBeFollowedUser() {
         return beFollowedUser;
+    }
+
+    public void setBeFollowedUser(Integer beFollowedUser) {
+        this.beFollowedUser = beFollowedUser;
     }
 
     public void setBeFollowedUser(int beFollowedUser) {

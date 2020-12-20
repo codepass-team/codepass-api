@@ -28,7 +28,7 @@ public class UserService {
         if (job != null) userEntity.setJob(job);
         if (tech != null) userEntity.setTech(tech);
         if (age != null) userEntity.setAge(age);
-        userRepository.refresh(userRepository.save(userEntity));
+        userRepository.save(userEntity);
         return userEntity;
     }
 
@@ -46,7 +46,6 @@ public class UserService {
         newUser.setPassword(bcryptEncoder.encode(password));
         newUser.setFollowerCount(0);
         userRepository.save(newUser);
-        userRepository.refresh(newUser);
         return newUser;
     }
 

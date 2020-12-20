@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PageChunk {
-    private List content = new ArrayList();
+    private List<?> content = new ArrayList<>();
     private long totalElements;
     private int totalPages;
     private int pageNumber;
     private int numberOfElements;
 
-    public PageChunk(Page page) {
+    public PageChunk(Page<?> page) {
         this.setContent(page.getContent());
         this.setTotalPages(page.getTotalPages());
         this.setTotalElements(page.getTotalElements());
@@ -20,11 +20,11 @@ public class PageChunk {
         this.setNumberOfElements(page.getNumberOfElements());
     }
 
-    public List getContent() {
+    public List<?> getContent() {
         return content;
     }
 
-    public void setContent(List content) {
+    public void setContent(List<?> content) {
         this.content = content;
     }
 

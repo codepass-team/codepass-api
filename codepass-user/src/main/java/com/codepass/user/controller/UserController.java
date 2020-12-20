@@ -32,11 +32,11 @@ public class UserController {
 
     @PostMapping
     @Operation(summary = "修改用户资料", description = "修改用户资料")
-    public ResponseEntity<?> updateUserData(@Parameter(description = "用户昵称") @RequestBody(required = false) String nickname,
-                                            @Parameter(description = "用户性别") @RequestBody(required = false) String gender,
-                                            @Parameter(description = "用户工作") @RequestBody(required = false) String job,
-                                            @Parameter(description = "用户职业") @RequestBody(required = false) String tech,
-                                            @Parameter(description = "用户年龄") @RequestBody(required = false) Integer age) {
+    public ResponseEntity<?> updateUserData(@Parameter(description = "用户昵称") @RequestParam(required = false) String nickname,
+                                            @Parameter(description = "用户性别") @RequestParam(required = false) String gender,
+                                            @Parameter(description = "用户工作") @RequestParam(required = false) String job,
+                                            @Parameter(description = "用户职业") @RequestParam(required = false) String tech,
+                                            @Parameter(description = "用户年龄") @RequestParam(required = false) Integer age) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
         return ResponseEntity.ok(new HashMap<String, Object>() {{

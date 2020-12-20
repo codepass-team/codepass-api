@@ -29,6 +29,10 @@ public class FollowQuestionEntity {
         return questionId;
     }
 
+    public void setQuestionId(Integer questionId) {
+        this.questionId = questionId;
+    }
+
     public void setQuestionId(int questionId) {
         this.questionId = questionId;
     }
@@ -60,6 +64,10 @@ public class FollowQuestionEntity {
     @Column(name = "user_id")
     public int getUserId() {
         return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public void setUserId(int userId) {

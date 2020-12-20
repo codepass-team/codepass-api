@@ -19,6 +19,10 @@ public class QuestionCommentEntity {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -29,6 +33,10 @@ public class QuestionCommentEntity {
         return questionId;
     }
 
+    public void setQuestionId(Integer questionId) {
+        this.questionId = questionId;
+    }
+
     public void setQuestionId(int questionId) {
         this.questionId = questionId;
     }
@@ -37,6 +45,10 @@ public class QuestionCommentEntity {
     @Column(name = "commenter")
     public int getCommenter() {
         return commenter;
+    }
+
+    public void setCommenter(Integer commenter) {
+        this.commenter = commenter;
     }
 
     public void setCommenter(int commenter) {
