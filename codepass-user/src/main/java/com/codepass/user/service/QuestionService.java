@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,6 +79,7 @@ public class QuestionService {
         FollowQuestionEntity followQuestionEntity = new FollowQuestionEntity();
         followQuestionEntity.setQuestionId(questionId);
         followQuestionEntity.setUserId(usid);
-        followQuestionRepository.saveAndFlush(followQuestionEntity);
+        followQuestionEntity.setFollowTime(new Timestamp(System.currentTimeMillis()));
+        followQuestionRepository.save(followQuestionEntity);
     }
 }

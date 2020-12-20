@@ -113,12 +113,14 @@ public class QuestionController {
     }
 
     @GetMapping("/list")
-    @Operation(summary = "获取某个用户提出的问题", description = "获取某用户提出的所有问题")
+    @Operation(summary = "获取某个用户提出的问题", description = "获取某用户提出的所有问题, 按照时间顺序排序")
     public ResponseEntity<?> listQuestion(@Parameter(description = "用户Id") @RequestParam int userId,
                                           @Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
+        List<QuestionEntity> questionEntities = questionService.getUserQuestion(userId, page);
+        questionEntities.sort((o1, o2) -> (o2.getRaiseTime().compareTo(o1.getRaiseTime())));
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("data", questionService.getUserQuestion(userId, page));
+            put("data", questionEntities);
         }});
     }
 
@@ -133,6 +135,8 @@ public class QuestionController {
             QuestionPojo questionPojo = new QuestionPojo(q, u);
             questionPojos.add(questionPojo);
         }
+        //按时间从降序排
+        questionPojos.sort((o1, o2) -> (o2.getRaiseTime().compareTo(o1.getRaiseTime())));
         questions.setContent(questionPojos);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
@@ -144,6 +148,8 @@ public class QuestionController {
     @Operation(description = "关注问题, 关注后, 问题有新的回答会收到通知")
     public ResponseEntity<?> follow(@PathVariable int questionId) {
         questionService.followQuestion(questionId);
-        return ResponseEntity.ok("Not implemented");
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+        }});
     }
 }

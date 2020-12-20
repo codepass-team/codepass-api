@@ -21,7 +21,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder bcryptEncoder;
 
-    public UserEntity updateUser(int userId, String nickname, String gender, String job,String tech,Integer age) {
+    public UserEntity updateUser(int userId, String nickname, String gender, String job, String tech, Integer age) {
         UserEntity userEntity = userRepository.findById(userId).orElseGet(UserEntity::new);
         if (nickname != null) userEntity.setNickname(nickname);
         if (gender != null) userEntity.setGender(gender);

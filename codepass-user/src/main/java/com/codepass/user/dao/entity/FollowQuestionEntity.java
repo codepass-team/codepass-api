@@ -8,29 +8,24 @@ import java.util.Objects;
 @Table(name = "follow_question", schema = "codepass", catalog = "")
 @IdClass(FollowQuestionEntityPK.class)
 public class FollowQuestionEntity {
-    private int user;
+    private int userId;
     private int questionId;
     private Timestamp followTime;
-    private int userId;
 
     @Id
-    @Column(name = "user")
-    public int getUser() {
-        return user;
+    @Column(name = "user_id")
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser(int user) {
-        this.user = user;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @Id
     @Column(name = "question_id")
     public int getQuestionId() {
         return questionId;
-    }
-
-    public void setQuestionId(Integer questionId) {
-        this.questionId = questionId;
     }
 
     public void setQuestionId(int questionId) {
@@ -51,26 +46,21 @@ public class FollowQuestionEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         FollowQuestionEntity that = (FollowQuestionEntity) o;
-        return user == that.user && questionId == that.questionId && Objects.equals(followTime, that.followTime);
+
+        if (userId != that.userId) return false;
+        if (questionId != that.questionId) return false;
+        if (followTime != null ? !followTime.equals(that.followTime) : that.followTime != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user, questionId, followTime);
-    }
-
-    @Id
-    @Column(name = "user_id")
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
+        int result = userId;
+        result = 31 * result + questionId;
+        result = 31 * result + (followTime != null ? followTime.hashCode() : 0);
+        return result;
     }
 }
