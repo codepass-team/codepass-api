@@ -32,7 +32,8 @@ public class AnswerService {
     public AnswerEntity createAnswer(int userId, int questionId, String content) {
         AnswerEntity answerEntity = new AnswerEntity();
         String dockerId = questionRepository.findById(questionId).get().getDockerId();
-        String newDockerId = dockerService.cloneDocker(dockerId);;
+        String newDockerId = dockerService.cloneDocker(dockerId);
+        ;
         answerEntity.setAnswerer(userId);
         answerEntity.setDockerId(newDockerId);
         answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));
@@ -51,14 +52,13 @@ public class AnswerService {
     public AnswerEntity updateAnswer(int questionId, String content) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
-        int usid=userEntity.getId();
+        int usid = userEntity.getId();
         AnswerEntity answerEntity = new AnswerEntity();
         answerEntity.setAnswerer(usid);
         answerEntity.setQuestionId(questionId);
         answerEntity.setContent(content);
         answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));
-        answerRepository.save(answerEntity);
-        answerRepository.refresh(answerEntity);
+        answerEntity = answerRepository.saveAndFlush(answerEntity);
         return answerEntity;
     }
 }

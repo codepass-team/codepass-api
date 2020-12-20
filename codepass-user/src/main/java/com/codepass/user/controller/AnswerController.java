@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
@@ -37,20 +34,20 @@ public class AnswerController {
     @PostMapping("/save")
     @Operation(description = "临时保存一个回答")
     @ApiResponse(responseCode = "200", description = "成功保存回答")
-    public ResponseEntity<?> createAnswer(@RequestBody int answerId, @RequestBody String content) {
+    public ResponseEntity<?> createAnswer(@RequestParam int questionId, @RequestParam String content) {
         int userId = 0;
-        AnswerEntity answerEntity = answerService.updateAnswer(answerId, content);
+        AnswerEntity answerEntity = answerService.updateAnswer(questionId, content);
         return ResponseEntity.ok(new AnswerCreateVO("ok", answerEntity.getId(), answerEntity.getDockerId()));
     }
 
     @PostMapping("/submit")
     @Operation(description = "提交回答, 提交后不能再修改")
     @ApiResponse(responseCode = "200", description = "提交成功")
-    public ResponseEntity<?> submitAnswer(@RequestBody int questionId, @RequestBody String content) {
+    public ResponseEntity<?> submitAnswer(@RequestParam int questionId, @RequestParam String content) {
         AnswerEntity answerEntity = answerService.updateAnswer(questionId, content);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("answerId", answerEntity.getId());
+            put("answerId", answerEntity);
         }});
     }
 }
