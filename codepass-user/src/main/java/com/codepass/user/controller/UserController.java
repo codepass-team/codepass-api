@@ -41,7 +41,7 @@ public class UserController {
         UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("data", userService.updateUser(userEntity.getId(), nickname, gender, job, tech, age););
+            put("data", userService.updateUser(userEntity.getId(), nickname, gender, job, tech, age));
         }});
     }
 
