@@ -21,6 +21,15 @@ public class UserService {
     @Autowired
     private PasswordEncoder bcryptEncoder;
 
+    public UserEntity updateUser(int userId, String nickname, String email, String job) {
+        UserEntity userEntity = userRepository.findById(userId).orElseGet(UserEntity::new);
+        if (nickname != null) userEntity.setNickname(nickname);
+        if (email != null) userEntity.setEmail(email);
+        if (job != null) userEntity.setJob(job);
+        userRepository.save(userEntity);
+        return userEntity;
+    }
+
     public UserEntity getUserByNickname(String nickname) {
         return userRepository.findByNickname(nickname);
     }
@@ -29,9 +38,9 @@ public class UserService {
         return userRepository.findById(id).get();
     }
 
-    public UserEntity createNewUser(String email, String password) {
+    public UserEntity createNewUser(String nickname, String password) {
         UserEntity newUser = new UserEntity();
-        newUser.setEmail(email);
+        newUser.setNickname(nickname);
         newUser.setPassword(bcryptEncoder.encode(password));
         newUser.setFollowerCount(0);
         userRepository.save(newUser);

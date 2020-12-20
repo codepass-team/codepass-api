@@ -16,12 +16,12 @@ public class JwtUserDetailsService implements UserDetailsService {
     UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByNickname(username);
         if (userEntity != null) {
-            return User.builder().username(userEntity.getEmail()).password(userEntity.getPassword()).authorities("user").build();
+            return User.builder().username(username).password(userEntity.getPassword()).authorities("user").build();
         } else {
-            throw new UsernameNotFoundException("User not found with username: " + email);
+            throw new UsernameNotFoundException("User not found with username: " + username);
         }
     }
 }

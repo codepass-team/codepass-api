@@ -1,7 +1,5 @@
 package com.codepass.user.controller;
 
-import java.util.HashMap;
-
 import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.UserEntity;
 import com.codepass.user.service.UserService;
@@ -16,9 +14,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 @Tag(name = "User", description = "用户管理相关API")
+//@Secured()
 public class UserController {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
@@ -29,20 +30,28 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
-    @PostMapping("/updateUserData")
+    @PostMapping
     @Operation(summary = "修改用户资料", description = "修改用户资料")
-    public ResponseEntity<?> updateUserData(@Parameter int userId, @Parameter(description = "用户邮箱") String email) {
-        //先空着
-        return ResponseEntity.ok("Ok");
+    public ResponseEntity<?> updateUserData(@Parameter(description = "用户昵称") @RequestBody(required = false) String nickname,
+                                            @Parameter(description = "用户邮箱") @RequestBody(required = false) String email,
+                                            @Parameter(description = "用户职业") @RequestBody(required = false) String job) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+        userService.updateUser(userEntity.getId(), nickname, email, job);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", userEntity);
+        }});
     }
 
-    @GetMapping("/getUserData/{userId}")
+    @GetMapping
     @Operation(summary = "获取用户资料", description = "获取用户资料")
-    public ResponseEntity<?> getUserData(@PathVariable int userId) {
-        //先空着
-        return ResponseEntity.ok(new HashMap<String,Object>(){{
+    public ResponseEntity<?> getUserData() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("data", userService.getUserById(userId));
+            put("data", userService.getUserById(userEntity.getId()));
         }});
     }
 

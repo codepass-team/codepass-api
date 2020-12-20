@@ -22,7 +22,7 @@ public class QuestionService {
         return questionRepository.save(questionEntity);
     }
 
-    public void changeQuestion(Integer questionId, String title, String content, boolean isFinal) {
+    public QuestionEntity changeQuestion(Integer questionId, String title, String content, boolean isFinal) {
         QuestionEntity questionEntity = questionRepository.findById(questionId).get();
         if (questionEntity.getStatus() == 1) {
             throw new RuntimeException("不能修改已经提交的问题");
@@ -31,15 +31,16 @@ public class QuestionService {
         if (content != null) questionEntity.setContent(content);
         if (isFinal) questionEntity.setStatus(1);
         questionRepository.save(questionEntity);
+        return questionEntity;
     }
 
     public void deleteQuestion(Integer questionId) {
         questionRepository.deleteById(questionId);
     }
 
-    public List<String> suggestQuestion(String keywords) {
-        // 只返回10条数据
-        Page<QuestionEntity> questionEntityList = questionRepository.findByTitleLike(keywords, PageRequest.of(0, 10));
+    public List<String> suggestQuestion(String keywords, int limits) {
+        // 返回最多limits条数据
+        Page<QuestionEntity> questionEntityList = questionRepository.findByTitleLike(keywords, PageRequest.of(0, limits));
         return questionEntityList.stream().map(QuestionEntity::getTitle).collect(Collectors.toList());
     }
 

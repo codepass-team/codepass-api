@@ -45,10 +45,10 @@ public class JwtAuthenticationController {
     @PostMapping("/login")
     @Operation(summary = "用户登录", description = "用户登录接口")
     @ApiResponse(responseCode = "200", description = "登录成功", content = @Content(schema = @Schema(implementation = String.class, description = "JWT字符串")))
-    public ResponseEntity<?> login(@Parameter(description = "用户邮箱") @RequestParam String email,
+    public ResponseEntity<?> login(@Parameter(description = "用户名") @RequestParam String username,
                                    @Parameter(description = "用户密码") @RequestParam String password) throws Exception {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
             throw new Exception("Account disabled", e);
         } catch (LockedException e) {
@@ -57,7 +57,7 @@ public class JwtAuthenticationController {
             throw new Exception("Incorrect username or password", e);
         }
 
-        UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(email);
+        UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
 
         String token = jwtTokenUtil.generateToken(userDetails);
 
@@ -71,9 +71,9 @@ public class JwtAuthenticationController {
 
     @PostMapping("/register")
     @Operation(summary = "用户注册", description = "用户注册接口")
-    public ResponseEntity<?> register(@Parameter(description = "用户邮箱") @RequestParam String email,
+    public ResponseEntity<?> register(@Parameter(description = "用户名") @RequestParam String username,
                                       @Parameter(description = "用户密码") @RequestParam String password) {
-        UserEntity userEntity = userService.createNewUser(email, password);
+        UserEntity userEntity = userService.createNewUser(username, password);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
             put("data", userEntity);

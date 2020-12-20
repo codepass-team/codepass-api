@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import java.util.HashMap;
+
 @RestController
 @RequestMapping("/api/question")
 @Tag(name = "Question", description = "问题管理相关API")
@@ -33,7 +35,10 @@ public class QuestionController {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userService.getUserByNickname(userDetails.getUsername());
         QuestionEntity questionEntity = questionService.createQuestion(userEntity.getId(), title);
-        return ResponseEntity.ok(questionEntity);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", questionEntity);
+        }});
     }
 
     @PostMapping("/save/{questionId}")
@@ -41,39 +46,54 @@ public class QuestionController {
     public ResponseEntity<?> saveQuestion(@Parameter(description = "问题Id") @PathVariable int questionId,
             @Parameter(description = "新的问题标题") @RequestParam(required = false) String title,
             @Parameter(description = "新的问题描述") @RequestParam(required = false) String content) {
-        questionService.changeQuestion(questionId, title, content, false);
-        return ResponseEntity.ok("ok");
+        QuestionEntity questionEntity = questionService.changeQuestion(questionId, title, content, false);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", questionEntity);
+        }});
     }
 
     @PostMapping("/submit/{questionId}")
     @Operation(summary = "提交问题", description = "提交一个问题, 提交后不能再次编辑")
     public ResponseEntity<?> submitQuestion(@Parameter(description = "问题Id") @PathVariable int questionId) {
-        questionService.changeQuestion(questionId, null, null, true);
-        return ResponseEntity.ok("ok");
+        QuestionEntity questionEntity = questionService.changeQuestion(questionId, null, null, true);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", questionEntity);
+        }});
     }
 
     @DeleteMapping("/{questionId}")
     @Operation(summary = "删除问题", description = "删除一个问题")
     public ResponseEntity<?> deleteQuestion(@Parameter(description = "问题Id") @PathVariable int questionId) {
         questionService.deleteQuestion(questionId);
-        return ResponseEntity.ok("ok");
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+        }});
     }
 
     @GetMapping("/searchRecommend")
     @Operation(summary = "搜索推荐", description = "搜索问题时, 获取搜索提示的接口")
-    public ResponseEntity<?> recommendQuestion(@Parameter(description = "搜索关键词") @RequestParam String keywords) {
-        return ResponseEntity.ok(questionService.suggestQuestion(keywords));
+    public ResponseEntity<?> recommendQuestion(@Parameter(description = "搜索关键词") @RequestParam String keywords,
+                                               @Parameter(description = "最多返回数据条数") @RequestParam int limits) {
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", questionService.suggestQuestion(keywords, limits));
+        }});
     }
 
     @GetMapping("/search")
     @Operation(summary = "搜索问题", description = "搜索问题")
     public ResponseEntity<?> searchQuestion(@Parameter(description = "搜索内容") @RequestParam String keywords,
             @Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
-        return ResponseEntity.ok(questionService.searchQuestion(keywords, page));
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", questionService.searchQuestion(keywords, page));
+        }});
     }
 
     @GetMapping("/{questionId}")
-    @Operation(summary = "搜索问题", description = "获取某个问题的信息, 包括问题标题, 描述等, 还包括该问题所有回答的信息. 回答中不包括编辑中(status=0)的回答, 但自己提的问题忽略")
+    @Operation(summary = "获取问题", description = "获取某个问题的信息, 包括问题标题, 描述等, 还包括该问题所有回答的信息. 回答中不包括编辑中(status=0)的回答, 但自己提的问题忽略")
     public ResponseEntity<?> getQuestion(@Parameter(description = "问题Id") @PathVariable int questionId) {
         return ResponseEntity.ok(questionService.getQuestion(questionId));
     }
