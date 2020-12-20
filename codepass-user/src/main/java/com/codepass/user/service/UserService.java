@@ -24,7 +24,7 @@ public class UserService {
     public UserEntity updateUser(int userId, String nickname, String gender, String job,String tech,Integer age) {
         UserEntity userEntity = userRepository.findById(userId).orElseGet(UserEntity::new);
         if (nickname != null) userEntity.setNickname(nickname);
-        if (gender != null) userEntity.setEmail(gender);
+        if (gender != null) userEntity.setGender(gender);
         if (job != null) userEntity.setJob(job);
         if (tech != null) userEntity.setTech(tech);
         if (age != null) userEntity.setAge(age);
