@@ -20,6 +20,7 @@ public class QuestionService {
         questionEntity.setTitle(title);
         questionEntity.setQuestioner(questionerId);
         questionRepository.save(questionEntity);
+        questionRepository.refresh(questionEntity);
         return questionEntity;
     }
 
@@ -32,6 +33,7 @@ public class QuestionService {
         if (content != null) questionEntity.setContent(content);
         if (isFinal) questionEntity.setStatus(1);
         questionRepository.save(questionEntity);
+        questionRepository.refresh(questionEntity);
         return questionEntity;
     }
 
