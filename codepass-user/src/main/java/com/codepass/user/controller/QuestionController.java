@@ -69,7 +69,10 @@ public class QuestionController {
     @Operation(summary = "搜索问题", description = "搜索问题")
     public ResponseEntity<?> searchQuestion(@Parameter(description = "搜索内容") @RequestParam String keywords,
             @Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
-        return ResponseEntity.ok(questionService.searchQuestion(keywords, page));
+        return ResponseEntity.ok(new HashMap<String,Object>(){{
+            put("status","ok");
+            put("data",questionService.searchQuestion(keywords, page));
+        }});
     }
 
     @GetMapping("/{questionId}")
