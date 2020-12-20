@@ -15,7 +15,7 @@ public class QuestionPojo extends QuestionEntity{
         this.setDockerId(q.getDockerId());
         this.setLikeCount(q.getLikeCount());
         this.setStatus(q.getStatus());
-        this.setNickname(u.getEmail());
+        this.setNickname(u.getNickname());
     }
 
     public String getNickname() {
