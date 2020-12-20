@@ -25,6 +25,10 @@ public class UserService {
         return userRepository.findByNickname(nickname);
     }
 
+    public UserEntity getUserById(int id) {
+        return userRepository.findById(id).get();
+    }
+
     public UserEntity createNewUser(String email, String password) {
         UserEntity newUser = new UserEntity();
         newUser.setEmail(email);

@@ -1,5 +1,7 @@
 package com.codepass.user.controller;
 
+import java.util.HashMap;
+
 import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.UserEntity;
 import com.codepass.user.service.UserService;
@@ -38,7 +40,10 @@ public class UserController {
     @Operation(summary = "获取用户资料", description = "获取用户资料")
     public ResponseEntity<?> getUserData(@PathVariable int userId) {
         //先空着
-        return ResponseEntity.ok("Ok");
+        return ResponseEntity.ok(new HashMap<String,Object>(){{
+            put("status", "ok");
+            put("data", userService.getUserById(userId));
+        }});
     }
 
     @PostMapping("/follow/{userId}")

@@ -84,7 +84,8 @@ public class QuestionController {
     @GetMapping("/listAll")
     @Operation(summary = "获取所有问题", description = "获取所有问题")
     public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
-        return ResponseEntity.ok(new HashMap<>(){{
+        
+        return ResponseEntity.ok(new HashMap<String,Object>(){{
             put("status", "ok");
             put("data", questionService.getAllQuestion(page));
         }});
