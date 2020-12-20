@@ -10,7 +10,7 @@ public class UserEntity {
     private String email;
     private String password;
     private String nickname;
-    private Integer gender;
+    private String gender;
     private String job;
     private String tech;
     private Integer age;
@@ -59,11 +59,11 @@ public class UserEntity {
 
     @Basic
     @Column(name = "gender")
-    public Integer getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Integer gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
