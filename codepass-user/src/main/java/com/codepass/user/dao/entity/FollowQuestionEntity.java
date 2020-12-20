@@ -2,7 +2,6 @@ package com.codepass.user.dao.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
 @Table(name = "follow_question", schema = "codepass", catalog = "")

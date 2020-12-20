@@ -2,7 +2,6 @@ package com.codepass.user.dao.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
 @Table(name = "answer", schema = "codepass", catalog = "")
@@ -21,10 +20,6 @@ public class AnswerEntity {
     @GeneratedValue(strategy=GenerationType.AUTO)
     public int getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public void setId(int id) {
@@ -81,19 +76,6 @@ public class AnswerEntity {
         this.likeCount = likeCount;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AnswerEntity that = (AnswerEntity) o;
-        return id == that.id && Objects.equals(answerer, that.answerer) && Objects.equals(content, that.content) && Objects.equals(answerTime, that.answerTime) && Objects.equals(dockerId, that.dockerId) && Objects.equals(likeCount, that.likeCount);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, answerer, content, answerTime, dockerId, likeCount);
-    }
-
     @Basic
     @Column(name = "status")
     public Integer getStatus() {
@@ -112,5 +94,37 @@ public class AnswerEntity {
 
     public void setQuestionId(Integer questionId) {
         this.questionId = questionId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AnswerEntity that = (AnswerEntity) o;
+
+        if (id != that.id) return false;
+        if (answerer != null ? !answerer.equals(that.answerer) : that.answerer != null) return false;
+        if (content != null ? !content.equals(that.content) : that.content != null) return false;
+        if (answerTime != null ? !answerTime.equals(that.answerTime) : that.answerTime != null) return false;
+        if (dockerId != null ? !dockerId.equals(that.dockerId) : that.dockerId != null) return false;
+        if (likeCount != null ? !likeCount.equals(that.likeCount) : that.likeCount != null) return false;
+        if (status != null ? !status.equals(that.status) : that.status != null) return false;
+        if (questionId != null ? !questionId.equals(that.questionId) : that.questionId != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (answerer != null ? answerer.hashCode() : 0);
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (answerTime != null ? answerTime.hashCode() : 0);
+        result = 31 * result + (dockerId != null ? dockerId.hashCode() : 0);
+        result = 31 * result + (likeCount != null ? likeCount.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (questionId != null ? questionId.hashCode() : 0);
+        return result;
     }
 }

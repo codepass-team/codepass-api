@@ -2,7 +2,6 @@ package com.codepass.user.dao.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
 @Table(name = "answer_comment", schema = "codepass", catalog = "")
@@ -15,12 +14,9 @@ public class AnswerCommentEntity {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy=GenerationType.AUTO)
     public int getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public void setId(int id) {
@@ -71,12 +67,25 @@ public class AnswerCommentEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         AnswerCommentEntity that = (AnswerCommentEntity) o;
-        return id == that.id && Objects.equals(answerId, that.answerId) && Objects.equals(commenter, that.commenter) && Objects.equals(comment, that.comment) && Objects.equals(commentTime, that.commentTime);
+
+        if (id != that.id) return false;
+        if (answerId != null ? !answerId.equals(that.answerId) : that.answerId != null) return false;
+        if (commenter != null ? !commenter.equals(that.commenter) : that.commenter != null) return false;
+        if (comment != null ? !comment.equals(that.comment) : that.comment != null) return false;
+        if (commentTime != null ? !commentTime.equals(that.commentTime) : that.commentTime != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, answerId, commenter, comment, commentTime);
+        int result = id;
+        result = 31 * result + (answerId != null ? answerId.hashCode() : 0);
+        result = 31 * result + (commenter != null ? commenter.hashCode() : 0);
+        result = 31 * result + (comment != null ? comment.hashCode() : 0);
+        result = 31 * result + (commentTime != null ? commentTime.hashCode() : 0);
+        return result;
     }
 }

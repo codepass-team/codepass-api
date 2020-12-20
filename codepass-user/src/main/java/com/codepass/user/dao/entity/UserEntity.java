@@ -1,7 +1,6 @@
 package com.codepass.user.dao.entity;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "user", schema = "codepass", catalog = "")
@@ -21,10 +20,6 @@ public class UserEntity {
     @GeneratedValue(strategy=GenerationType.AUTO)
     public int getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public void setId(int id) {
@@ -115,12 +110,34 @@ public class UserEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         UserEntity that = (UserEntity) o;
-        return id == that.id && Objects.equals(email, that.email) && Objects.equals(password, that.password) && Objects.equals(nickname, that.nickname) && Objects.equals(gender, that.gender) && Objects.equals(job, that.job) && Objects.equals(tech, that.tech) && Objects.equals(age, that.age) && Objects.equals(followerCount, that.followerCount);
+
+        if (id != that.id) return false;
+        if (email != null ? !email.equals(that.email) : that.email != null) return false;
+        if (password != null ? !password.equals(that.password) : that.password != null) return false;
+        if (nickname != null ? !nickname.equals(that.nickname) : that.nickname != null) return false;
+        if (gender != null ? !gender.equals(that.gender) : that.gender != null) return false;
+        if (job != null ? !job.equals(that.job) : that.job != null) return false;
+        if (tech != null ? !tech.equals(that.tech) : that.tech != null) return false;
+        if (age != null ? !age.equals(that.age) : that.age != null) return false;
+        if (followerCount != null ? !followerCount.equals(that.followerCount) : that.followerCount != null)
+            return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password, nickname, gender, job, tech, age, followerCount);
+        int result = id;
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (nickname != null ? nickname.hashCode() : 0);
+        result = 31 * result + (gender != null ? gender.hashCode() : 0);
+        result = 31 * result + (job != null ? job.hashCode() : 0);
+        result = 31 * result + (tech != null ? tech.hashCode() : 0);
+        result = 31 * result + (age != null ? age.hashCode() : 0);
+        result = 31 * result + (followerCount != null ? followerCount.hashCode() : 0);
+        return result;
     }
 }

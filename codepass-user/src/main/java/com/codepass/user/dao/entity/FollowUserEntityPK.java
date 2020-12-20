@@ -3,7 +3,6 @@ package com.codepass.user.dao.entity;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.Objects;
 
 public class FollowUserEntityPK implements Serializable {
     private int followUser;
@@ -33,12 +32,19 @@ public class FollowUserEntityPK implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         FollowUserEntityPK that = (FollowUserEntityPK) o;
-        return followUser == that.followUser && beFollowedUser == that.beFollowedUser;
+
+        if (followUser != that.followUser) return false;
+        if (beFollowedUser != that.beFollowedUser) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(followUser, beFollowedUser);
+        int result = followUser;
+        result = 31 * result + beFollowedUser;
+        return result;
     }
 }

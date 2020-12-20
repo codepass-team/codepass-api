@@ -2,7 +2,6 @@ package com.codepass.user.dao.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
 @Table(name = "follow_user", schema = "codepass", catalog = "")
@@ -18,10 +17,6 @@ public class FollowUserEntity {
         return followUser;
     }
 
-    public void setFollowUser(Integer followUser) {
-        this.followUser = followUser;
-    }
-
     public void setFollowUser(int followUser) {
         this.followUser = followUser;
     }
@@ -30,10 +25,6 @@ public class FollowUserEntity {
     @Column(name = "be_followed_user")
     public int getBeFollowedUser() {
         return beFollowedUser;
-    }
-
-    public void setBeFollowedUser(Integer beFollowedUser) {
-        this.beFollowedUser = beFollowedUser;
     }
 
     public void setBeFollowedUser(int beFollowedUser) {
@@ -54,12 +45,21 @@ public class FollowUserEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         FollowUserEntity that = (FollowUserEntity) o;
-        return followUser == that.followUser && beFollowedUser == that.beFollowedUser && Objects.equals(followTime, that.followTime);
+
+        if (followUser != that.followUser) return false;
+        if (beFollowedUser != that.beFollowedUser) return false;
+        if (followTime != null ? !followTime.equals(that.followTime) : that.followTime != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(followUser, beFollowedUser, followTime);
+        int result = followUser;
+        result = 31 * result + beFollowedUser;
+        result = 31 * result + (followTime != null ? followTime.hashCode() : 0);
+        return result;
     }
 }
