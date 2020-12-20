@@ -112,10 +112,10 @@ public class QuestionController {
             public int compare(QuestionEntity o1, QuestionEntity o2) {
                 return (int)(o2.getRaiseTime().getTime()-o1.getRaiseTime().getTime());
             };
-        };
+        });
         return ResponseEntity.ok(new HashMap<String,Object>(){{
             put("status", "ok");
-            put("data", questionService.getUserQuestion(userId, page));
+            put("data", questionEntities);
         }});
     }
 
