@@ -62,7 +62,9 @@ public class QuestionController {
     @GetMapping("/searchRecommend")
     @Operation(summary = "搜索推荐", description = "搜索问题时, 获取搜索提示的接口")
     public ResponseEntity<?> recommendQuestion(@Parameter(description = "搜索关键词") @RequestParam String keywords) {
-        return ResponseEntity.ok(questionService.suggestQuestion(keywords));
+        return ResponseEntity.ok(new HashMap<String,Object>(){{
+            put("recommend", questionService.suggestQuestion(keywords));
+        }});
     }
 
     @GetMapping("/search")
