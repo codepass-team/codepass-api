@@ -29,7 +29,7 @@ public class QuestionController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/")
+    @PostMapping("/create")
     @Operation(summary = "创建问题", description = "创建一个新问题, 需要提供问题标题")
     public ResponseEntity<?> createQuestion(@Parameter(description = "问题标题") @RequestParam String title) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
