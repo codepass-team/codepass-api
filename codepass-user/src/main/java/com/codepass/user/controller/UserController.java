@@ -39,10 +39,9 @@ public class UserController {
                                             @Parameter(description = "用户年龄") @RequestBody(required = false) Integer age) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
-        userService.updateUser(userEntity.getId(), nickname, gender, job, tech, age);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("data", userEntity);
+            put("data", userService.updateUser(userEntity.getId(), nickname, gender, job, tech, age););
         }});
     }
 
