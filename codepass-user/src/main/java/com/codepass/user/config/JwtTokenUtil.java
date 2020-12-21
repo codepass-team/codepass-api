@@ -42,10 +42,13 @@ public class JwtTokenUtil implements Serializable {
      * 验证JWT
      */
     public Boolean validateToken(String token, UserDetails userDetails) {
-        User user = (User) userDetails;
-        String username = getUsernameFromToken(token);
-
-        return (username.equals(user.getUsername()) && !isTokenExpired(token));
+        try {
+            User user = (User) userDetails;
+            String username = getUsernameFromToken(token);
+            return (username.equals(user.getUsername()) && !isTokenExpired(token));
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**
