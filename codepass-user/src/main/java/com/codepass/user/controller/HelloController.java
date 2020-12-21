@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedReader;
@@ -32,16 +33,9 @@ public class HelloController {
     @GetMapping("/hello1")
     @Operation(summary = "测试接口1", description = "测试用的接口1, 不需要鉴权就可以调用")
     @ApiResponse(responseCode = "200", description = "正常返回")
-    public String hello1() {
+    public String hello1(@RequestParam String cmds) {
         try {
-            String mountPath = "";
-            ProcessBuilder builder = new ProcessBuilder("timeout 1800" +
-                    " docker run --rm -it" +
-                    " --name 4a479ddd" +
-                    " --env PASSWORD=123456" +
-                    " -p 0.0.0.0:12345:8080" +
-                    " -v /home/docker_space/4a479ddd:/home/coder/project" +
-                    " codercom/code-server");
+            ProcessBuilder builder = new ProcessBuilder(cmds);
             builder.redirectErrorStream(true);
             for (String cmd : builder.command()) {
                 logger.info(cmd);
