@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,11 +38,17 @@ public class QuestionController {
     public ResponseEntity<?> createQuestion(@Parameter(description = "问题标题") @RequestParam String title) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userService.getUserByNickname(userDetails.getUsername());
-        QuestionEntity questionEntity = questionService.createQuestion(userEntity.getId(), title);
-        return ResponseEntity.ok(new HashMap<String, Object>() {{
-            put("status", "ok");
-            put("data", questionEntity);
-        }});
+        try {
+            QuestionEntity questionEntity = questionService.createQuestion(userEntity.getId(), title);
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "ok");
+                put("data", questionEntity);
+            }});
+        } catch (IOException e) {
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "bad");
+            }});
+        }
     }
 
     @PostMapping("/save/{questionId}")
@@ -78,7 +85,7 @@ public class QuestionController {
     @GetMapping("/searchRecommend")
     @Operation(summary = "搜索推荐", description = "搜索问题时, 获取搜索提示的接口")
     public ResponseEntity<?> recommendQuestion(@Parameter(description = "搜索关键词") @RequestParam String keywords,
-                                               @Parameter(description = "最多返回数据条数") @RequestParam int limits) {
+                                               @Parameter(description = "最多返回数据条数") @RequestParam(defaultValue = "10") int limits) {
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
             put("data", questionService.suggestQuestion("%" + keywords + "%", limits));

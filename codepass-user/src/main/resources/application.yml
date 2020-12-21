@@ -37,3 +37,7 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /oa/swagger-ui.html
+
+docker:
+  storage:
+    path: /home/docker_space/

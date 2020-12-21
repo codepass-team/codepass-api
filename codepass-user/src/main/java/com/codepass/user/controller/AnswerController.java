@@ -30,13 +30,19 @@ public class AnswerController {
     @ApiResponse(responseCode = "200", description = "成功创建回答, 返回dockerId和该回答的id")
     public ResponseEntity<?> createAnswer(@Parameter(description = "问题Id") @RequestParam int questionId,
                                           @Parameter(description = "回答内容") @RequestParam String content) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
-        AnswerEntity answerEntity = answerService.createAnswer(userEntity.getId(), questionId, content);
-        return ResponseEntity.ok(new HashMap<String, Object>() {{
-            put("status", "ok");
-            put("data", answerEntity);
-        }});
+        try {
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+            AnswerEntity answerEntity = answerService.createAnswer(userEntity.getId(), questionId, content);
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "ok");
+                put("data", answerEntity);
+            }});
+        } catch (Exception e) {
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "bad");
+            }});
+        }
     }
 
     @PostMapping("/save/{answerId}")

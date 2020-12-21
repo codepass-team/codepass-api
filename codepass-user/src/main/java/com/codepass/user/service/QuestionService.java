@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,12 +26,17 @@ public class QuestionService {
     FollowQuestionRepository followQuestionRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    DockerService dockerService;
 
-    public QuestionEntity createQuestion(int questionerId, String title) {
+    public QuestionEntity createQuestion(int questionerId, String title) throws IOException {
+        String dockerId = dockerService.createDocker();
+        dockerService.mountDocker(dockerId, "123456");
         QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setTitle(title);
         questionEntity.setQuestioner(questionerId);
         questionEntity.setStatus(0);
+        questionEntity.setDockerId(dockerId);
         questionRepository.save(questionEntity);
         return questionEntity;
     }

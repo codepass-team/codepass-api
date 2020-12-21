@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 
 @Component
@@ -30,18 +31,23 @@ public class AnswerService {
     UserRepository userRepository;
 
     public AnswerEntity createAnswer(int userId, int questionId, String content) {
-        AnswerEntity answerEntity = new AnswerEntity();
-        String dockerId = questionRepository.findById(questionId).get().getDockerId();
-        String newDockerId = dockerService.cloneDocker(dockerId);
-        answerEntity.setAnswerer(userId);
-        answerEntity.setQuestionId(questionId);
-        answerEntity.setDockerId(newDockerId);
-        answerEntity.setContent(content);
-        answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));
-        answerEntity.setLikeCount(0);
-        answerEntity.setStatus(0);
-        answerRepository.save(answerEntity);
-        return answerEntity;
+        try {
+            AnswerEntity answerEntity = new AnswerEntity();
+            String dockerId = questionRepository.findById(questionId).get().getDockerId();
+            String newDockerId = dockerService.cloneDocker(dockerId);
+            dockerService.mountDocker(newDockerId, "123456");
+            answerEntity.setAnswerer(userId);
+            answerEntity.setQuestionId(questionId);
+            answerEntity.setDockerId(newDockerId);
+            answerEntity.setContent(content);
+            answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));
+            answerEntity.setLikeCount(0);
+            answerEntity.setStatus(0);
+            answerRepository.save(answerEntity);
+            return answerEntity;
+        } catch (IOException e) {
+            throw new RuntimeException("Create docker failed");
+        }
     }
 
     public void likeAnswer(int answerId) {
