@@ -70,11 +70,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                 .antMatchers("/api/hello1").permitAll() // for test
                 .antMatchers("/api/hello2").authenticated() // for test
-                .antMatchers("/api/login", "/api/register").permitAll()
                 .antMatchers("/oa/**").permitAll() // swagger doc
+                .antMatchers("/api/docker/**").permitAll()
+                .antMatchers("/api/login", "/api/register").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
-                .and().logout().logoutUrl("/api/logout").permitAll()
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 // make sure we use stateless session; session won't be used to
                 // store user's state.
