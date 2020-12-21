@@ -1,5 +1,7 @@
 package com.codepass.user.dao.entity;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -88,6 +90,7 @@ public class QuestionEntity {
 
     @Basic
     @Column(name = "status")
+    @ColumnDefault("0")
     public Integer getStatus() {
         return status;
     }
