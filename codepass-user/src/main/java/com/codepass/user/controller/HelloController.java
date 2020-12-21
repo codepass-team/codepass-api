@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 
 /*
@@ -45,6 +47,11 @@ public class HelloController {
                 logger.info(cmd);
             }
             Process process = builder.start();
+            String line;
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            while ((line = reader.readLine()) != null) {
+                logger.info("Stdout: " + line);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
