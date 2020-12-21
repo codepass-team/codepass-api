@@ -98,7 +98,10 @@ public class QuestionController {
     @GetMapping("/{questionId}")
     @Operation(summary = "获取问题", description = "获取某个问题的信息, 包括问题标题, 描述等, 还包括该问题所有回答的信息. 回答中不包括编辑中(status=0)的回答, 但自己提的问题忽略")
     public ResponseEntity<?> getQuestion(@Parameter(description = "问题Id") @PathVariable int questionId) {
-        return ResponseEntity.ok(questionService.getQuestion(questionId));
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", questionService.getQuestion(questionId));
+        }});
     }
 
     @GetMapping("/listMy")

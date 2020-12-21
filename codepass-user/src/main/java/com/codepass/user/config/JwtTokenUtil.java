@@ -1,6 +1,7 @@
 package com.codepass.user.config;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -42,10 +43,13 @@ public class JwtTokenUtil implements Serializable {
      * 验证JWT
      */
     public Boolean validateToken(String token, UserDetails userDetails) {
-        User user = (User) userDetails;
-        String username = getUsernameFromToken(token);
-
-        return (username.equals(user.getUsername()) && !isTokenExpired(token));
+        try {
+            User user = (User) userDetails;
+            String username = getUsernameFromToken(token);
+            return (username.equals(user.getUsername()) && !isTokenExpired(token));
+        } catch (JwtException e) {
+            return false;
+        }
     }
 
     /**
