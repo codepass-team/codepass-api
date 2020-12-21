@@ -81,7 +81,7 @@ public class QuestionController {
                                                @Parameter(description = "最多返回数据条数") @RequestParam int limits) {
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("data", questionService.suggestQuestion(keywords, limits));
+            put("data", questionService.suggestQuestion("%" + keywords + "%", limits));
         }});
     }
 
@@ -91,7 +91,7 @@ public class QuestionController {
                                             @Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("data", questionService.searchQuestion(keywords, page));
+            put("data", questionService.searchQuestion("%" + keywords + "%", page));
         }});
     }
 
