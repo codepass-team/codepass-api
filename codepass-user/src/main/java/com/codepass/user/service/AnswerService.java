@@ -33,12 +33,13 @@ public class AnswerService {
         AnswerEntity answerEntity = new AnswerEntity();
         String dockerId = questionRepository.findById(questionId).get().getDockerId();
         String newDockerId = dockerService.cloneDocker(dockerId);
-        ;
         answerEntity.setAnswerer(userId);
         answerEntity.setDockerId(newDockerId);
         answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));
         answerEntity.setLikeCount(0);
-        return answerRepository.save(answerEntity);
+        answerEntity.setStatus(0);
+        answerRepository.save(answerEntity);
+        return answerEntity;
     }
 
     public void likeAnswer(int answerId) {
@@ -49,16 +50,26 @@ public class AnswerService {
         answerRepository.updateLikeBy(answerId, 1);
     }
 
-    public AnswerEntity updateAnswer(int questionId, String content) {
+    public AnswerEntity updateAnswer(int answerId, String content, boolean isFinal) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
-        int usid = userEntity.getId();
-        AnswerEntity answerEntity = new AnswerEntity();
-        answerEntity.setAnswerer(usid);
-        answerEntity.setQuestionId(questionId);
-        answerEntity.setContent(content);
+        int userId = userEntity.getId();
+        AnswerEntity answerEntity = answerRepository.findById(answerId).get();
+        if (answerEntity.getStatus() == 1) {
+            throw new RuntimeException("不能修改已经提交的回答");
+        }
+        if (content != null) answerEntity.setContent(content);
         answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));
-        answerEntity = answerRepository.saveAndFlush(answerEntity);
+        if (isFinal) answerEntity.setStatus(1);
+        answerEntity = answerRepository.save(answerEntity);
         return answerEntity;
+    }
+
+    public void deleteAnswer(int answerId) {
+        answerRepository.deleteById(answerId);
+    }
+
+    public AnswerEntity getAnswer(int answerId) {
+        return answerRepository.findById(answerId).get();
     }
 }

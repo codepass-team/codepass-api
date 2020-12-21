@@ -1,7 +1,6 @@
 package com.codepass.user.controller;
 
 import com.codepass.user.dao.entity.AnswerEntity;
-import com.codepass.user.dto.AnswerCreateParam;
 import com.codepass.user.service.AnswerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,12 +20,11 @@ public class AnswerController {
     AnswerService answerService;
 
     @PostMapping("/create")
-    @Operation(description = "创建一个回答")
+    @Operation(summary = "创建回答", description = "创建一个回答")
     @ApiResponse(responseCode = "200", description = "成功创建回答, 返回dockerId和该回答的id")
-    public ResponseEntity<?> createAnswer(@RequestBody AnswerCreateParam answerCreateParam) {
+    public ResponseEntity<?> createAnswer(@Parameter(description = "问题Id") @RequestParam int questionId,
+                                          @Parameter(description = "回答内容") @RequestParam String content) {
         int userId = 0;
-        int questionId = answerCreateParam.getQuestionId();
-        String content = answerCreateParam.getContent();
         AnswerEntity answerEntity = answerService.createAnswer(userId, questionId, content);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
@@ -34,25 +32,45 @@ public class AnswerController {
         }});
     }
 
-    @PostMapping("/save")
-    @Operation(description = "临时保存一个回答")
+    @PostMapping("/save/{answerId}")
+    @Operation(summary = "临时保存回答", description = "临时保存一个回答")
     @ApiResponse(responseCode = "200", description = "成功保存回答")
-    public ResponseEntity<?> createAnswer(@Parameter(description = "回答Id") @RequestParam int answerId,
-                                          @Parameter(description = "回答内容") @RequestParam String content) {
+    public ResponseEntity<?> saveAnswer(@Parameter(description = "回答Id") @PathVariable int answerId,
+                                        @Parameter(description = "回答内容") @RequestParam String content) {
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("data", answerService.updateAnswer(answerId, content));
+            put("data", answerService.updateAnswer(answerId, content, false));
         }});
     }
 
-    @PostMapping("/submit")
-    @Operation(description = "提交回答, 提交后不能再修改")
+    @PostMapping("/submit/{answerId}")
+    @Operation(summary = "提交回答", description = "提交回答, 提交后不能再修改")
     @ApiResponse(responseCode = "200", description = "提交成功")
-    public ResponseEntity<?> submitAnswer(@Parameter(description = "回答Id") @RequestParam int answerId,
-                                          @Parameter(description = "回答内容") @RequestParam String content) {
+    public ResponseEntity<?> submitAnswer(@Parameter(description = "回答Id") @PathVariable int answerId) {
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("answerId", answerService.updateAnswer(answerId, content));
+            put("answerId", answerService.updateAnswer(answerId, null, true));
+        }});
+    }
+
+    @DeleteMapping("/{answerId}")
+    @Operation(summary = "删除回答", description = "删除回答")
+    @ApiResponse(responseCode = "200", description = "提交成功")
+    public ResponseEntity<?> deleteAnswer(@Parameter(description = "回答Id") @PathVariable int answerId) {
+        answerService.deleteAnswer(answerId);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+        }});
+    }
+
+    @GetMapping("/{answerId}")
+    @Operation(summary = "获取回答", description = "获取回答")
+    @ApiResponse(responseCode = "200", description = "提交成功")
+    public ResponseEntity<?> getAnswer(@Parameter(description = "回答Id") @PathVariable int answerId) {
+        AnswerEntity answerEntity = answerService.getAnswer(answerId);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", answerEntity);
         }});
     }
 }
