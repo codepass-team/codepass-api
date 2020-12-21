@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermissions;
@@ -53,8 +55,10 @@ public class DockerService {
                 " -p 0.0.0.0:" + port + ":8080" +
                 " -v " + filePath + ":" + mountPath +
                 " codercom/code-server");
-        logger.info(process.getOutputStream().toString());
-        logger.info(process.getErrorStream().toString());
+        String str = null;
+        BufferedReader buffer = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        while ((str = (buffer.readLine())) != null)
+            logger.info(str);
         dockerEntity.setPassword(password);
         dockerEntity.setPort(port);
         dockerEntity.setStatus(1);
@@ -68,6 +72,6 @@ public class DockerService {
 
     public String getUri(String dockerId, String baseUri) {
         DockerEntity dockerEntity = dockerRepository.findById(dockerId).get();
-        return "http://" + baseUri.split(":")[0] + ":" + dockerEntity.getPort() + "/?folder=/home/coder/project";
+        return "http://" + baseUri.split(":")[0] + ":" + dockerEntity.getPort() + "?folder=/home/coder/project";
     }
 }
