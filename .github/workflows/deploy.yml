@@ -16,7 +16,7 @@ jobs:
     - name: Deploy via ssh
       uses: garygrossgarten/github-action-ssh@release
       with:
-        command: ~/codepass/deploy.sh
+        command: /home/frezcirno/codepass/deploy.sh
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USER }}
         privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
