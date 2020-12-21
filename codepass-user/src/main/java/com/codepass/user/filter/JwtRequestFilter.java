@@ -2,6 +2,7 @@ package com.codepass.user.filter;
 
 import com.codepass.user.config.JwtTokenUtil;
 import com.codepass.user.service.JwtUserDetailsService;
+import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,7 +47,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             jwtToken = requestTokenHeader.substring(7);
             try {
                 username = this.jwtTokenUtil.getUsernameFromToken(jwtToken);
-            } catch (IllegalArgumentException e) {
+            } catch (JwtException e) {
                 System.out.println("Unable to get JWT Token");
             }
         } else {
