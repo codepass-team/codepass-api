@@ -4,6 +4,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "question", schema = "codepass", catalog = "")
@@ -16,10 +17,12 @@ public class QuestionEntity {
     private String dockerId;
     private Integer likeCount;
     private Integer status;
+//    private UserEntity questionerUser;
+    private List<AnswerEntity> answer;
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -97,6 +100,29 @@ public class QuestionEntity {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "questioner", referencedColumnName = "id")
+//    // 本表的name字段引用另一个表中的referencedColumnName字段,
+//    // referencedColumnName默认为另一个表的主键
+//    public UserEntity getQuestionerUser() {
+//        return questionerUser;
+//    }
+//
+//    public void setQuestionerUser(UserEntity questionerUser) {
+//        this.questionerUser = questionerUser;
+//    }
+
+    @OneToMany(mappedBy = "questionId", fetch = FetchType.EAGER)
+    // 拥有mappedBy注解的实体类为关系被维护端
+    // mappedBy中的是另一个实体中的属性
+    public List<AnswerEntity> getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(List<AnswerEntity> answer) {
+        this.answer = answer;
     }
 
     @Override
