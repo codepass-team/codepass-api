@@ -57,10 +57,6 @@ public class DockerService {
                 " codercom/code-server");
         builder.redirectErrorStream(true);
         Process process = builder.start();
-        String str = null;
-        BufferedReader buffer = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        while ((str = (buffer.readLine())) != null)
-            logger.info(str);
         dockerEntity.setPassword(password);
         dockerEntity.setPort(port);
         dockerEntity.setStatus(1);
