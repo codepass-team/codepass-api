@@ -1,6 +1,8 @@
 package com.codepass.user.controller;
 
+import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.AnswerEntity;
+import com.codepass.user.dao.entity.UserEntity;
 import com.codepass.user.service.AnswerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -8,6 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -18,14 +22,17 @@ import java.util.HashMap;
 public class AnswerController {
     @Autowired
     AnswerService answerService;
+    @Autowired
+    UserRepository userRepository;
 
     @PostMapping("/create")
     @Operation(summary = "创建回答", description = "创建一个回答")
     @ApiResponse(responseCode = "200", description = "成功创建回答, 返回dockerId和该回答的id")
     public ResponseEntity<?> createAnswer(@Parameter(description = "问题Id") @RequestParam int questionId,
                                           @Parameter(description = "回答内容") @RequestParam String content) {
-        int userId = 0;
-        AnswerEntity answerEntity = answerService.createAnswer(userId, questionId, content);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+        AnswerEntity answerEntity = answerService.createAnswer(userEntity.getId(), questionId, content);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
             put("data", answerEntity);

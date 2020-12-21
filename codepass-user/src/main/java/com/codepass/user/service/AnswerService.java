@@ -34,7 +34,9 @@ public class AnswerService {
         String dockerId = questionRepository.findById(questionId).get().getDockerId();
         String newDockerId = dockerService.cloneDocker(dockerId);
         answerEntity.setAnswerer(userId);
+        answerEntity.setQuestionId(questionId);
         answerEntity.setDockerId(newDockerId);
+        answerEntity.setContent(content);
         answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));
         answerEntity.setLikeCount(0);
         answerEntity.setStatus(0);
@@ -59,9 +61,9 @@ public class AnswerService {
             throw new RuntimeException("不能修改已经提交的回答");
         }
         if (content != null) answerEntity.setContent(content);
-        answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));
         if (isFinal) answerEntity.setStatus(1);
-        answerEntity = answerRepository.save(answerEntity);
+        answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));
+        answerRepository.save(answerEntity);
         return answerEntity;
     }
 
