@@ -36,7 +36,7 @@ public class AnswerService {
         try {
             AnswerEntity answerEntity = new AnswerEntity();
             String dockerId = questionRepository.findById(questionId).get().getDockerId();
-            String newDockerId = dockerService.cloneDocker(dockerId);
+            String newDockerId = dockerService.createDocker(dockerId);
             dockerService.mountDocker(newDockerId, "123456");
             answerEntity.setAnswerer(userId);
             answerEntity.setQuestionId(questionId);

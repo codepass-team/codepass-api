@@ -20,7 +20,7 @@ public class DockerService {
     @Autowired
     DockerRepository dockerRepository;
 
-    public String createDocker() throws IOException {
+    public String createDocker(String parentId) throws IOException {
         String dockerId = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
         Files.createDirectory(
                 Path.of(dockerStoragePath + dockerId),
@@ -30,14 +30,11 @@ public class DockerService {
         dockerEntity.setId(dockerId);
         dockerEntity.setPort(0);
         dockerEntity.setStatus(0);
+        if (parentId != null) {
+            Files.copy(Path.of(dockerStoragePath + parentId), Path.of(dockerStoragePath + dockerId));
+        }
         dockerRepository.save(dockerEntity);
         return dockerId;
-    }
-
-    public String cloneDocker(String dockerId) throws IOException {
-        String newDockerId = createDocker();
-        Files.copy(Path.of(dockerStoragePath + dockerId), Path.of(dockerStoragePath + newDockerId));
-        return newDockerId;
     }
 
     public DockerEntity mountDocker(String dockerId, String password) throws IOException {
