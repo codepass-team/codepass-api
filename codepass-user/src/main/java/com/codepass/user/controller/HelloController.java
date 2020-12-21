@@ -4,6 +4,8 @@ import com.codepass.user.service.DockerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +25,26 @@ public class HelloController {
     @Autowired
     DockerService dockerService;
 
+    private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
+
     @GetMapping("/hello1")
     @Operation(summary = "测试接口1", description = "测试用的接口1, 不需要鉴权就可以调用")
     @ApiResponse(responseCode = "200", description = "正常返回")
     public String hello1() {
         try {
-            dockerService.mountDocker("4a479ddd", "123456");
+            String mountPath = "";
+            ProcessBuilder builder = new ProcessBuilder("timeout 1800" +
+                    " docker run --rm -it" +
+                    " --name 4a479ddd" +
+                    " --env PASSWORD=123456" +
+                    " -p 0.0.0.0:12345:8080" +
+                    " -v /home/docker_space/4a479ddd:/home/coder/project" +
+                    " codercom/code-server");
+            builder.redirectErrorStream(true);
+            for (String cmd : builder.command()) {
+                logger.info(cmd);
+            }
+            Process process = builder.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
