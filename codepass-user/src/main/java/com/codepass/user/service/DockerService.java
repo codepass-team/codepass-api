@@ -2,6 +2,8 @@ package com.codepass.user.service;
 
 import com.codepass.user.dao.DockerRepository;
 import com.codepass.user.dao.entity.DockerEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,6 +21,8 @@ public class DockerService {
     private String dockerStoragePath;
     @Autowired
     DockerRepository dockerRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(DockerService.class);
 
     public String createDocker(String parentId) throws IOException {
         String dockerId = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
@@ -49,6 +53,8 @@ public class DockerService {
                 " -p 0.0.0.0:" + port + ":8080" +
                 " -v " + filePath + ":" + mountPath +
                 " codercom/code-server");
+        logger.info(process.getOutputStream().toString());
+        logger.info(process.getErrorStream().toString());
         dockerEntity.setPassword(password);
         dockerEntity.setPort(port);
         dockerEntity.setStatus(1);
@@ -62,6 +68,6 @@ public class DockerService {
 
     public String getUri(String dockerId, String baseUri) {
         DockerEntity dockerEntity = dockerRepository.findById(dockerId).get();
-        return baseUri.split(":")[0] + ":" + dockerEntity.getPort() + "/?folder=/home/coder/project";
+        return "http://" + baseUri.split(":")[0] + ":" + dockerEntity.getPort() + "/?folder=/home/coder/project";
     }
 }
