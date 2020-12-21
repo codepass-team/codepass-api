@@ -37,7 +37,7 @@ public class DockerService {
         Process process = Runtime.getRuntime().exec("timeout 1800 " +
                 "docker run --env PASSWORD=" + password + " -it " +
                 "-p 0.0.0.0:" + port + ":8080 " +
-                "-v " + filePath + " " + mountPath + " " +
+                "-v " + filePath + ":" + mountPath + " " +
                 "codercom/code-server");
         return port;
     }
