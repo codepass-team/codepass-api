@@ -86,4 +86,15 @@ public class AnswerController {
             put("data", answerEntity);
         }});
     }
+
+    @GetMapping("/listMy")
+    @Operation(summary = "获取我提出的回答", description = "获取我提出的所有回答")
+    public ResponseEntity<?> listAnswer(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", answerService.getUserAnswer(userEntity.getId(), page));
+        }});
+    }
 }

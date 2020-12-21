@@ -8,12 +8,14 @@ import com.codepass.user.dao.entity.AnswerEntity;
 import com.codepass.user.dao.entity.LikeAnswerEntity;
 import com.codepass.user.dao.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Component
 public class AnswerService {
@@ -79,5 +81,9 @@ public class AnswerService {
 
     public AnswerEntity getAnswer(int answerId) {
         return answerRepository.findById(answerId).get();
+    }
+
+    public List<AnswerEntity> getUserAnswer(int userId, int page) {
+        return answerRepository.findByAnswerer(userId, PageRequest.of(page, 10)).toList();
     }
 }
