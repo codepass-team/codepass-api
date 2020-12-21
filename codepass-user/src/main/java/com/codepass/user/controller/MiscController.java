@@ -27,7 +27,7 @@ public class MiscController {
     @Operation(summary = "进入容器", description = "进入容器")
     public ResponseEntity<?> redirectToDocker(@Parameter(description = "容器Id") @PathVariable String dockerId,
                                               HttpServletRequest request) {
-        String baseUri = request.getRequestURI();
+        String baseUri = request.getHeader("Host");
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header(HttpHeaders.LOCATION, dockerService.getUri(dockerId, baseUri)).build();
     }
 }

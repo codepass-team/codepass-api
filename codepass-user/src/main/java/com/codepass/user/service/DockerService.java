@@ -53,6 +53,7 @@ public class DockerService {
                 " -v " + filePath + ":" + mountPath +
                 " codercom/code-server");
         dockerEntity.setPassword(password);
+        dockerEntity.setPort(port);
         dockerEntity.setStatus(1);
         dockerRepository.save(dockerEntity);
         return dockerEntity;
@@ -64,6 +65,6 @@ public class DockerService {
 
     public String getUri(String dockerId, String baseUri) {
         DockerEntity dockerEntity = dockerRepository.findById(dockerId).get();
-        return baseUri.split(":/")[0] + ":" + dockerEntity.getPort() + "/?folder=/home/coder/project";
+        return baseUri.split(":")[0] + ":" + dockerEntity.getPort() + "/?folder=/home/coder/project";
     }
 }
