@@ -48,13 +48,15 @@ public class DockerService {
         String filePath = dockerStoragePath + dockerId;
         String mountPath = "/home/coder/project";
         int port = new Random().nextInt(10000) + 10000;
-        Process process = Runtime.getRuntime().exec("timeout 1800" +
+        ProcessBuilder builder = new ProcessBuilder("timeout 1800" +
                 " docker run --rm -it" +
                 " --name " + dockerId +
                 " --env PASSWORD=" + password +
                 " -p 0.0.0.0:" + port + ":8080" +
                 " -v " + filePath + ":" + mountPath +
                 " codercom/code-server");
+        builder.redirectErrorStream(true);
+        Process process = builder.start();
         String str = null;
         BufferedReader buffer = new BufferedReader(new InputStreamReader(process.getInputStream()));
         while ((str = (buffer.readLine())) != null)
