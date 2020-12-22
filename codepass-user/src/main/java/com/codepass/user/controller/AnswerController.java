@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 @RestController
@@ -50,20 +51,36 @@ public class AnswerController {
     @ApiResponse(responseCode = "200", description = "成功保存回答")
     public ResponseEntity<?> saveAnswer(@Parameter(description = "回答Id") @PathVariable int answerId,
                                         @Parameter(description = "回答内容") @RequestParam String content) {
-        return ResponseEntity.ok(new HashMap<String, Object>() {{
-            put("status", "ok");
-            put("data", answerService.updateAnswer(answerId, content, false));
-        }});
+        try {
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "ok");
+                put("data", answerService.updateAnswer(answerId, content, false));
+            }});
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "bad");
+                put("data", "docker启动失败");
+            }});
+        }
     }
 
     @PostMapping("/submit/{answerId}")
     @Operation(summary = "提交回答", description = "提交回答, 提交后不能再修改")
     @ApiResponse(responseCode = "200", description = "提交成功")
     public ResponseEntity<?> submitAnswer(@Parameter(description = "回答Id") @PathVariable int answerId) {
-        return ResponseEntity.ok(new HashMap<String, Object>() {{
-            put("status", "ok");
-            put("answerId", answerService.updateAnswer(answerId, null, true));
-        }});
+        try {
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "ok");
+                put("answerId", answerService.updateAnswer(answerId, null, true));
+            }});
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "bad");
+                put("data", "docker启动失败");
+            }});
+        }
     }
 
     @DeleteMapping("/{answerId}")

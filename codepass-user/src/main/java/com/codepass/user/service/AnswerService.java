@@ -60,7 +60,7 @@ public class AnswerService {
         answerRepository.updateLikeBy(answerId, 1);
     }
 
-    public AnswerEntity updateAnswer(int answerId, String content, boolean isFinal) {
+    public AnswerEntity updateAnswer(int answerId, String content, boolean isFinal) throws IOException {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
         int userId = userEntity.getId();
@@ -69,7 +69,10 @@ public class AnswerService {
             throw new RuntimeException("不能修改已经提交的回答");
         }
         if (content != null) answerEntity.setContent(content);
-        if (isFinal) answerEntity.setStatus(1);
+        if (isFinal) {
+            answerEntity.setStatus(1);
+            dockerService.umountDocker(answerEntity.getDockerId());
+        }
         answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));
         answerRepository.save(answerEntity);
         return answerEntity;

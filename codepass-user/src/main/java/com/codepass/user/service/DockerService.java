@@ -8,9 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
+import javax.transaction.Transactional;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermissions;
@@ -18,6 +17,7 @@ import java.util.Random;
 import java.util.UUID;
 
 @Component
+@Transactional
 public class DockerService {
     @Value("${docker.storage.path}")
     private String dockerStoragePath;
@@ -48,15 +48,17 @@ public class DockerService {
         String filePath = dockerStoragePath + dockerId;
         String mountPath = "/home/coder/project";
         int port = new Random().nextInt(10000) + 10000;
+        // timeout 1800 表示如果1800s内后面的命令还未启动就停止执行
+        // 不能加-it参数否则会出问题
         ProcessBuilder builder = new ProcessBuilder("timeout 1800" +
-                " docker run --rm -it" +
+                " docker run --rm" +
                 " --name " + dockerId +
                 " --env PASSWORD=" + password +
                 " -p 0.0.0.0:" + port + ":8080" +
                 " -v " + filePath + ":" + mountPath +
                 " codercom/code-server");
         builder.redirectErrorStream(true);
-        Process process = builder.start();
+        builder.start();
         dockerEntity.setPassword(password);
         dockerEntity.setPort(port);
         dockerEntity.setStatus(1);
@@ -64,8 +66,15 @@ public class DockerService {
         return dockerEntity;
     }
 
-    public boolean umountDocker(String dockerId) {
-        return true;
+    public DockerEntity umountDocker(String dockerId) throws IOException {
+        DockerEntity dockerEntity = dockerRepository.findById(dockerId).get();
+        ProcessBuilder builder = new ProcessBuilder("docker stop " + dockerId);
+        builder.redirectErrorStream(true);
+        builder.start();
+        dockerEntity.setPort(0);
+        dockerEntity.setStatus(0);
+        dockerRepository.save(dockerEntity);
+        return dockerEntity;
     }
 
     public String getUri(String dockerId, String baseUri) {

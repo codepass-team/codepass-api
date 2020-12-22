@@ -56,21 +56,35 @@ public class QuestionController {
     public ResponseEntity<?> saveQuestion(@Parameter(description = "问题Id") @PathVariable int questionId,
                                           @Parameter(description = "新的问题标题") @RequestParam(required = false) String title,
                                           @Parameter(description = "新的问题描述") @RequestParam(required = false) String content) {
-        QuestionEntity questionEntity = questionService.changeQuestion(questionId, title, content, false);
-        return ResponseEntity.ok(new HashMap<String, Object>() {{
-            put("status", "ok");
-            put("data", questionEntity);
-        }});
+        try {
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "ok");
+                put("data", questionService.changeQuestion(questionId, title, content, false));
+            }});
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "bad");
+                put("data", "docker启动失败");
+            }});
+        }
     }
 
     @PostMapping("/submit/{questionId}")
     @Operation(summary = "提交问题", description = "提交一个问题, 提交后不能再次编辑")
     public ResponseEntity<?> submitQuestion(@Parameter(description = "问题Id") @PathVariable int questionId) {
-        QuestionEntity questionEntity = questionService.changeQuestion(questionId, null, null, true);
-        return ResponseEntity.ok(new HashMap<String, Object>() {{
-            put("status", "ok");
-            put("data", questionEntity);
-        }});
+        try {
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "ok");
+                put("data", questionService.changeQuestion(questionId, null, null, true));
+            }});
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "bad");
+                put("data", "docker启动失败");
+            }});
+        }
     }
 
     @DeleteMapping("/{questionId}")

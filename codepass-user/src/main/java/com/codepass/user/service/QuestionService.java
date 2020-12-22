@@ -41,14 +41,17 @@ public class QuestionService {
         return questionEntity;
     }
 
-    public QuestionEntity changeQuestion(Integer questionId, String title, String content, boolean isFinal) {
+    public QuestionEntity changeQuestion(Integer questionId, String title, String content, boolean isFinal) throws IOException {
         QuestionEntity questionEntity = questionRepository.findById(questionId).get();
         if (questionEntity.getStatus() == 1) {
             throw new RuntimeException("不能修改已经提交的问题");
         }
         if (title != null) questionEntity.setTitle(title);
         if (content != null) questionEntity.setContent(content);
-        if (isFinal) questionEntity.setStatus(1);
+        if (isFinal) {
+            questionEntity.setStatus(1);
+            dockerService.umountDocker(questionEntity.getDockerId());
+        }
         questionRepository.save(questionEntity);
         return questionEntity;
     }
