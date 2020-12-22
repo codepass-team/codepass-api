@@ -46,8 +46,10 @@ public class AnswerController {
                 put("data", answerEntity);
             }});
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "bad");
+                put("data", e.getMessage());
             }});
         }
     }
@@ -66,7 +68,7 @@ public class AnswerController {
             e.printStackTrace();
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "bad");
-                put("data", "docker启动失败");
+                put("data", e.getMessage());
             }});
         }
     }
@@ -84,7 +86,7 @@ public class AnswerController {
             e.printStackTrace();
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "bad");
-                put("data", "docker启动失败");
+                put("data", e.getMessage());
             }});
         }
     }
