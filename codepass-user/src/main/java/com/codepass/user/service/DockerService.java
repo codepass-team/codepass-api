@@ -28,16 +28,17 @@ public class DockerService {
 
     public String createDocker(String parentId) throws IOException {
         String dockerId = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
-        Files.createDirectory(
-                Path.of(dockerStoragePath + dockerId),
-                PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwxrwxrwx"))
-        );
         DockerEntity dockerEntity = new DockerEntity();
         dockerEntity.setId(dockerId);
         dockerEntity.setPort(0);
         dockerEntity.setStatus(0);
         if (parentId != null) {
             Files.copy(Path.of(dockerStoragePath + parentId), Path.of(dockerStoragePath + dockerId));
+        } else {
+            Files.createDirectory(
+                    Path.of(dockerStoragePath + dockerId),
+                    PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwxrwxrwx"))
+            );
         }
         dockerRepository.save(dockerEntity);
         return dockerId;
