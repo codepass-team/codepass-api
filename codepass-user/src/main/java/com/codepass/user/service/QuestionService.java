@@ -74,8 +74,8 @@ public class QuestionService {
         return questionRepository.findById(questionId).get();
     }
 
-    public List<QuestionEntity> getUserQuestion(int userId, int page) {
-        return questionRepository.findByQuestioner(userId, PageRequest.of(page, 10)).toList();
+    public List<QuestionEntity> getUserQuestion(UserEntity user, int page) {
+        return questionRepository.findByQuestioner(user, PageRequest.of(page, 10)).toList();
     }
 
     public Page<QuestionEntity> getAllQuestion(int page) {

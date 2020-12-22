@@ -132,7 +132,7 @@ public class QuestionController {
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("data", questionService.getUserQuestion(userEntity.getId(), page));
+            put("data", questionService.getUserQuestion(userEntity, page));
         }});
     }
 
@@ -140,7 +140,8 @@ public class QuestionController {
     @Operation(summary = "获取某个用户提出的问题", description = "获取某用户提出的所有问题, 按照时间顺序排序")
     public ResponseEntity<?> listQuestion(@Parameter(description = "用户Id") @RequestParam int userId,
                                           @Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
-        List<QuestionEntity> questionEntities = questionService.getUserQuestion(userId, page);
+        UserEntity userEntity = userService.getUserById(userId);
+        List<QuestionEntity> questionEntities = questionService.getUserQuestion(userEntity, page);
         questionEntities.sort((o1, o2) -> (o2.getRaiseTime().compareTo(o1.getRaiseTime())));
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
