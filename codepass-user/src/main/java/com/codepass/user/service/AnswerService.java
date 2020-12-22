@@ -1,9 +1,6 @@
 package com.codepass.user.service;
 
-import com.codepass.user.dao.AnswerRepository;
-import com.codepass.user.dao.LikeAnswerRepository;
-import com.codepass.user.dao.QuestionRepository;
-import com.codepass.user.dao.UserRepository;
+import com.codepass.user.dao.*;
 import com.codepass.user.dao.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +26,8 @@ public class AnswerService {
     DockerService dockerService;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    CollectAnswerRepository collectAnswerRepository;
 
     public AnswerEntity createAnswer(UserEntity userId, int questionId) throws IOException {
         AnswerEntity answerEntity = new AnswerEntity();
@@ -62,12 +61,32 @@ public class AnswerService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         int userId = userEntity.getId();
-        LikeAnswerEntity likeAnswerEntity = new LikeAnswerEntity();
         LikeAnswerEntityPK pk = new LikeAnswerEntityPK();
         pk.setUserId(userId);
         pk.setAnswerId(answerId);
         likeAnswerRepository.deleteById(pk);
         answerRepository.updateLikeBy(answerId, -1);
+    }
+
+    public void collectAnswer(int answerId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        int userId = userEntity.getId();
+        CollectAnswerEntity collectAnswerEntity = new CollectAnswerEntity();
+        collectAnswerEntity.setAnswerId(answerId);
+        collectAnswerEntity.setUserId(userId);
+        collectAnswerEntity.setCollectTime(new Timestamp(System.currentTimeMillis()));
+        collectAnswerRepository.save(collectAnswerEntity);
+    }
+
+    public void uncollectAnswer(int answerId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        int userId = userEntity.getId();
+        CollectAnswerEntityPK pk = new CollectAnswerEntityPK();
+        pk.setUserId(userId);
+        pk.setAnswerId(answerId);
+        collectAnswerRepository.deleteById(pk);
     }
 
     public AnswerEntity updateAnswer(int answerId, String content, boolean isFinal) throws IOException {

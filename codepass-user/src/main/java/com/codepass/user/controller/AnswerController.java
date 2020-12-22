@@ -147,4 +147,22 @@ public class AnswerController {
             put("status", "ok");
         }});
     }
+
+    @PostMapping("/collect/{answerId}")
+    @Operation(description = "收藏回答")
+    public ResponseEntity<?> collect(@PathVariable int answerId) {
+        answerService.collectAnswer(answerId);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+        }});
+    }
+
+    @PostMapping("/uncollect/{answerId}")
+    @Operation(description = "取消收藏回答")
+    public ResponseEntity<?> uncollect(@PathVariable int answerId) {
+        answerService.uncollectAnswer(answerId);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+        }});
+    }
 }
