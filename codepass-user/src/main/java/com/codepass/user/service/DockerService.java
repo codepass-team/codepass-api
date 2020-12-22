@@ -50,13 +50,14 @@ public class DockerService {
         int port = new Random().nextInt(10000) + 10000;
         // timeout 1800 表示如果1800s内后面的命令还未启动就停止执行
         // 不能加-it参数否则会出问题
-        ProcessBuilder builder = new ProcessBuilder("timeout 1800" +
-                " docker run --rm" +
-                " --name " + dockerId +
-                " --env PASSWORD=" + password +
-                " -p 0.0.0.0:" + port + ":8080" +
-                " -v " + filePath + ":" + mountPath +
-                " codercom/code-server");
+        ProcessBuilder builder = new ProcessBuilder("/bin/sh", "-c",
+                "timeout 1800" +
+                        " docker run --rm" +
+                        " --name " + dockerId +
+                        " --env PASSWORD=" + password +
+                        " -p 0.0.0.0:" + port + ":8080" +
+                        " -v " + filePath + ":" + mountPath +
+                        " codercom/code-server");
         builder.redirectErrorStream(true);
         builder.start();
         dockerEntity.setPassword(password);
@@ -68,7 +69,8 @@ public class DockerService {
 
     public DockerEntity umountDocker(String dockerId) throws IOException {
         DockerEntity dockerEntity = dockerRepository.findById(dockerId).get();
-        ProcessBuilder builder = new ProcessBuilder("docker stop " + dockerId);
+        ProcessBuilder builder = new ProcessBuilder("/bin/sh", "-c",
+                "docker stop" + dockerId);
         builder.redirectErrorStream(true);
         builder.start();
         dockerEntity.setPort(0);
