@@ -116,7 +116,7 @@ public class AnswerController {
     public ResponseEntity<?> listAnswer(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
-        List<AnswerEntity> answerEntities = answerService.getUserAnswer(userEntity.getId(), page);
+        List<AnswerEntity> answerEntities = answerService.getUserAnswer(userEntity, page);
         List<AnswerDTO> answerDTOs = new ArrayList<>();
         for (AnswerEntity a : answerEntities) {
             QuestionEntity q = questionService.getQuestion(a.getQuestionId());

@@ -1,6 +1,7 @@
 package com.codepass.user.dao;
 
 import com.codepass.user.dao.entity.AnswerEntity;
+import com.codepass.user.dao.entity.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,5 +13,5 @@ public interface AnswerRepository extends CustomRepository<AnswerEntity, Integer
     @Query("update AnswerEntity set likeCount = likeCount + ?2 where id = ?1")
     int updateLikeBy(int id, int count);
 
-    Page<AnswerEntity> findByAnswerer(int answererId, Pageable pageable);
+    Page<AnswerEntity> findByAnswerer(UserEntity answerer, Pageable pageable);
 }

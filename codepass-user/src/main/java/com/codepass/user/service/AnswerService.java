@@ -86,7 +86,7 @@ public class AnswerService {
         return answerRepository.findById(answerId).get();
     }
 
-    public List<AnswerEntity> getUserAnswer(int userId, int page) {
-        return answerRepository.findByAnswerer(userId, PageRequest.of(page, 10)).toList();
+    public List<AnswerEntity> getUserAnswer(UserEntity user, int page) {
+        return answerRepository.findByAnswerer(user, PageRequest.of(page, 10)).toList();
     }
 }
