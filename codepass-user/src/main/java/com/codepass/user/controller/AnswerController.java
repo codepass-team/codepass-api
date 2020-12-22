@@ -45,7 +45,7 @@ public class AnswerController {
                 put("status", "ok");
                 put("data", answerEntity);
             }});
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "bad");

@@ -32,23 +32,19 @@ public class AnswerService {
     @Autowired
     UserRepository userRepository;
 
-    public AnswerEntity createAnswer(UserEntity userId, int questionId) {
-        try {
-            AnswerEntity answerEntity = new AnswerEntity();
-            String dockerId = questionRepository.findById(questionId).get().getDockerId();
-            String newDockerId = dockerService.createDocker(dockerId);
-            dockerService.mountDocker(newDockerId, "123456");
-            answerEntity.setAnswerer(userId);
-            answerEntity.setQuestionId(questionId);
-            answerEntity.setDockerId(newDockerId);
-            answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));
-            answerEntity.setLikeCount(0);
-            answerEntity.setStatus(0);
-            answerRepository.save(answerEntity);
-            return answerEntity;
-        } catch (IOException e) {
-            throw new RuntimeException("Create docker failed");
-        }
+    public AnswerEntity createAnswer(UserEntity userId, int questionId) throws IOException {
+        AnswerEntity answerEntity = new AnswerEntity();
+        String dockerId = questionRepository.findById(questionId).get().getDockerId();
+        String newDockerId = dockerService.createDocker(dockerId);
+        dockerService.mountDocker(newDockerId, "123456");
+        answerEntity.setAnswerer(userId);
+        answerEntity.setQuestionId(questionId);
+        answerEntity.setDockerId(newDockerId);
+        answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));
+        answerEntity.setLikeCount(0);
+        answerEntity.setStatus(0);
+        answerRepository.save(answerEntity);
+        return answerEntity;
     }
 
     public void likeAnswer(int answerId) {
