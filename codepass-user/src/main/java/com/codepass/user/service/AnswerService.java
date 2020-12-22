@@ -4,10 +4,7 @@ import com.codepass.user.dao.AnswerRepository;
 import com.codepass.user.dao.LikeAnswerRepository;
 import com.codepass.user.dao.QuestionRepository;
 import com.codepass.user.dao.UserRepository;
-import com.codepass.user.dao.entity.AnswerEntity;
-import com.codepass.user.dao.entity.LikeAnswerEntity;
-import com.codepass.user.dao.entity.QuestionEntity;
-import com.codepass.user.dao.entity.UserEntity;
+import com.codepass.user.dao.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -50,11 +47,27 @@ public class AnswerService {
     }
 
     public void likeAnswer(int answerId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        int userId = userEntity.getId();
         LikeAnswerEntity likeAnswerEntity = new LikeAnswerEntity();
         likeAnswerEntity.setAnswerId(answerId);
+        likeAnswerEntity.setUserId(userId);
         likeAnswerEntity.setLikeTime(new Timestamp(System.currentTimeMillis()));
         likeAnswerRepository.save(likeAnswerEntity);
         answerRepository.updateLikeBy(answerId, 1);
+    }
+
+    public void unlikeAnswer(int answerId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        int userId = userEntity.getId();
+        LikeAnswerEntity likeAnswerEntity = new LikeAnswerEntity();
+        LikeAnswerEntityPK pk = new LikeAnswerEntityPK();
+        pk.setUserId(userId);
+        pk.setAnswerId(answerId);
+        likeAnswerRepository.deleteById(pk);
+        answerRepository.updateLikeBy(answerId, -1);
     }
 
     public AnswerEntity updateAnswer(int answerId, String content, boolean isFinal) throws IOException {

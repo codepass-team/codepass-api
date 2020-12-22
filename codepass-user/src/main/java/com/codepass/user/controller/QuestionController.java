@@ -192,7 +192,7 @@ public class QuestionController {
     }
 
     @PostMapping("/unlike/{questionId}")
-    @Operation(description = "取消问题")
+    @Operation(description = "取消点赞问题")
     public ResponseEntity<?> unlike(@PathVariable int questionId) {
         questionService.unlikeQuestion(questionId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{

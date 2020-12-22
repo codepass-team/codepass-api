@@ -129,4 +129,22 @@ public class AnswerController {
             put("data", answerDTOs);
         }});
     }
+
+    @PostMapping("/like/{answerId}")
+    @Operation(description = "点赞回答")
+    public ResponseEntity<?> like(@PathVariable int answerId) {
+        answerService.likeAnswer(answerId);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+        }});
+    }
+
+    @PostMapping("/unlike/{answerId}")
+    @Operation(description = "取消点赞回答")
+    public ResponseEntity<?> unlike(@PathVariable int answerId) {
+        answerService.unlikeAnswer(answerId);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+        }});
+    }
 }
