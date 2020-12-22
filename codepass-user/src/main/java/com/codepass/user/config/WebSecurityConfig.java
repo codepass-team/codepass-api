@@ -73,9 +73,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/oa/**").permitAll() // swagger doc
                 .antMatchers("/api/docker/**").permitAll()
                 .antMatchers("/api/login", "/api/register").permitAll()
-                .antMatchers("/api/question/**", "/api/answer/**").permitAll()
+                .antMatchers("/api/question/**", "/api/answer/**", "/api/comment/**").permitAll()
                 .antMatchers("/api/question/create", "/api/question/save", "/api/question/commit", "/api/question/delete",
-                        "/api/answer/create", "/api/answer/save", "/api/answer/commit", "/api/answer/delete").authenticated()
+                        "/api/answer/create", "/api/answer/save", "/api/answer/commit", "/api/answer/delete",
+                        "/api/comment/question/create","/api/comment/question/delete",
+                        "/api/comment/answer/create","/api/comment/answer/delete").authenticated()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
