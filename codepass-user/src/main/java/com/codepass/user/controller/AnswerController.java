@@ -2,8 +2,12 @@ package com.codepass.user.controller;
 
 import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.AnswerEntity;
+import com.codepass.user.dao.entity.QuestionEntity;
 import com.codepass.user.dao.entity.UserEntity;
+import com.codepass.user.dto.AnswerDTO;
 import com.codepass.user.service.AnswerService;
+import com.codepass.user.service.QuestionService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,7 +18,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/answer")
@@ -24,6 +30,8 @@ public class AnswerController {
     AnswerService answerService;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    QuestionService questionService;
 
     @PostMapping("/create")
     @Operation(summary = "创建回答", description = "创建一个回答")
@@ -92,9 +100,16 @@ public class AnswerController {
     public ResponseEntity<?> listAnswer(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+        List<AnswerEntity> answerEntities = answerService.getUserAnswer(userEntity.getId(), page);
+        List<AnswerDTO> answerDTOs = new ArrayList<>();
+        for(AnswerEntity a:answerEntities){
+            QuestionEntity q = questionService.getQuestion(a.getQuestionId());
+            AnswerDTO answerDTO = new AnswerDTO(a, q);
+            answerDTOs.add(answerDTO);
+        }
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("data", answerService.getUserAnswer(userEntity.getId(), page));
+            put("data", answerDTOs);
         }});
     }
 }
