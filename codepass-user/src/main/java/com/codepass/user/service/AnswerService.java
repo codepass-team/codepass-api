@@ -61,7 +61,7 @@ public class AnswerService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         AnswerEntity answerEntity = answerRepository.findById(answerId).get();
-        QuestionEntity questionEntity = questionRepository.findById(answerEntity.getId()).get();
+        QuestionEntity questionEntity = questionRepository.findById(answerEntity.getQuestionId()).get();
         if (answerEntity.getAnswerer().getId() != userEntity.getId()) {
             throw new RuntimeException("不能修改别人的回答");
         }
