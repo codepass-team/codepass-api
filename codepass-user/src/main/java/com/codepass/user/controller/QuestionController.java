@@ -35,7 +35,7 @@ public class QuestionController {
     @Operation(summary = "创建问题", description = "创建一个新问题, 需要提供问题标题")
     public ResponseEntity<?> createQuestion(@Parameter(description = "问题标题") @RequestParam String title) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userService.getUserByNickname(userDetails.getUsername());
+        UserEntity userEntity = userService.getUserByUsername(userDetails.getUsername());
         try {
             QuestionEntity questionEntity = questionService.createQuestion(userEntity, title);
             return ResponseEntity.ok(new HashMap<String, Object>() {{
@@ -129,7 +129,7 @@ public class QuestionController {
     @Operation(summary = "获取我提出的问题", description = "获取我提出的所有问题")
     public ResponseEntity<?> listQuestion(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
             put("data", questionService.getUserQuestion(userEntity.getId(), page));

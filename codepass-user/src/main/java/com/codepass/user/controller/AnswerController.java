@@ -40,7 +40,7 @@ public class AnswerController {
                                           @Parameter(description = "回答内容") @RequestParam String content) {
         try {
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+            UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
             AnswerEntity answerEntity = answerService.createAnswer(userEntity, questionId, content);
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "ok");
@@ -115,7 +115,7 @@ public class AnswerController {
     @Operation(summary = "获取我提出的回答", description = "获取我提出的所有回答")
     public ResponseEntity<?> listAnswer(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         List<AnswerEntity> answerEntities = answerService.getUserAnswer(userEntity.getId(), page);
         List<AnswerDTO> answerDTOs = new ArrayList<>();
         for (AnswerEntity a : answerEntities) {

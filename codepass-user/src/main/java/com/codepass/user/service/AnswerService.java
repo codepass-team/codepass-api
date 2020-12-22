@@ -62,7 +62,7 @@ public class AnswerService {
 
     public AnswerEntity updateAnswer(int answerId, String content, boolean isFinal) throws IOException {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         int userId = userEntity.getId();
         AnswerEntity answerEntity = answerRepository.findById(answerId).get();
         if (answerEntity.getStatus() == 1) {

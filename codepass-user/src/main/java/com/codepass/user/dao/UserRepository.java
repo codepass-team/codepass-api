@@ -12,5 +12,5 @@ public interface UserRepository extends CustomRepository<UserEntity, Integer> {
 
     UserEntity findByEmail(String email);
 
-    UserEntity findByNickname(String nickname);
+    UserEntity findByUsername(String username);
 }

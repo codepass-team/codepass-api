@@ -21,9 +21,9 @@ public class UserService {
     @Autowired
     private PasswordEncoder bcryptEncoder;
 
-    public UserEntity updateUser(int userId, String nickname, String gender, String job, String tech, Integer age) {
+    public UserEntity updateUser(int userId, String username, String gender, String job, String tech, Integer age) {
         UserEntity userEntity = userRepository.findById(userId).orElseGet(UserEntity::new);
-        if (nickname != null) userEntity.setNickname(nickname);
+        if (username != null) userEntity.setUsername(username);
         if (gender != null) userEntity.setGender(gender);
         if (job != null) userEntity.setJob(job);
         if (tech != null) userEntity.setTech(tech);
@@ -32,17 +32,17 @@ public class UserService {
         return userEntity;
     }
 
-    public UserEntity getUserByNickname(String nickname) {
-        return userRepository.findByNickname(nickname);
+    public UserEntity getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     public UserEntity getUserById(int id) {
         return userRepository.findById(id).get();
     }
 
-    public UserEntity createNewUser(String nickname, String password) {
+    public UserEntity createNewUser(String username, String password) {
         UserEntity newUser = new UserEntity();
-        newUser.setNickname(nickname);
+        newUser.setUsername(username);
         newUser.setPassword(bcryptEncoder.encode(password));
         newUser.setFollowerCount(0);
         userRepository.save(newUser);

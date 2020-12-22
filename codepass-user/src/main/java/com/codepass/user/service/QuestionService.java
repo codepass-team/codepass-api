@@ -84,7 +84,7 @@ public class QuestionService {
 
     public void followQuestion(int questionId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         int userId = userEntity.getId();
         FollowQuestionEntity followQuestionEntity = new FollowQuestionEntity();
         followQuestionEntity.setQuestionId(questionId);

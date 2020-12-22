@@ -8,7 +8,7 @@ public class UserEntity {
     private int id;
     private String email;
     private String password;
-    private String nickname;
+    private String username;
     private String gender;
     private String job;
     private String tech;
@@ -47,13 +47,13 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "nickname")
-    public String getNickname() {
-        return nickname;
+    @Column(name = "username")
+    public String getUsername() {
+        return username;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Basic
@@ -116,7 +116,7 @@ public class UserEntity {
         if (id != that.id) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (nickname != null ? !nickname.equals(that.nickname) : that.nickname != null) return false;
+        if (username != null ? !username.equals(that.username) : that.username != null) return false;
         if (gender != null ? !gender.equals(that.gender) : that.gender != null) return false;
         if (job != null ? !job.equals(that.job) : that.job != null) return false;
         if (tech != null ? !tech.equals(that.tech) : that.tech != null) return false;
@@ -132,7 +132,7 @@ public class UserEntity {
         int result = id;
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (nickname != null ? nickname.hashCode() : 0);
+        result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
         result = 31 * result + (job != null ? job.hashCode() : 0);
         result = 31 * result + (tech != null ? tech.hashCode() : 0);

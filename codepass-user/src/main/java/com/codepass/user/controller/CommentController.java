@@ -48,7 +48,7 @@ public class CommentController {
     public ResponseEntity<?> commentQuestion(@Parameter(description = "问题Id") @PathVariable int questionId,
                                              @Parameter(description = "评论内容") @RequestParam String content) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         QuestionCommentEntity questionCommentEntity = new QuestionCommentEntity();
         questionCommentEntity.setQuestionId(questionId);
         questionCommentEntity.setContent(content);
@@ -65,7 +65,7 @@ public class CommentController {
     @Operation(summary = "删除问题评论", description = "删除问题评论")
     public ResponseEntity<?> deleteQuestionComment(@Parameter(description = "评论Id") @PathVariable int commentId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         QuestionCommentEntity questionCommentEntity = questionCommentRepository.findById(commentId).get();
         if (questionCommentEntity.getCommenter() != userEntity.getId()) {
             return ResponseEntity.ok(new HashMap<String, Object>() {{
@@ -96,7 +96,7 @@ public class CommentController {
     public ResponseEntity<?> commentAnswer(@Parameter(description = "回答Id") @PathVariable int answerId,
                                            @Parameter(description = "评论内容") @RequestParam String content) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         AnswerCommentEntity answerCommentEntity = new AnswerCommentEntity();
         answerCommentEntity.setAnswerId(answerId);
         answerCommentEntity.setContent(content);
@@ -113,7 +113,7 @@ public class CommentController {
     @Operation(summary = "删除回答评论", description = "删除回答评论")
     public ResponseEntity<?> commentAnswer(@Parameter(description = "评论Id") @PathVariable int commentId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         AnswerCommentEntity answerCommentEntity = answerCommentRepository.findById(commentId).get();
         if (answerCommentEntity.getCommenter() != userEntity.getId()) {
             return ResponseEntity.ok(new HashMap<String, Object>() {{
