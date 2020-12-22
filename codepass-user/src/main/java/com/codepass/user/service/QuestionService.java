@@ -1,6 +1,7 @@
 package com.codepass.user.service;
 
 import com.codepass.user.dao.FollowQuestionRepository;
+import com.codepass.user.dao.LikeQuestionRepository;
 import com.codepass.user.dao.QuestionRepository;
 import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.FollowQuestionEntity;
@@ -28,6 +29,8 @@ public class QuestionService {
     UserRepository userRepository;
     @Autowired
     DockerService dockerService;
+    @Autowired
+    LikeQuestionRepository likeQuestionRepository;
 
     public QuestionEntity createQuestion(UserEntity questioner, String title) throws IOException {
         String dockerId = dockerService.createDocker(null);
@@ -91,5 +94,12 @@ public class QuestionService {
         followQuestionEntity.setUserId(userId);
         followQuestionEntity.setFollowTime(new Timestamp(System.currentTimeMillis()));
         followQuestionRepository.save(followQuestionEntity);
+    }
+
+    public int checkLike(int questionId){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        int userId = userEntity.getId();
+        return likeQuestionRepository.existsByUserIdAndQuestionId(userId,questionId)?1:0;
     }
 }

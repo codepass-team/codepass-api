@@ -1,9 +1,11 @@
 package com.codepass.user.controller;
 
+import com.codepass.user.dao.LikeQuestionRepository;
 import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.QuestionEntity;
 import com.codepass.user.dao.entity.UserEntity;
 import com.codepass.user.dto.PageChunk;
+import com.codepass.user.dto.QuestionPojoQuery;
 import com.codepass.user.service.QuestionService;
 import com.codepass.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -119,9 +121,11 @@ public class QuestionController {
     @GetMapping("/{questionId}")
     @Operation(summary = "获取问题", description = "获取某个问题的信息, 包括问题标题, 描述等, 还包括该问题所有回答的信息. 回答中不包括编辑中(status=0)的回答, 但自己提的问题忽略")
     public ResponseEntity<?> getQuestion(@Parameter(description = "问题Id") @PathVariable int questionId) {
+        QuestionPojoQuery question = new QuestionPojoQuery(questionService.getQuestion(questionId));
+        question.setUlike(questionService.checkLike(questionId));
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("data", questionService.getQuestion(questionId));
+            put("data", question);
         }});
     }
 
