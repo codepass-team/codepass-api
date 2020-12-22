@@ -1,10 +1,7 @@
 package com.codepass.user.controller;
 
 import com.codepass.user.dao.UserRepository;
-import com.codepass.user.dao.entity.AnswerEntity;
-import com.codepass.user.dao.entity.LikeAnswerEntity;
-import com.codepass.user.dao.entity.QuestionEntity;
-import com.codepass.user.dao.entity.UserEntity;
+import com.codepass.user.dao.entity.*;
 import com.codepass.user.dto.AnswerDTO;
 import com.codepass.user.service.AnswerService;
 import com.codepass.user.service.QuestionService;
@@ -133,13 +130,13 @@ public class AnswerController {
 
     @GetMapping("/listCollect")
     @Operation(summary = "获取我收藏的回答", description = "获取我收藏的所有回答")
-    public ResponseEntity<?> listlistCollect(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
+    public ResponseEntity<?> listCollect(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         int userId = userEntity.getId();
-        List<LikeAnswerEntity> likeAnswerEntities = answerService.getUserCollect(userId, page);
+        List<CollectAnswerEntity> likeAnswerEntities = answerService.getUserCollect(userId, page);
         List<AnswerDTO> answerDTOs = new ArrayList<>();
-        for (LikeAnswerEntity la : likeAnswerEntities) {
+        for (CollectAnswerEntity la : likeAnswerEntities) {
             AnswerEntity a = answerService.getAnswer(la.getAnswerId());
             QuestionEntity q = questionService.getQuestion(a.getQuestionId());
             AnswerDTO answerDTO = new AnswerDTO(a, q);

@@ -1,9 +1,6 @@
 package com.codepass.user.service;
 
-import com.codepass.user.dao.FollowQuestionRepository;
-import com.codepass.user.dao.LikeQuestionRepository;
-import com.codepass.user.dao.QuestionRepository;
-import com.codepass.user.dao.UserRepository;
+import com.codepass.user.dao.*;
 import com.codepass.user.dao.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +26,8 @@ public class QuestionService {
     DockerService dockerService;
     @Autowired
     LikeQuestionRepository likeQuestionRepository;
+    @Autowired
+    CollectAnswerRepository collectAnswerRepository;
 
     public QuestionEntity createQuestion(UserEntity questioner, String title) throws IOException {
         String dockerId = dockerService.createDocker(null);
@@ -120,5 +119,9 @@ public class QuestionService {
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         int userId = userEntity.getId();
         return likeQuestionRepository.existsByUserIdAndQuestionId(userId, questionId) ? 1 : 0;
+    }
+
+    public List<FollowQuestionEntity> getUserFollow(int userid, int page) {
+        return followQuestionRepository.findByUserId(userid, PageRequest.of(page, 10)).toList();
     }
 }

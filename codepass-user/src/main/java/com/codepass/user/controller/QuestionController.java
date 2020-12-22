@@ -2,8 +2,8 @@ package com.codepass.user.controller;
 
 import com.codepass.user.dao.LikeQuestionRepository;
 import com.codepass.user.dao.UserRepository;
-import com.codepass.user.dao.entity.QuestionEntity;
-import com.codepass.user.dao.entity.UserEntity;
+import com.codepass.user.dao.entity.*;
+import com.codepass.user.dto.AnswerDTO;
 import com.codepass.user.dto.PageChunk;
 import com.codepass.user.dto.QuestionPojoQuery;
 import com.codepass.user.service.QuestionService;
@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -170,6 +171,24 @@ public class QuestionController {
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
             put("data", questions);
+        }});
+    }
+
+    @GetMapping("/listFollow")
+    @Operation(summary = "获取我关注的问题", description = "获取我关注的所有问题")
+    public ResponseEntity<?> listFollow(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        int userId = userEntity.getId();
+        List<FollowQuestionEntity> followQuestionEntities = questionService.getUserFollow(userId, page);
+        List<QuestionEntity> questionEntityList = new ArrayList<>();
+        for (FollowQuestionEntity fq : followQuestionEntities) {
+            QuestionEntity a = questionService.getQuestion(fq.getQuestionId());
+            questionEntityList.add(a);
+        }
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", questionEntityList);
         }});
     }
 
