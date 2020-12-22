@@ -1,5 +1,7 @@
 package com.codepass.user.dao.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -38,6 +40,7 @@ public class UserEntity {
 
     @Basic
     @Column(name = "password")
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
