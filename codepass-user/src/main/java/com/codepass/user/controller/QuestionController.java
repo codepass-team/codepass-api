@@ -181,4 +181,22 @@ public class QuestionController {
             put("status", "ok");
         }});
     }
+
+    @PostMapping("/like/{questionId}")
+    @Operation(description = "点赞问题")
+    public ResponseEntity<?> like(@PathVariable int questionId) {
+        questionService.likeQuestion(questionId);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+        }});
+    }
+
+    @PostMapping("/unlike/{questionId}")
+    @Operation(description = "取消问题")
+    public ResponseEntity<?> unlike(@PathVariable int questionId) {
+        questionService.unlikeQuestion(questionId);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+        }});
+    }
 }

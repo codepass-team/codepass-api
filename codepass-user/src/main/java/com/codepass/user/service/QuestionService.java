@@ -4,9 +4,7 @@ import com.codepass.user.dao.FollowQuestionRepository;
 import com.codepass.user.dao.LikeQuestionRepository;
 import com.codepass.user.dao.QuestionRepository;
 import com.codepass.user.dao.UserRepository;
-import com.codepass.user.dao.entity.FollowQuestionEntity;
-import com.codepass.user.dao.entity.QuestionEntity;
-import com.codepass.user.dao.entity.UserEntity;
+import com.codepass.user.dao.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -96,10 +94,31 @@ public class QuestionService {
         followQuestionRepository.save(followQuestionEntity);
     }
 
-    public int checkLike(int questionId){
+    public void likeQuestion(int questionId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         int userId = userEntity.getId();
-        return likeQuestionRepository.existsByUserIdAndQuestionId(userId,questionId)?1:0;
+        LikeQuestionEntity likeQuestionEntity = new LikeQuestionEntity();
+        likeQuestionEntity.setQuestionId(questionId);
+        likeQuestionEntity.setUserId(userId);
+        likeQuestionEntity.setLikeTime(new Timestamp(System.currentTimeMillis()));
+        likeQuestionRepository.save(likeQuestionEntity);
+    }
+
+    public void unlikeQuestion(int questionId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        int userId = userEntity.getId();
+        var pk = new LikeQuestionEntityPK();
+        pk.setUserId(userId);
+        pk.setQuestionId(questionId);
+        likeQuestionRepository.deleteById(pk);
+    }
+
+    public int checkLike(int questionId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        int userId = userEntity.getId();
+        return likeQuestionRepository.existsByUserIdAndQuestionId(userId, questionId) ? 1 : 0;
     }
 }
