@@ -122,4 +122,8 @@ public class AnswerService {
     public List<AnswerEntity> getUserAnswer(UserEntity user, int page) {
         return answerRepository.findByAnswerer(user, PageRequest.of(page, 10)).toList();
     }
+
+    public List<LikeAnswerEntity> getUserCollect(int userid, int page) {
+        return likeAnswerRepository.findByUserId(userid, PageRequest.of(page, 10)).toList();
+    }
 }
