@@ -9,7 +9,7 @@ public class AnswerCommentEntity {
     private int id;
     private Integer answerId;
     private Integer commenter;
-    private String comment;
+    private String content;
     private Timestamp commentTime;
 
     @Id
@@ -44,13 +44,13 @@ public class AnswerCommentEntity {
     }
 
     @Basic
-    @Column(name = "comment")
-    public String getComment() {
-        return comment;
+    @Column(name = "content")
+    public String getContent() {
+        return content;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setContent(String comment) {
+        this.content = comment;
     }
 
     @Basic
@@ -73,7 +73,7 @@ public class AnswerCommentEntity {
         if (id != that.id) return false;
         if (answerId != null ? !answerId.equals(that.answerId) : that.answerId != null) return false;
         if (commenter != null ? !commenter.equals(that.commenter) : that.commenter != null) return false;
-        if (comment != null ? !comment.equals(that.comment) : that.comment != null) return false;
+        if (content != null ? !content.equals(that.content) : that.content != null) return false;
         if (commentTime != null ? !commentTime.equals(that.commentTime) : that.commentTime != null) return false;
 
         return true;
@@ -84,7 +84,7 @@ public class AnswerCommentEntity {
         int result = id;
         result = 31 * result + (answerId != null ? answerId.hashCode() : 0);
         result = 31 * result + (commenter != null ? commenter.hashCode() : 0);
-        result = 31 * result + (comment != null ? comment.hashCode() : 0);
+        result = 31 * result + (content != null ? content.hashCode() : 0);
         result = 31 * result + (commentTime != null ? commentTime.hashCode() : 0);
         return result;
     }

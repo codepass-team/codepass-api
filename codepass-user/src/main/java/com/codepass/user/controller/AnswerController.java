@@ -2,12 +2,8 @@ package com.codepass.user.controller;
 
 import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.AnswerEntity;
-import com.codepass.user.dao.entity.QuestionEntity;
 import com.codepass.user.dao.entity.UserEntity;
-import com.codepass.user.dto.AnswerDTO;
 import com.codepass.user.service.AnswerService;
-import com.codepass.user.service.QuestionService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,9 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/answer")
@@ -30,8 +25,6 @@ public class AnswerController {
     AnswerService answerService;
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    QuestionService questionService;
 
     @PostMapping("/create")
     @Operation(summary = "创建回答", description = "创建一个回答")
@@ -58,20 +51,36 @@ public class AnswerController {
     @ApiResponse(responseCode = "200", description = "成功保存回答")
     public ResponseEntity<?> saveAnswer(@Parameter(description = "回答Id") @PathVariable int answerId,
                                         @Parameter(description = "回答内容") @RequestParam String content) {
-        return ResponseEntity.ok(new HashMap<String, Object>() {{
-            put("status", "ok");
-            put("data", answerService.updateAnswer(answerId, content, false));
-        }});
+        try {
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "ok");
+                put("data", answerService.updateAnswer(answerId, content, false));
+            }});
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "bad");
+                put("data", "docker启动失败");
+            }});
+        }
     }
 
     @PostMapping("/submit/{answerId}")
     @Operation(summary = "提交回答", description = "提交回答, 提交后不能再修改")
     @ApiResponse(responseCode = "200", description = "提交成功")
     public ResponseEntity<?> submitAnswer(@Parameter(description = "回答Id") @PathVariable int answerId) {
-        return ResponseEntity.ok(new HashMap<String, Object>() {{
-            put("status", "ok");
-            put("answerId", answerService.updateAnswer(answerId, null, true));
-        }});
+        try {
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "ok");
+                put("answerId", answerService.updateAnswer(answerId, null, true));
+            }});
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "bad");
+                put("data", "docker启动失败");
+            }});
+        }
     }
 
     @DeleteMapping("/{answerId}")
@@ -100,16 +109,9 @@ public class AnswerController {
     public ResponseEntity<?> listAnswer(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
-        List<AnswerEntity> answerEntities = answerService.getUserAnswer(userEntity.getId(), page);
-        List<AnswerDTO> answerDTOs = new ArrayList<>();
-        for(AnswerEntity a:answerEntities){
-            QuestionEntity q = questionService.getQuestion(a.getQuestionId());
-            AnswerDTO answerDTO = new AnswerDTO(a, q);
-            answerDTOs.add(answerDTO);
-        }
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("data", answerDTOs);
+            put("data", answerService.getUserAnswer(userEntity.getId(), page));
         }});
     }
 }
