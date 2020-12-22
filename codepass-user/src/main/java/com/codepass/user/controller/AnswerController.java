@@ -1,9 +1,13 @@
 package com.codepass.user.controller;
 
 import com.codepass.user.dao.UserRepository;
+import com.codepass.user.dao.entity.QuestionEntity;
+import com.codepass.user.dto.AnswerDTO;
 import com.codepass.user.dao.entity.AnswerEntity;
 import com.codepass.user.dao.entity.UserEntity;
 import com.codepass.user.service.AnswerService;
+import com.codepass.user.service.QuestionService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,6 +19,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @RestController
@@ -25,6 +31,8 @@ public class AnswerController {
     AnswerService answerService;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    QuestionService questionService;
 
     @PostMapping("/create")
     @Operation(summary = "创建回答", description = "创建一个回答")
