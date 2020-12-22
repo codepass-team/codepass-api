@@ -29,12 +29,12 @@ public class QuestionService {
     @Autowired
     DockerService dockerService;
 
-    public QuestionEntity createQuestion(int questionerId, String title) throws IOException {
+    public QuestionEntity createQuestion(UserEntity questioner, String title) throws IOException {
         String dockerId = dockerService.createDocker(null);
         dockerService.mountDocker(dockerId, "123456");
         QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setTitle(title);
-        questionEntity.setQuestioner(questionerId);
+        questionEntity.setQuestioner(questioner);
         questionEntity.setStatus(0);
         questionEntity.setDockerId(dockerId);
         questionRepository.save(questionEntity);

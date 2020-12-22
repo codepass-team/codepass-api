@@ -12,7 +12,7 @@ public class QuestionEntity {
     private int id;
     private String title;
     private String content;
-    private Integer questioner;
+    private UserEntity questioner;
     private Timestamp raiseTime;
     private String dockerId;
     private Integer likeCount;
@@ -51,13 +51,15 @@ public class QuestionEntity {
         this.content = content;
     }
 
-    @Basic
-    @Column(name = "questioner")
-    public Integer getQuestioner() {
+    @OneToOne()
+    @JoinColumn(name = "questioner", referencedColumnName = "id")
+    // 本表的name字段引用另一个表中的referencedColumnName字段,
+    // referencedColumnName默认为另一个表的主键
+    public UserEntity getQuestioner() {
         return questioner;
     }
 
-    public void setQuestioner(Integer questioner) {
+    public void setQuestioner(UserEntity questioner) {
         this.questioner = questioner;
     }
 
@@ -102,18 +104,6 @@ public class QuestionEntity {
         this.status = status;
     }
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "questioner", referencedColumnName = "id")
-//    // 本表的name字段引用另一个表中的referencedColumnName字段,
-//    // referencedColumnName默认为另一个表的主键
-//    public UserEntity getQuestionerUser() {
-//        return questionerUser;
-//    }
-//
-//    public void setQuestionerUser(UserEntity questionerUser) {
-//        this.questionerUser = questionerUser;
-//    }
-
     @OneToMany(mappedBy = "questionId", fetch = FetchType.EAGER)
     // 拥有mappedBy注解的实体类为关系被维护端
     // mappedBy中的是另一个实体中的属性
@@ -125,35 +115,4 @@ public class QuestionEntity {
         this.answer = answer;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        QuestionEntity that = (QuestionEntity) o;
-
-        if (id != that.id) return false;
-        if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
-        if (questioner != null ? !questioner.equals(that.questioner) : that.questioner != null) return false;
-        if (raiseTime != null ? !raiseTime.equals(that.raiseTime) : that.raiseTime != null) return false;
-        if (dockerId != null ? !dockerId.equals(that.dockerId) : that.dockerId != null) return false;
-        if (likeCount != null ? !likeCount.equals(that.likeCount) : that.likeCount != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (content != null ? content.hashCode() : 0);
-        result = 31 * result + (questioner != null ? questioner.hashCode() : 0);
-        result = 31 * result + (raiseTime != null ? raiseTime.hashCode() : 0);
-        result = 31 * result + (dockerId != null ? dockerId.hashCode() : 0);
-        result = 31 * result + (likeCount != null ? likeCount.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        return result;
-    }
 }

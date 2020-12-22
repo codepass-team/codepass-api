@@ -32,7 +32,7 @@ public class AnswerService {
     @Autowired
     UserRepository userRepository;
 
-    public AnswerEntity createAnswer(int userId, int questionId, String content) {
+    public AnswerEntity createAnswer(UserEntity userId, int questionId, String content) {
         try {
             AnswerEntity answerEntity = new AnswerEntity();
             String dockerId = questionRepository.findById(questionId).get().getDockerId();

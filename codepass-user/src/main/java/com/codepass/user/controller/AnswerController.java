@@ -41,7 +41,7 @@ public class AnswerController {
         try {
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
-            AnswerEntity answerEntity = answerService.createAnswer(userEntity.getId(), questionId, content);
+            AnswerEntity answerEntity = answerService.createAnswer(userEntity, questionId, content);
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "ok");
                 put("data", answerEntity);
@@ -118,7 +118,7 @@ public class AnswerController {
         UserEntity userEntity = userRepository.findByNickname(userDetails.getUsername());
         List<AnswerEntity> answerEntities = answerService.getUserAnswer(userEntity.getId(), page);
         List<AnswerDTO> answerDTOs = new ArrayList<>();
-        for(AnswerEntity a:answerEntities){
+        for (AnswerEntity a : answerEntities) {
             QuestionEntity q = questionService.getQuestion(a.getQuestionId());
             AnswerDTO answerDTO = new AnswerDTO(a, q);
             answerDTOs.add(answerDTO);

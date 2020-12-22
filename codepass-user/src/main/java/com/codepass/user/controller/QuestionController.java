@@ -4,7 +4,6 @@ import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.QuestionEntity;
 import com.codepass.user.dao.entity.UserEntity;
 import com.codepass.user.dto.PageChunk;
-import com.codepass.user.dto.QuestionPojo;
 import com.codepass.user.service.QuestionService;
 import com.codepass.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,7 +37,7 @@ public class QuestionController {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userService.getUserByNickname(userDetails.getUsername());
         try {
-            QuestionEntity questionEntity = questionService.createQuestion(userEntity.getId(), title);
+            QuestionEntity questionEntity = questionService.createQuestion(userEntity, title);
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "ok");
                 put("data", questionEntity);
@@ -155,15 +153,15 @@ public class QuestionController {
     public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
         Page<QuestionEntity> questionEntities = questionService.getAllQuestion(page);
         PageChunk questions = new PageChunk(questionEntities);
-        List<QuestionPojo> questionPojos = new ArrayList<>();
-        for (QuestionEntity q : questionEntities) {
-            UserEntity u = userService.getUserById(q.getQuestioner());
-            QuestionPojo questionPojo = new QuestionPojo(q, u);
-            questionPojos.add(questionPojo);
-        }
+//        List<QuestionPojo> questionPojos = new ArrayList<>();
+//        for (QuestionEntity q : questionEntities) {
+//            UserEntity u = userService.getUserById(q.getQuestioner());
+//            QuestionPojo questionPojo = new QuestionPojo(q, u);
+//            questionPojos.add(questionPojo);
+//        }
         //按时间从降序排
-        questionPojos.sort((o1, o2) -> (o2.getRaiseTime().compareTo(o1.getRaiseTime())));
-        questions.setContent(questionPojos);
+//        questionPojos.sort((o1, o2) -> (o2.getRaiseTime().compareTo(o1.getRaiseTime())));
+//        questions.setContent(questionPojos);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
             put("data", questions);

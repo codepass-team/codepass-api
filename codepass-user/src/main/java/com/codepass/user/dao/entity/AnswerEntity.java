@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 @Table(name = "answer", schema = "codepass", catalog = "")
 public class AnswerEntity {
     private int id;
-    private Integer answerer;
+    private UserEntity answerer;
     private String content;
     private Timestamp answerTime;
     private String dockerId;
@@ -26,13 +26,13 @@ public class AnswerEntity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "answerer")
-    public Integer getAnswerer() {
+    @OneToOne()
+    @JoinColumn(name = "answerer")
+    public UserEntity getAnswerer() {
         return answerer;
     }
 
-    public void setAnswerer(Integer answerer) {
+    public void setAnswerer(UserEntity answerer) {
         this.answerer = answerer;
     }
 
