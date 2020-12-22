@@ -93,6 +93,16 @@ public class QuestionService {
         followQuestionRepository.save(followQuestionEntity);
     }
 
+    public void unfollowQuestion(int questionId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        int userId = userEntity.getId();
+        var pk = new FollowQuestionEntityPK();
+        pk.setUserId(userId);
+        pk.setQuestionId(questionId);
+        followQuestionRepository.deleteById(pk);
+    }
+
     public void likeQuestion(int questionId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());

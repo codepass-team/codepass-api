@@ -201,6 +201,15 @@ public class QuestionController {
         }});
     }
 
+    @PostMapping("/unfollow/{questionId}")
+    @Operation(description = "取消关注问题")
+    public ResponseEntity<?> unfollow(@PathVariable int questionId) {
+        questionService.unfollowQuestion(questionId);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+        }});
+    }
+
     @PostMapping("/like/{questionId}")
     @Operation(description = "点赞问题")
     public ResponseEntity<?> like(@PathVariable int questionId) {
