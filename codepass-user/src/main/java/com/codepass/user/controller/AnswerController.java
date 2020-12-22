@@ -80,7 +80,7 @@ public class AnswerController {
         try {
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "ok");
-                put("answerId", answerService.updateAnswer(answerId, null, true));
+                put("data", answerService.updateAnswer(answerId, null, true));
             }});
         } catch (IOException e) {
             e.printStackTrace();
