@@ -32,7 +32,7 @@ public class AnswerService {
     @Autowired
     UserRepository userRepository;
 
-    public AnswerEntity createAnswer(UserEntity userId, int questionId, String content) {
+    public AnswerEntity createAnswer(UserEntity userId, int questionId) {
         try {
             AnswerEntity answerEntity = new AnswerEntity();
             String dockerId = questionRepository.findById(questionId).get().getDockerId();
@@ -41,7 +41,6 @@ public class AnswerService {
             answerEntity.setAnswerer(userId);
             answerEntity.setQuestionId(questionId);
             answerEntity.setDockerId(newDockerId);
-            answerEntity.setContent(content);
             answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));
             answerEntity.setLikeCount(0);
             answerEntity.setStatus(0);

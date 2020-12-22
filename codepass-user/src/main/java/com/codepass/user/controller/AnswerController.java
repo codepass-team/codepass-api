@@ -36,12 +36,11 @@ public class AnswerController {
     @PostMapping("/create")
     @Operation(summary = "创建回答", description = "创建一个回答")
     @ApiResponse(responseCode = "200", description = "成功创建回答, 返回dockerId和该回答的id")
-    public ResponseEntity<?> createAnswer(@Parameter(description = "问题Id") @RequestParam int questionId,
-                                          @Parameter(description = "回答内容") @RequestParam String content) {
+    public ResponseEntity<?> createAnswer(@Parameter(description = "问题Id") @RequestParam int questionId) {
         try {
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
-            AnswerEntity answerEntity = answerService.createAnswer(userEntity, questionId, content);
+            AnswerEntity answerEntity = answerService.createAnswer(userEntity, questionId);
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "ok");
                 put("data", answerEntity);
