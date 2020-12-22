@@ -48,6 +48,7 @@ public class QuestionController {
             e.printStackTrace();
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "bad");
+                put("data", e.getMessage());
             }});
         }
     }
@@ -83,7 +84,7 @@ public class QuestionController {
             e.printStackTrace();
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "bad");
-                put("data", "docker启动失败");
+                put("data", e.getMessage());
             }});
         }
     }
