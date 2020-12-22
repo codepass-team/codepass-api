@@ -15,8 +15,11 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.PosixFileAttributes;
+import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -30,20 +33,36 @@ public class DockerService {
 
     private static final Logger logger = LoggerFactory.getLogger(DockerService.class);
 
+    private void setPerm(Path p) throws IOException {
+        Set<PosixFilePermission> perms = Files.readAttributes(p, PosixFileAttributes.class).permissions();
+        perms.add(PosixFilePermission.OWNER_WRITE);
+        perms.add(PosixFilePermission.OWNER_READ);
+        perms.add(PosixFilePermission.OWNER_EXECUTE);
+        perms.add(PosixFilePermission.GROUP_WRITE);
+        perms.add(PosixFilePermission.GROUP_READ);
+        perms.add(PosixFilePermission.GROUP_EXECUTE);
+        perms.add(PosixFilePermission.OTHERS_WRITE);
+        perms.add(PosixFilePermission.OTHERS_READ);
+        perms.add(PosixFilePermission.OTHERS_EXECUTE);
+        Files.setPosixFilePermissions(p, perms);
+    }
+
     public String createDocker(String parentId) throws IOException {
         String dockerId = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
         DockerEntity dockerEntity = new DockerEntity();
         dockerEntity.setId(dockerId);
         dockerEntity.setPort(0);
         dockerEntity.setStatus(0);
+        Path p;
         if (parentId != null) {
-            Files.copy(Path.of(dockerStoragePath + parentId), Path.of(dockerStoragePath + dockerId));
+            p = Files.copy(Path.of(dockerStoragePath + parentId), Path.of(dockerStoragePath + dockerId));
         } else {
-            Files.createDirectory(
+            p = Files.createDirectory(
                     Path.of(dockerStoragePath + dockerId),
                     PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwxrwxrwx"))
             );
         }
+        setPerm(p);
         dockerRepository.save(dockerEntity);
         return dockerId;
     }
