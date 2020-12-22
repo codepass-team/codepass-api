@@ -9,12 +9,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @Transactional
@@ -70,8 +74,7 @@ public class DockerService {
 
     public DockerEntity umountDocker(String dockerId) throws IOException {
         DockerEntity dockerEntity = dockerRepository.findById(dockerId).get();
-        ProcessBuilder builder = new ProcessBuilder("/bin/sh", "-c",
-                "docker stop" + dockerId);
+        ProcessBuilder builder = new ProcessBuilder("/bin/sh", "-c", "docker stop" + dockerId);
         builder.redirectErrorStream(true);
         builder.start();
         dockerEntity.setPort(0);
@@ -83,5 +86,14 @@ public class DockerService {
     public String getUri(String dockerId, String baseUri) {
         DockerEntity dockerEntity = dockerRepository.findById(dockerId).get();
         return "http://" + baseUri.split(":")[0] + ":" + dockerEntity.getPort() + "?folder=/home/coder/project";
+    }
+
+    public String getDiff(String parentId, String dockerId) throws IOException {
+        Process process = new ProcessBuilder("/bin/sh", "-c",
+                "diff -ruNa " + dockerStoragePath + parentId + " " + dockerStoragePath + dockerId).start();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
+        return reader.lines().collect(Collectors.joining("\n"))
+                .replace(dockerStoragePath + parentId, "/origin")
+                .replace(dockerStoragePath + dockerId, "/new");
     }
 }

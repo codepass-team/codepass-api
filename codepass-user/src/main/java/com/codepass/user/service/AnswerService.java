@@ -6,6 +6,7 @@ import com.codepass.user.dao.QuestionRepository;
 import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.AnswerEntity;
 import com.codepass.user.dao.entity.LikeAnswerEntity;
+import com.codepass.user.dao.entity.QuestionEntity;
 import com.codepass.user.dao.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -43,6 +44,7 @@ public class AnswerService {
         answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));
         answerEntity.setLikeCount(0);
         answerEntity.setStatus(0);
+        answerEntity.setDiff(dockerService.getDiff(dockerId, newDockerId));
         answerRepository.save(answerEntity);
         return answerEntity;
     }
@@ -58,14 +60,18 @@ public class AnswerService {
     public AnswerEntity updateAnswer(int answerId, String content, boolean isFinal) throws IOException {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
-        int userId = userEntity.getId();
         AnswerEntity answerEntity = answerRepository.findById(answerId).get();
+        QuestionEntity questionEntity = questionRepository.findById(answerEntity.getId()).get();
+        if (answerEntity.getAnswerer().getId() != userEntity.getId()) {
+            throw new RuntimeException("不能修改别人的回答");
+        }
         if (answerEntity.getStatus() == 1) {
             throw new RuntimeException("不能修改已经提交的回答");
         }
         if (content != null) answerEntity.setContent(content);
         if (isFinal) {
             answerEntity.setStatus(1);
+            answerEntity.setDiff(dockerService.getDiff(questionEntity.getDockerId(), answerEntity.getDockerId()));
             dockerService.umountDocker(answerEntity.getDockerId());
         }
         answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));

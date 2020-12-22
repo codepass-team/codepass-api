@@ -14,6 +14,7 @@ public class AnswerEntity {
     private Integer likeCount;
     private Integer status;
     private Integer questionId;
+    private String diff;
 
     @Id
     @Column(name = "id")
@@ -96,35 +97,13 @@ public class AnswerEntity {
         this.questionId = questionId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        AnswerEntity that = (AnswerEntity) o;
-
-        if (id != that.id) return false;
-        if (answerer != null ? !answerer.equals(that.answerer) : that.answerer != null) return false;
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
-        if (answerTime != null ? !answerTime.equals(that.answerTime) : that.answerTime != null) return false;
-        if (dockerId != null ? !dockerId.equals(that.dockerId) : that.dockerId != null) return false;
-        if (likeCount != null ? !likeCount.equals(that.likeCount) : that.likeCount != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
-        if (questionId != null ? !questionId.equals(that.questionId) : that.questionId != null) return false;
-
-        return true;
+    @Basic
+    @Column(name = "diff")
+    public String getDiff() {
+        return diff;
     }
 
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (answerer != null ? answerer.hashCode() : 0);
-        result = 31 * result + (content != null ? content.hashCode() : 0);
-        result = 31 * result + (answerTime != null ? answerTime.hashCode() : 0);
-        result = 31 * result + (dockerId != null ? dockerId.hashCode() : 0);
-        result = 31 * result + (likeCount != null ? likeCount.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (questionId != null ? questionId.hashCode() : 0);
-        return result;
+    public void setDiff(String diff) {
+        this.diff = diff;
     }
 }
