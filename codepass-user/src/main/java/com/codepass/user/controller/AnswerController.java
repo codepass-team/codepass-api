@@ -27,11 +27,11 @@ import java.util.List;
 @Tag(name = "Answer", description = "答案管理相关API")
 public class AnswerController {
     @Autowired
-    QuestionService questionService;
-    @Autowired
     AnswerService answerService;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    QuestionService questionService;
 
     @PostMapping("/create")
     @Operation(summary = "创建回答", description = "创建一个回答")
