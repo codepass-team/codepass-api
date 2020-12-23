@@ -25,7 +25,7 @@ spring:
   redis:
     host: katty.top
     port: 6379
-    password: codepass
+    password: codepassTJ2020
     database: 0
     connect-timeout: 3000
 
