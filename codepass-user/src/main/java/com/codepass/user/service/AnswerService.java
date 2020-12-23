@@ -49,6 +49,8 @@ public class AnswerService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         int userId = userEntity.getId();
+        if (likeAnswerRepository.existsByUserIdAndAnswerId(userId, answerId))
+            return;
         LikeAnswerEntity likeAnswerEntity = new LikeAnswerEntity();
         likeAnswerEntity.setAnswerId(answerId);
         likeAnswerEntity.setUserId(userId);
@@ -61,6 +63,8 @@ public class AnswerService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         int userId = userEntity.getId();
+        if (!likeAnswerRepository.existsByUserIdAndAnswerId(userId, answerId))
+            return;
         LikeAnswerEntityPK pk = new LikeAnswerEntityPK();
         pk.setUserId(userId);
         pk.setAnswerId(answerId);

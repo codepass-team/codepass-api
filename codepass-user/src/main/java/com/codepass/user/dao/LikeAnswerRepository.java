@@ -10,4 +10,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface LikeAnswerRepository extends CustomRepository<LikeAnswerEntity, LikeAnswerEntityPK> {
     Page<LikeAnswerEntity> findByUserId(int userid, Pageable pageable);
+
+    boolean existsByUserIdAndAnswerId(int userid, int answerid);
 }
