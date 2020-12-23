@@ -1,6 +1,7 @@
 package com.codepass.user.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -16,6 +17,7 @@ public class UserEntity {
     private String tech;
     private Integer age;
     private Integer followerCount;
+    private Integer isAdmin;
 
     @Id
     @Column(name = "id")
@@ -109,6 +111,17 @@ public class UserEntity {
         this.followerCount = followerCount;
     }
 
+    @Basic
+    @Column(name = "is_admin")
+    @ColumnDefault("0")
+    public Integer getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(Integer isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -126,6 +139,7 @@ public class UserEntity {
         if (age != null ? !age.equals(that.age) : that.age != null) return false;
         if (followerCount != null ? !followerCount.equals(that.followerCount) : that.followerCount != null)
             return false;
+        if (isAdmin != null ? !isAdmin.equals(that.age) : that.isAdmin != null) return false;
 
         return true;
     }
@@ -141,6 +155,7 @@ public class UserEntity {
         result = 31 * result + (tech != null ? tech.hashCode() : 0);
         result = 31 * result + (age != null ? age.hashCode() : 0);
         result = 31 * result + (followerCount != null ? followerCount.hashCode() : 0);
+        result = 31 * result + (isAdmin != null ? isAdmin.hashCode() : 0);
         return result;
     }
 }
