@@ -78,21 +78,27 @@ public class AnswerService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         int userId = userEntity.getId();
+        if (collectAnswerRepository.existsByUserIdAndAnswerId(userId, answerId))
+            return;
         CollectAnswerEntity collectAnswerEntity = new CollectAnswerEntity();
         collectAnswerEntity.setAnswerId(answerId);
         collectAnswerEntity.setUserId(userId);
         collectAnswerEntity.setCollectTime(new Timestamp(System.currentTimeMillis()));
         collectAnswerRepository.save(collectAnswerEntity);
+        answerRepository.updateCollectCountBy(answerId, 1);
     }
 
     public void uncollectAnswer(int answerId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         int userId = userEntity.getId();
+        if (!collectAnswerRepository.existsByUserIdAndAnswerId(userId, answerId))
+            return;
         CollectAnswerEntityPK pk = new CollectAnswerEntityPK();
         pk.setUserId(userId);
         pk.setAnswerId(answerId);
         collectAnswerRepository.deleteById(pk);
+        answerRepository.updateCollectCountBy(answerId, -1);
     }
 
     public AnswerEntity updateAnswer(int answerId, String content, boolean isFinal) throws IOException {
