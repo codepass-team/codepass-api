@@ -1,5 +1,7 @@
 package com.codepass.user.dao.entity;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -15,6 +17,7 @@ public class AnswerEntity {
     private Integer status;
     private Integer questionId;
     private String diff;
+    private Integer commentCount;
 
     @Id
     @Column(name = "id")
@@ -105,5 +108,16 @@ public class AnswerEntity {
 
     public void setDiff(String diff) {
         this.diff = diff;
+    }
+
+    @Basic
+    @Column(name = "comment_count")
+    @ColumnDefault("0")
+    public Integer getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
     }
 }

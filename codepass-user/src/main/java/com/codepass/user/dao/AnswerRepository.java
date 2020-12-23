@@ -14,4 +14,8 @@ public interface AnswerRepository extends CustomRepository<AnswerEntity, Integer
     int updateLikeBy(int id, int count);
 
     Page<AnswerEntity> findByAnswerer(UserEntity answerer, Pageable pageable);
+
+    @Modifying
+    @Query("update AnswerEntity set comment_count = comment_count + ?2 where id = ?1")
+    int updateCommentCountBy(int answerId, int i);
 }

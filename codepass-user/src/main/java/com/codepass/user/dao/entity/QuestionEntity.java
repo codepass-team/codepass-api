@@ -17,8 +17,9 @@ public class QuestionEntity {
     private String dockerId;
     private Integer likeCount;
     private Integer status;
-//    private UserEntity questionerUser;
+    //    private UserEntity questionerUser;
     private List<AnswerEntity> answer;
+    private Integer commentCount;
 
     @Id
     @Column(name = "id")
@@ -115,4 +116,14 @@ public class QuestionEntity {
         this.answer = answer;
     }
 
+    @Basic
+    @Column(name = "comment_count")
+    @ColumnDefault("0")
+    public Integer getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
+    }
 }

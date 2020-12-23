@@ -1,8 +1,6 @@
 package com.codepass.user.controller;
 
-import com.codepass.user.dao.AnswerCommentRepository;
-import com.codepass.user.dao.QuestionCommentRepository;
-import com.codepass.user.dao.UserRepository;
+import com.codepass.user.dao.*;
 import com.codepass.user.dao.entity.AnswerCommentEntity;
 import com.codepass.user.dao.entity.QuestionCommentEntity;
 import com.codepass.user.dao.entity.UserEntity;
@@ -18,13 +16,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/comment")
 @Tag(name = "Comment", description = "评论管理相关API")
+@Transactional
 public class CommentController {
+    @Autowired
+    AnswerRepository answerRepository;
+    @Autowired
+    QuestionRepository questionRepository;
     @Autowired
     AnswerCommentRepository answerCommentRepository;
     @Autowired
@@ -55,6 +59,7 @@ public class CommentController {
         questionCommentEntity.setCommenter(userEntity.getId());
         questionCommentEntity.setCommentTime(new Timestamp(System.currentTimeMillis()));
         questionCommentRepository.save(questionCommentEntity);
+        questionRepository.updateCommentCountBy(questionId, 1);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
             put("data", questionCommentEntity);
@@ -73,6 +78,7 @@ public class CommentController {
                 put("data", "不能删除别人的评论");
             }});
         }
+        questionRepository.updateCommentCountBy(questionCommentEntity.getQuestionId(), -1);
         questionCommentRepository.delete(questionCommentEntity);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
@@ -103,6 +109,7 @@ public class CommentController {
         answerCommentEntity.setAnswerId(userEntity.getId());
         answerCommentEntity.setCommentTime(new Timestamp(System.currentTimeMillis()));
         answerCommentRepository.save(answerCommentEntity);
+        answerRepository.updateCommentCountBy(answerId, 1);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
             put("data", answerCommentEntity);
@@ -121,6 +128,7 @@ public class CommentController {
                 put("data", "不能删除别人的评论");
             }});
         }
+        answerRepository.updateCommentCountBy(answerCommentEntity.getAnswerId(), 1);
         answerCommentRepository.delete(answerCommentEntity);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
