@@ -66,7 +66,7 @@ public class DockerService {
         // docker -v时不能修改文件owner
         // 这里让外部和里面保持一致
         new ProcessBuilder("/bin/sh", "-c", "chown -R 1000:1000 " + dockerStoragePath + dockerId).start();
-        setPerm(p);
+        // setPerm(p);
         dockerRepository.save(dockerEntity);
         return dockerId;
     }
