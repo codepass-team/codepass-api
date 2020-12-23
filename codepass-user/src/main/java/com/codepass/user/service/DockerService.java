@@ -2,10 +2,13 @@ package com.codepass.user.service;
 
 import com.codepass.user.dao.DockerRepository;
 import com.codepass.user.dao.entity.DockerEntity;
+import com.codepass.user.dao.entity.QuestionEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -121,5 +124,9 @@ public class DockerService {
         return reader.lines().collect(Collectors.joining("\n"))
                 .replace(dockerStoragePath + parentId, "/origin")
                 .replace(dockerStoragePath + dockerId, "/new");
+    }
+
+    public Page<DockerEntity> getAllDocker(int page) {
+        return dockerRepository.findAll(PageRequest.of(page, 10));
     }
 }
