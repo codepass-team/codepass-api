@@ -4,6 +4,7 @@ import com.codepass.user.config.JwtTokenUtil;
 import com.codepass.user.service.JwtUserDetailsService;
 import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,6 +34,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
@@ -59,9 +63,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
 
-            // JWT 验证通过 使用Spring Security 管理
-            if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
-
+            // 每个用户最多允许一个token有效
+            if (jwtTokenUtil.validateToken(jwtToken, userDetails)
+                    && jwtToken.equals(stringRedisTemplate.opsForValue().get(username))) {
+                // JWT 验证通过 使用Spring Security 管理
                 UsernamePasswordAuthenticationToken usPaAuToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 usPaAuToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

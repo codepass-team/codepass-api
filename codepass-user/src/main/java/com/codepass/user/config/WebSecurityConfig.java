@@ -73,11 +73,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/oa/**").permitAll() // swagger doc
                 .antMatchers("/api/docker/**").permitAll()
                 .antMatchers("/api/login", "/api/register").permitAll()
-                .antMatchers("/api/question/**", "/api/answer/**", "/api/comment/**").permitAll()
-                .antMatchers("/api/question/create", "/api/question/save", "/api/question/commit", "/api/question/delete",
+
+                // 前面的会覆盖后面的, 什么鬼
+                .antMatchers(
+                        "/api/question/create", "/api/question/save", "/api/question/commit", "/api/question/delete",
                         "/api/answer/create", "/api/answer/save", "/api/answer/commit", "/api/answer/delete",
-                        "/api/comment/question/create","/api/comment/question/delete",
-                        "/api/comment/answer/create","/api/comment/answer/delete").authenticated()
+                        "/api/comment/question/create", "/api/comment/question/delete",
+                        "/api/comment/answer/create", "/api/comment/answer/delete",
+                        "/api/question/follow/**", "/api/question/unfollow/**",
+                        "/api/answer/follow/**", "/api/answer/unfollow/**",
+                        "/api/question/listFollow", "/api/question/listMy").authenticated()
+                .antMatchers("/api/question/**", "/api/answer/**", "/api/comment/**").permitAll()
+
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)

@@ -22,6 +22,7 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    compile 'org.springframework.boot:spring-boot-starter-data-redis:2.3.7.RELEASE'
     runtimeOnly 'mysql:mysql-connector-java'
     compile 'com.zaxxer:HikariCP:3.4.5'
     compile 'org.springdoc:springdoc-openapi-ui:1.5.1'
@@ -30,6 +31,7 @@ dependencies {
             // Uncomment the next line if you want to use RSASSA-PSS (PS256, PS384, PS512) algorithms:
             //'org.bouncycastle:bcprov-jdk15on:1.60',
             'io.jsonwebtoken:jjwt-jackson:0.11.2' // or 'io.jsonwebtoken:jjwt-gson:0.11.2' for gson
+
 }
 
 test {

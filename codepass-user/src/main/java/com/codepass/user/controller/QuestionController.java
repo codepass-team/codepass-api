@@ -193,7 +193,7 @@ public class QuestionController {
     }
 
     @PostMapping("/follow/{questionId}")
-    @Operation(description = "关注问题")
+    @Operation(summary = "关注问题", description = "关注问题")
     public ResponseEntity<?> follow(@PathVariable int questionId) {
         questionService.followQuestion(questionId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
@@ -202,7 +202,7 @@ public class QuestionController {
     }
 
     @PostMapping("/unfollow/{questionId}")
-    @Operation(description = "取消关注问题")
+    @Operation(summary = "取消关注问题", description = "取消关注问题")
     public ResponseEntity<?> unfollow(@PathVariable int questionId) {
         questionService.unfollowQuestion(questionId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
@@ -211,7 +211,7 @@ public class QuestionController {
     }
 
     @PostMapping("/like/{questionId}")
-    @Operation(description = "点赞问题")
+    @Operation(summary = "点赞问题", description = "点赞问题")
     public ResponseEntity<?> like(@PathVariable int questionId) {
         questionService.likeQuestion(questionId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
@@ -220,7 +220,7 @@ public class QuestionController {
     }
 
     @PostMapping("/unlike/{questionId}")
-    @Operation(description = "取消点赞问题")
+    @Operation(summary = "取消点赞问题", description = "取消点赞问题")
     public ResponseEntity<?> unlike(@PathVariable int questionId) {
         questionService.unlikeQuestion(questionId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{

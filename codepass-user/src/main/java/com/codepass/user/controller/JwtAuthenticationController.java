@@ -13,8 +13,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,15 +34,14 @@ public class JwtAuthenticationController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
-
     @Autowired
     private UserService userService;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @PostMapping("/login")
     @Operation(summary = "用户登录", description = "用户登录接口")
@@ -60,6 +61,9 @@ public class JwtAuthenticationController {
         UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
 
         String token = jwtTokenUtil.generateToken(userDetails);
+
+        // 刷新token
+        stringRedisTemplate.opsForValue().set(username, token);
 
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
@@ -83,6 +87,12 @@ public class JwtAuthenticationController {
     @PostMapping("/logout")
     @Operation(summary = "用户注销", description = "用户注销接口")
     public ResponseEntity<?> logout() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userService.getUserByUsername(userDetails.getUsername());
+
+        // 清除token
+        stringRedisTemplate.delete(userEntity.getUsername());
+
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
         }});
