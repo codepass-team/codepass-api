@@ -17,7 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.PosixFileAttributes;
 import java.nio.file.attribute.PosixFilePermission;
-import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -58,10 +57,15 @@ public class DockerService {
             p = Files.copy(Path.of(dockerStoragePath + parentId), Path.of(dockerStoragePath + dockerId));
         } else {
             p = Files.createDirectory(
-                    Path.of(dockerStoragePath + dockerId),
-                    PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwxrwxrwx"))
+                    Path.of(dockerStoragePath + dockerId)
+                    // , PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwxrwxrwx"))
             );
         }
+
+        // code-server里面的coder用户的id是1000:1000
+        // docker -v时不能修改文件owner
+        // 这里让外部和里面保持一致
+        new ProcessBuilder("/bin/sh", "-c", "chown -R 1000:1000 " + dockerStoragePath + dockerId).start();
         setPerm(p);
         dockerRepository.save(dockerEntity);
         return dockerId;
@@ -93,7 +97,7 @@ public class DockerService {
 
     public DockerEntity umountDocker(String dockerId) throws IOException {
         DockerEntity dockerEntity = dockerRepository.findById(dockerId).get();
-        ProcessBuilder builder = new ProcessBuilder("/bin/sh", "-c", "docker stop" + dockerId);
+        ProcessBuilder builder = new ProcessBuilder("/bin/sh", "-c", "docker stop " + dockerId);
         builder.redirectErrorStream(true);
         builder.start();
         dockerEntity.setPort(0);
