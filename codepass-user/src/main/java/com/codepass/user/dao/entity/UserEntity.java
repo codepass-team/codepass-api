@@ -103,6 +103,7 @@ public class UserEntity {
 
     @Basic
     @Column(name = "follower_count")
+    @ColumnDefault("0")
     public Integer getFollowerCount() {
         return followerCount;
     }
