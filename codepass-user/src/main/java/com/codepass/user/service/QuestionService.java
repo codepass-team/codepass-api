@@ -37,6 +37,7 @@ public class QuestionService {
         questionEntity.setQuestioner(questioner);
         questionEntity.setStatus(0);
         questionEntity.setDockerId(dockerId);
+        questionEntity.setRaiseTime(new Timestamp(System.currentTimeMillis()));
         questionRepository.save(questionEntity);
         return questionEntity;
     }
@@ -52,6 +53,7 @@ public class QuestionService {
             questionEntity.setStatus(1);
             dockerService.umountDocker(questionEntity.getDockerId());
         }
+        questionEntity.setRaiseTime(new Timestamp(System.currentTimeMillis()));
         questionRepository.save(questionEntity);
         return questionEntity;
     }
