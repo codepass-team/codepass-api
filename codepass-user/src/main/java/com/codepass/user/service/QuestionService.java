@@ -37,6 +37,7 @@ public class QuestionService {
         questionEntity.setQuestioner(questioner);
         questionEntity.setStatus(0);
         questionEntity.setDockerId(dockerId);
+        questionEntity.setLikeCount(0);
         questionEntity.setRaiseTime(new Timestamp(System.currentTimeMillis()));
         questionRepository.save(questionEntity);
         return questionEntity;
@@ -109,21 +110,27 @@ public class QuestionService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         int userId = userEntity.getId();
+        if (likeQuestionRepository.existsByUserIdAndQuestionId(userId, questionId))
+            return;
         LikeQuestionEntity likeQuestionEntity = new LikeQuestionEntity();
         likeQuestionEntity.setQuestionId(questionId);
         likeQuestionEntity.setUserId(userId);
         likeQuestionEntity.setLikeTime(new Timestamp(System.currentTimeMillis()));
         likeQuestionRepository.save(likeQuestionEntity);
+        questionRepository.updateLikeBy(questionId, 1);
     }
 
     public void unlikeQuestion(int questionId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         int userId = userEntity.getId();
+        if (!likeQuestionRepository.existsByUserIdAndQuestionId(userId, questionId))
+            return;
         var pk = new LikeQuestionEntityPK();
         pk.setUserId(userId);
         pk.setQuestionId(questionId);
         likeQuestionRepository.deleteById(pk);
+        questionRepository.updateLikeBy(questionId, -1);
     }
 
     public int checkLike(int questionId) {

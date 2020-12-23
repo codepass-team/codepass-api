@@ -14,6 +14,10 @@ public interface QuestionRepository extends CustomRepository<QuestionEntity, Int
     Page<QuestionEntity> findByQuestioner(UserEntity questioner, Pageable pageable);
 
     @Modifying
+    @Query("update QuestionEntity set likeCount = likeCount + ?2 where id = ?1")
+    int updateLikeBy(int id, int count);
+
+    @Modifying
     @Query("update QuestionEntity set comment_count = comment_count + ?2 where id = ?1")
     int updateCommentCountBy(int questionId, int i);
 }
