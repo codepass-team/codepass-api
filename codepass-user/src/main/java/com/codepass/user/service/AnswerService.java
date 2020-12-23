@@ -3,6 +3,7 @@ package com.codepass.user.service;
 import com.codepass.user.dao.*;
 import com.codepass.user.dao.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -137,5 +138,9 @@ public class AnswerService {
 
     public List<CollectAnswerEntity> getUserCollect(int userid, int page) {
         return collectAnswerRepository.findByUserId(userid, PageRequest.of(page, 10)).toList();
+    }
+
+    public Page<AnswerEntity> getAllAnswer(int page) {
+        return answerRepository.findAll(PageRequest.of(page, 10));
     }
 }

@@ -3,8 +3,11 @@ package com.codepass.user.service;
 import com.codepass.user.dao.FollowUserRepository;
 import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.FollowUserEntity;
+import com.codepass.user.dao.entity.QuestionEntity;
 import com.codepass.user.dao.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,5 +70,9 @@ public class UserService {
         followUserEntity.setFollowUser(followerId);
         followUserEntity.setBeFollowedUser(beFollowerId);
         followUserRepository.delete(followUserEntity);
+    }
+
+    public Page<UserEntity> getAllUser(int page) {
+        return userRepository.findAll(PageRequest.of(page, 10));
     }
 }

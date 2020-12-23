@@ -3,6 +3,7 @@ package com.codepass.user.controller;
 import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.*;
 import com.codepass.user.dto.AnswerDTO;
+import com.codepass.user.dto.PageChunk;
 import com.codepass.user.service.AnswerService;
 import com.codepass.user.service.QuestionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -107,6 +109,17 @@ public class AnswerController {
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
             put("data", answerEntity);
+        }});
+    }
+
+    @GetMapping("/listAll")
+    @Operation(summary = "获取数据库里的所有回答", description = "获取数据库里的所有回答")
+    public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
+        Page<AnswerEntity> answerEntities = answerService.getAllAnswer(page);
+        PageChunk answers = new PageChunk(answerEntities);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", answers);
         }});
     }
 
