@@ -20,6 +20,7 @@ public class QuestionEntity {
     //    private UserEntity questionerUser;
     private List<AnswerEntity> answer;
     private Integer commentCount;
+    private Integer collectCount;
 
     @Id
     @Column(name = "id")
@@ -125,5 +126,16 @@ public class QuestionEntity {
 
     public void setCommentCount(Integer commentCount) {
         this.commentCount = commentCount;
+    }
+
+    @Basic
+    @Column(name = "collect_count")
+    @ColumnDefault("0")
+    public Integer getCollectCount() {
+        return collectCount;
+    }
+
+    public void setCollectCount(Integer collectCount) {
+        this.collectCount = collectCount;
     }
 }

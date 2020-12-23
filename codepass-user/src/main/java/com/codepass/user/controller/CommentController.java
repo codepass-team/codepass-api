@@ -23,7 +23,6 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/api/comment")
 @Tag(name = "Comment", description = "评论管理相关API")
-@Transactional
 public class CommentController {
     @Autowired
     AnswerRepository answerRepository;

@@ -9,12 +9,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@Transactional
 public class QuestionService {
     @Autowired
     QuestionRepository questionRepository;
@@ -89,21 +91,27 @@ public class QuestionService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         int userId = userEntity.getId();
+        if (likeQuestionRepository.existsByUserIdAndQuestionId(userId, questionId))
+            return;
         FollowQuestionEntity followQuestionEntity = new FollowQuestionEntity();
         followQuestionEntity.setQuestionId(questionId);
         followQuestionEntity.setUserId(userId);
         followQuestionEntity.setFollowTime(new Timestamp(System.currentTimeMillis()));
         followQuestionRepository.save(followQuestionEntity);
+        questionRepository.updateCollectCountBy(questionId, 1);
     }
 
     public void unfollowQuestion(int questionId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         int userId = userEntity.getId();
+        if (!likeQuestionRepository.existsByUserIdAndQuestionId(userId, questionId))
+            return;
         var pk = new FollowQuestionEntityPK();
         pk.setUserId(userId);
         pk.setQuestionId(questionId);
         followQuestionRepository.deleteById(pk);
+        questionRepository.updateCollectCountBy(questionId, -1);
     }
 
     public void likeQuestion(int questionId) {

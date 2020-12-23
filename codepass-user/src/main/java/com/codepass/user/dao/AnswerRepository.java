@@ -18,4 +18,8 @@ public interface AnswerRepository extends CustomRepository<AnswerEntity, Integer
     @Modifying
     @Query("update AnswerEntity set commentCount = commentCount + ?2 where id = ?1")
     int updateCommentCountBy(int answerId, int i);
+
+    @Modifying
+    @Query("update AnswerEntity set collectCount = collectCount + ?2 where id = ?1")
+    int updateCollectCountBy(int answerId, int i);
 }
