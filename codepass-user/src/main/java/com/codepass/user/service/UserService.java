@@ -9,6 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+
 @Component
 @Transactional
 public class UserService {
@@ -56,6 +58,7 @@ public class UserService {
         FollowUserEntity followUserEntity = new FollowUserEntity();
         followUserEntity.setFollowUser(followerId);
         followUserEntity.setBeFollowedUser(beFollowerId);
+        followUserEntity.setFollowTime(new Timestamp(System.currentTimeMillis()));
         followUserRepository.save(followUserEntity);
     }
 
