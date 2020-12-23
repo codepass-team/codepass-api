@@ -18,6 +18,7 @@ public class AnswerEntity {
     private Integer questionId;
     private String diff;
     private Integer commentCount;
+    private Integer collectCount;
 
     @Id
     @Column(name = "id")
@@ -119,5 +120,16 @@ public class AnswerEntity {
 
     public void setCommentCount(Integer commentCount) {
         this.commentCount = commentCount;
+    }
+
+    @Basic
+    @Column(name = "collect_count")
+    @ColumnDefault("0")
+    public Integer getCollectCount() {
+        return collectCount;
+    }
+
+    public void setCollectCount(Integer collectCount) {
+        this.collectCount = collectCount;
     }
 }
