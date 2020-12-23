@@ -18,6 +18,6 @@ public interface QuestionRepository extends CustomRepository<QuestionEntity, Int
     int updateLikeBy(int id, int count);
 
     @Modifying
-    @Query("update QuestionEntity set comment_count = comment_count + ?2 where id = ?1")
+    @Query("update QuestionEntity set commentCount = commentCount + ?2 where id = ?1")
     int updateCommentCountBy(int questionId, int i);
 }
