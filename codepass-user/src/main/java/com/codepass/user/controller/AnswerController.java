@@ -114,7 +114,11 @@ public class AnswerController {
 
     @GetMapping("/listAll")
     @Operation(summary = "获取数据库里的所有回答", description = "获取数据库里的所有回答")
-    public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
+    public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) throws RuntimeException {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        if (userEntity.getIsAdmin() == 0)
+            throw new RuntimeException("Not Administrator!");
         Page<AnswerEntity> answerEntities = answerService.getAllAnswer(page);
         PageChunk answers = new PageChunk(answerEntities);
         return ResponseEntity.ok(new HashMap<String, Object>() {{

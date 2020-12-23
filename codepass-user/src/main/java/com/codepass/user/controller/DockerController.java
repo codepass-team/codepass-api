@@ -30,10 +30,16 @@ import java.util.List;
 public class DockerController {
     @Autowired
     DockerService dockerService;
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping("/listAll")
     @Operation(summary = "获取数据库里的docker信息", description = "获取数据库里的所有回答")
-    public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) {
+    public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) throws RuntimeException {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        if (userEntity.getIsAdmin() == 0)
+            throw new RuntimeException("Not Administrator!");
         Page<DockerEntity> answerEntities = dockerService.getAllDocker(page);
         PageChunk dockers = new PageChunk(answerEntities);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
