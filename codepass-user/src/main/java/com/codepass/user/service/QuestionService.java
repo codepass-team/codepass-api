@@ -115,6 +115,7 @@ public class QuestionService {
         likeQuestionEntity.setUserId(userId);
         likeQuestionEntity.setLikeTime(new Timestamp(System.currentTimeMillis()));
         likeQuestionRepository.save(likeQuestionEntity);
+        questionRepository.updateLikeBy(questionId, 1);
     }
 
     public void unlikeQuestion(int questionId) {
@@ -125,6 +126,7 @@ public class QuestionService {
         pk.setUserId(userId);
         pk.setQuestionId(questionId);
         likeQuestionRepository.deleteById(pk);
+        questionRepository.updateLikeBy(questionId, -1);
     }
 
     public int checkLike(int questionId) {
