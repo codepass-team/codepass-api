@@ -105,7 +105,7 @@ public class QuestionService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         int userId = userEntity.getId();
-        if (!likeQuestionRepository.existsByUserIdAndQuestionId(userId, questionId))
+        if (!followQuestionRepository.existsByUserIdAndQuestionId(userId, questionId))
             return;
         var pk = new FollowQuestionEntityPK();
         pk.setUserId(userId);
@@ -118,7 +118,7 @@ public class QuestionService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         int userId = userEntity.getId();
-        if (likeQuestionRepository.existsByUserIdAndQuestionId(userId, questionId))
+        if (followQuestionRepository.existsByUserIdAndQuestionId(userId, questionId))
             return;
         LikeQuestionEntity likeQuestionEntity = new LikeQuestionEntity();
         likeQuestionEntity.setQuestionId(questionId);

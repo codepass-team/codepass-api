@@ -8,4 +8,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface FollowQuestionRepository extends CustomRepository<FollowQuestionEntity, FollowQuestionEntityPK> {
     Page<FollowQuestionEntity> findByUserId(int userid, Pageable pageable);
+
+    boolean existsByUserIdAndQuestionId(int userid, int questionid);
 }
