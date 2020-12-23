@@ -75,4 +75,8 @@ public class UserService {
     public Page<UserEntity> getAllUser(int page) {
         return userRepository.findAll(PageRequest.of(page, 10));
     }
+
+    public void deleteUser(Integer userId) {
+        userRepository.deleteById(userId);
+    }
 }

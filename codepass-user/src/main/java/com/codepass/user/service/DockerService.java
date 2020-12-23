@@ -129,4 +129,8 @@ public class DockerService {
     public Page<DockerEntity> getAllDocker(int page) {
         return dockerRepository.findAll(PageRequest.of(page, 10));
     }
+
+    public void deleteDocker(String dockerId) {
+        dockerRepository.deleteById(dockerId);
+    }
 }

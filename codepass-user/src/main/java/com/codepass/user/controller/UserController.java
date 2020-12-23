@@ -92,4 +92,17 @@ public class UserController {
             put("data", users);
         }});
     }
+
+    @DeleteMapping("/{userId}")
+    @Operation(summary = "删除用户", description = "删除一个用户")
+    public ResponseEntity<?> deleteQuestion(@Parameter(description = "用户Id") @PathVariable int userId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        if (userEntity.getIsAdmin() == 0)
+            throw new RuntimeException("Not Administrator!");
+        userService.deleteUser(userId);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+        }});
+    }
 }

@@ -47,4 +47,17 @@ public class DockerController {
             put("data", dockers);
         }});
     }
+
+    @DeleteMapping("/{dockerId}")
+    @Operation(summary = "删除docker容器", description = "删除一个docker容器")
+    public ResponseEntity<?> deleteQuestion(@Parameter(description = "Docker Id") @PathVariable String dockerId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        if (userEntity.getIsAdmin() == 0)
+            throw new RuntimeException("Not Administrator!");
+        dockerService.deleteDocker(dockerId);
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+        }});
+    }
 }
