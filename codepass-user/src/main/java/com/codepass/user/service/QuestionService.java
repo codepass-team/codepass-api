@@ -37,6 +37,7 @@ public class QuestionService {
         questionEntity.setQuestioner(questioner);
         questionEntity.setStatus(0);
         questionEntity.setDockerId(dockerId);
+        questionEntity.setLikeCount(0);
         questionEntity.setRaiseTime(new Timestamp(System.currentTimeMillis()));
         questionRepository.save(questionEntity);
         return questionEntity;
