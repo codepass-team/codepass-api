@@ -54,7 +54,10 @@ public class DockerService {
         dockerEntity.setStatus(0);
         Path p;
         if (parentId != null) {
-            p = Files.copy(Path.of(dockerStoragePath + parentId), Path.of(dockerStoragePath + dockerId));
+            new ProcessBuilder("/bin/sh", "-c",
+                    "cp " + dockerStoragePath + parentId +
+                            " " + dockerStoragePath + dockerId).start();
+            // p = Files.copy(Path.of(dockerStoragePath + parentId), Path.of(dockerStoragePath + dockerId));
         } else {
             p = Files.createDirectory(
                     Path.of(dockerStoragePath + dockerId)
