@@ -93,6 +93,14 @@ public class QuestionController {
     @DeleteMapping("/{questionId}")
     @Operation(summary = "删除问题", description = "删除一个问题")
     public ResponseEntity<?> deleteQuestion(@Parameter(description = "问题Id") @PathVariable int questionId) {
+        var question = questionService.getQuestion(questionId);
+        if (question == null)
+            throw new RuntimeException("No questionId!");
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        if (userEntity.getId() != question.getQuestioner().getId())
+            if (userEntity.getIsAdmin() == 0)
+                throw new RuntimeException("Not Administrator and not questioner!");
         questionService.deleteQuestion(questionId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");

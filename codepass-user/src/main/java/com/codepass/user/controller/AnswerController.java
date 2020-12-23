@@ -95,6 +95,14 @@ public class AnswerController {
     @Operation(summary = "删除回答", description = "删除回答")
     @ApiResponse(responseCode = "200", description = "提交成功")
     public ResponseEntity<?> deleteAnswer(@Parameter(description = "回答Id") @PathVariable int answerId) {
+        var answer = answerService.getAnswer(answerId);
+        if (answer == null)
+            throw new RuntimeException("No answerId!");
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        if (userEntity.getId() != answer.getAnswerer().getId())
+            if (userEntity.getIsAdmin() == 0)
+                throw new RuntimeException("Not Administrator and not answerer!");
         answerService.deleteAnswer(answerId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
