@@ -5,7 +5,7 @@ server:
 
 spring:
   application:
-    name: ${APP_NAME:unnamed}
+    name: ${APP_NAME:codepasss}
   datasource:
     url: jdbc:mysql://katty.top:3306/codepass?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: codepass
@@ -22,13 +22,13 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: update
-  data:
-    mongodb:
-      host: katty.top
-      port: 27017
-      database: codepass
-      username: codepass
-      password: codepass
+#  data:
+#    mongodb:
+#      host: katty.top
+#      port: 27017
+#      database: codepass
+#      username: codepass
+#      password: codepass
 
 springdoc:
   api-docs:
