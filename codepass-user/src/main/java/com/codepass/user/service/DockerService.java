@@ -55,7 +55,7 @@ public class DockerService {
         Path p;
         if (parentId != null) {
             new ProcessBuilder("/bin/sh", "-c",
-                    "cp " + dockerStoragePath + parentId +
+                    "cp -r " + dockerStoragePath + parentId +
                             " " + dockerStoragePath + dockerId).start();
             // p = Files.copy(Path.of(dockerStoragePath + parentId), Path.of(dockerStoragePath + dockerId));
         } else {
