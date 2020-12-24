@@ -133,4 +133,8 @@ public class DockerService {
     public void deleteDocker(String dockerId) {
         dockerRepository.deleteById(dockerId);
     }
+
+    public DockerEntity getDockerById(String dockerId) {
+        return dockerRepository.findById(dockerId).get();
+    }
 }

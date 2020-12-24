@@ -32,12 +32,12 @@ public class AnswerService {
     @Autowired
     CollectAnswerRepository collectAnswerRepository;
 
-    public AnswerEntity createAnswer(UserEntity userId, int questionId) throws IOException {
+    public AnswerEntity createAnswer(UserEntity userEntity, int questionId) throws IOException {
         AnswerEntity answerEntity = new AnswerEntity();
         String dockerId = questionRepository.findById(questionId).get().getDockerId();
         String newDockerId = dockerService.createDocker(dockerId);
-        dockerService.mountDocker(newDockerId, "123456");
-        answerEntity.setAnswerer(userId);
+        dockerService.mountDocker(newDockerId, userEntity.getPassword());
+        answerEntity.setAnswerer(userEntity);
         answerEntity.setQuestionId(questionId);
         answerEntity.setDockerId(newDockerId);
         answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));

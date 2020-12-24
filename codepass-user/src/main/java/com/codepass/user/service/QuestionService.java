@@ -33,7 +33,7 @@ public class QuestionService {
 
     public QuestionEntity createQuestion(UserEntity questioner, String title) throws IOException {
         String dockerId = dockerService.createDocker(null);
-        dockerService.mountDocker(dockerId, "123456");
+        dockerService.mountDocker(dockerId, questioner.getPassword());
         QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setTitle(title);
         questionEntity.setQuestioner(questioner);

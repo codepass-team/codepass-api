@@ -2,6 +2,7 @@ package com.codepass.user.controller;
 
 import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.DockerEntity;
+import com.codepass.user.dao.entity.UserEntity;
 import com.codepass.user.dto.PageChunk;
 import com.codepass.user.service.DockerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -59,10 +60,12 @@ public class DockerController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("admin")))
             throw new RuntimeException("Not Administrator!");
+        UserEntity userEntity = (UserEntity) authentication.getPrincipal();
         try {
-            dockerService.mountDocker(dockerId, "123456");
+            DockerEntity dockerEntity = dockerService.mountDocker(dockerId, userEntity.getPassword());
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "ok");
+                put("data", dockerEntity);
             }});
         } catch (IOException e) {
             e.printStackTrace();
