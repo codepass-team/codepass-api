@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -121,11 +123,10 @@ public class AnswerController {
     }
 
     @GetMapping("/listAll")
-    @Operation(summary = "获取数据库里的所有回答", description = "获取数据库里的所有回答")
+    @Operation(summary = "获取数据库里的所有回答", description = "获取数据库里的所有回答", tags = "Admin")
     public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) throws RuntimeException {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
-        if (userEntity.getIsAdmin() == 0)
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("admin")))
             throw new RuntimeException("Not Administrator!");
         Page<AnswerEntity> answerEntities = answerService.getAllAnswer(page);
         PageChunk answers = new PageChunk(answerEntities);
