@@ -1,23 +1,18 @@
 package com.codepass.user.controller;
 
-import com.codepass.user.dao.*;
-import com.codepass.user.dao.entity.AnswerCommentEntity;
-import com.codepass.user.dao.entity.QuestionCommentEntity;
+import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.UserEntity;
 import com.codepass.user.dto.PageChunk;
+import com.codepass.user.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
-import java.sql.Timestamp;
 import java.util.HashMap;
 
 @RestController
@@ -25,24 +20,17 @@ import java.util.HashMap;
 @Tag(name = "Comment", description = "评论管理相关API")
 public class CommentController {
     @Autowired
-    AnswerRepository answerRepository;
-    @Autowired
-    QuestionRepository questionRepository;
-    @Autowired
-    AnswerCommentRepository answerCommentRepository;
-    @Autowired
-    QuestionCommentRepository questionCommentRepository;
-    @Autowired
     UserRepository userRepository;
+    @Autowired
+    CommentService commentService;
 
     @GetMapping("/question/{questionId}")
     @Operation(summary = "获取问题评论", description = "获取对一个问题的所有评论")
     public ResponseEntity<?> getQuestionComment(@Parameter(description = "问题Id") @PathVariable int questionId,
                                                 @Parameter(description = "页码") @RequestParam(defaultValue = "0") int page) {
-        Page<QuestionCommentEntity> questionCommentEntities = questionCommentRepository.findByQuestionId(questionId, PageRequest.of(page, 10));
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("data", new PageChunk(questionCommentEntities));
+            put("data", new PageChunk(commentService.getQuestionCommentById(questionId, page)));
         }});
     }
 
@@ -52,16 +40,9 @@ public class CommentController {
                                              @Parameter(description = "评论内容") @RequestParam String content) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
-        QuestionCommentEntity questionCommentEntity = new QuestionCommentEntity();
-        questionCommentEntity.setQuestionId(questionId);
-        questionCommentEntity.setContent(content);
-        questionCommentEntity.setCommenter(userEntity.getId());
-        questionCommentEntity.setCommentTime(new Timestamp(System.currentTimeMillis()));
-        questionCommentRepository.save(questionCommentEntity);
-        questionRepository.updateCommentCountBy(questionId, 1);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("data", questionCommentEntity);
+            put("data", commentService.commentQuestion(userEntity, questionId, content));
         }});
     }
 
@@ -70,18 +51,17 @@ public class CommentController {
     public ResponseEntity<?> deleteQuestionComment(@Parameter(description = "评论Id") @PathVariable int commentId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
-        QuestionCommentEntity questionCommentEntity = questionCommentRepository.findById(commentId).get();
-        if (questionCommentEntity.getCommenter() != userEntity.getId()) {
+        try {
+            commentService.uncommentQuestion(userEntity, commentId);
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "ok");
+            }});
+        } catch (RuntimeException e) {
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "bad");
-                put("data", "不能删除别人的评论");
+                put("data", e.getMessage());
             }});
         }
-        questionRepository.updateCommentCountBy(questionCommentEntity.getQuestionId(), -1);
-        questionCommentRepository.delete(questionCommentEntity);
-        return ResponseEntity.ok(new HashMap<String, Object>() {{
-            put("status", "ok");
-        }});
     }
 
 
@@ -89,10 +69,9 @@ public class CommentController {
     @Operation(summary = "获取回答评论", description = "获取对一个回答的所有评论")
     public ResponseEntity<?> getAnswerComment(@Parameter(description = "回答Id") @PathVariable int answerId,
                                               @Parameter(description = "页码") @RequestParam(defaultValue = "0") int page) {
-        Page<AnswerCommentEntity> answerCommentEntities = answerCommentRepository.findByAnswerId(answerId, PageRequest.of(page, 10));
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("data", new PageChunk(answerCommentEntities));
+            put("data", new PageChunk(commentService.getAnswerCommentById(answerId, page)));
         }});
     }
 
@@ -102,16 +81,9 @@ public class CommentController {
                                            @Parameter(description = "评论内容") @RequestParam String content) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
-        AnswerCommentEntity answerCommentEntity = new AnswerCommentEntity();
-        answerCommentEntity.setAnswerId(answerId);
-        answerCommentEntity.setContent(content);
-        answerCommentEntity.setAnswerId(userEntity.getId());
-        answerCommentEntity.setCommentTime(new Timestamp(System.currentTimeMillis()));
-        answerCommentRepository.save(answerCommentEntity);
-        answerRepository.updateCommentCountBy(answerId, 1);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("data", answerCommentEntity);
+            put("data", commentService.commentAnswer(userEntity, answerId, content));
         }});
     }
 
@@ -120,19 +92,16 @@ public class CommentController {
     public ResponseEntity<?> commentAnswer(@Parameter(description = "评论Id") @PathVariable int commentId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
-        AnswerCommentEntity answerCommentEntity = answerCommentRepository.findById(commentId).get();
-        if (answerCommentEntity.getCommenter() != userEntity.getId()) {
+        try {
+            commentService.uncommentAnswer(userEntity, commentId);
+            return ResponseEntity.ok(new HashMap<String, Object>() {{
+                put("status", "ok");
+            }});
+        } catch (RuntimeException e) {
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "bad");
-                put("data", "不能删除别人的评论");
+                put("data", e.getMessage());
             }});
         }
-        answerRepository.updateCommentCountBy(answerCommentEntity.getAnswerId(), 1);
-        answerCommentRepository.delete(answerCommentEntity);
-        return ResponseEntity.ok(new HashMap<String, Object>() {{
-            put("status", "ok");
-        }});
     }
-
-
 }
