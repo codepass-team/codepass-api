@@ -59,8 +59,9 @@ public class JwtAuthenticationController {
         }
 
         UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
-
         String token = jwtTokenUtil.generateToken(userDetails);
+
+        UserEntity userEntity = userService.getUserByUsername(username);
 
         // 刷新token
         stringRedisTemplate.opsForValue().set(username, token);
