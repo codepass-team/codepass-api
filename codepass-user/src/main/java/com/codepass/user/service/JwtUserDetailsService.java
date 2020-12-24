@@ -23,13 +23,13 @@ public class JwtUserDetailsService implements UserDetailsService {
                 return User.builder()
                         .username(username)
                         .password(userEntity.getPassword())
-                        .authorities("user", "admin")
+                        .authorities("ROLE_USER", "ROLE_ADMIN")
                         .build();
             } else {
                 return User.builder()
                         .username(username)
                         .password(userEntity.getPassword())
-                        .authorities("user")
+                        .authorities("ROLE_USER")
                         .build();
             }
         } else {

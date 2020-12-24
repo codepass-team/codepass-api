@@ -3,10 +3,10 @@ package com.codepass.user.dto;
 import com.codepass.user.dao.entity.QuestionEntity;
 import com.codepass.user.dao.entity.UserEntity;
 
-public class QuestionPojo extends QuestionEntity{
+public class QuestionPojo extends QuestionEntity {
     private String nickname;
 
-    public QuestionPojo(QuestionEntity q,UserEntity u){
+    public QuestionPojo(QuestionEntity q, UserEntity u) {
         this.setId(q.getId());
         this.setTitle(q.getTitle());
         this.setContent(q.getContent());

@@ -5,8 +5,6 @@ import com.codepass.user.dao.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -32,11 +30,11 @@ public class AnswerService {
     @Autowired
     CollectAnswerRepository collectAnswerRepository;
 
-    public AnswerEntity createAnswer(UserEntity userEntity, int questionId) throws IOException {
+    public AnswerEntity createAnswer(UserEntity userEntity, int questionId, String password) throws IOException {
         AnswerEntity answerEntity = new AnswerEntity();
         String dockerId = questionRepository.findById(questionId).get().getDockerId();
         String newDockerId = dockerService.createDocker(dockerId);
-        dockerService.mountDocker(newDockerId, userEntity.getPassword());
+        dockerService.mountDocker(newDockerId, password);
         answerEntity.setAnswerer(userEntity);
         answerEntity.setQuestionId(questionId);
         answerEntity.setDockerId(newDockerId);
@@ -48,9 +46,7 @@ public class AnswerService {
         return answerEntity;
     }
 
-    public void likeAnswer(int answerId) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+    public void likeAnswer(UserEntity userEntity, int answerId) {
         int userId = userEntity.getId();
         if (likeAnswerRepository.existsByUserIdAndAnswerId(userId, answerId))
             return;
@@ -62,9 +58,7 @@ public class AnswerService {
         answerRepository.updateLikeBy(answerId, 1);
     }
 
-    public void unlikeAnswer(int answerId) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+    public void unlikeAnswer(UserEntity userEntity, int answerId) {
         int userId = userEntity.getId();
         if (!likeAnswerRepository.existsByUserIdAndAnswerId(userId, answerId))
             return;
@@ -75,9 +69,7 @@ public class AnswerService {
         answerRepository.updateLikeBy(answerId, -1);
     }
 
-    public void collectAnswer(int answerId) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+    public void collectAnswer(UserEntity userEntity, int answerId) {
         int userId = userEntity.getId();
         if (collectAnswerRepository.existsByUserIdAndAnswerId(userId, answerId))
             return;
@@ -89,9 +81,7 @@ public class AnswerService {
         answerRepository.updateCollectCountBy(answerId, 1);
     }
 
-    public void uncollectAnswer(int answerId) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+    public void uncollectAnswer(UserEntity userEntity, int answerId) {
         int userId = userEntity.getId();
         if (!collectAnswerRepository.existsByUserIdAndAnswerId(userId, answerId))
             return;
@@ -102,9 +92,7 @@ public class AnswerService {
         answerRepository.updateCollectCountBy(answerId, -1);
     }
 
-    public AnswerEntity updateAnswer(int answerId, String content, boolean isFinal) throws IOException {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+    public AnswerEntity updateAnswer(UserEntity userEntity, int answerId, String content, boolean isFinal) throws IOException {
         AnswerEntity answerEntity = answerRepository.findById(answerId).get();
         QuestionEntity questionEntity = questionRepository.findById(answerEntity.getQuestionId()).get();
         if (answerEntity.getAnswerer().getId() != userEntity.getId()) {

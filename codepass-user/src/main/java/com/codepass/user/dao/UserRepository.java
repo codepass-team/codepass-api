@@ -1,7 +1,6 @@
 package com.codepass.user.dao;
 
 import com.codepass.user.dao.entity.UserEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 // https://stackoverflow.com/questions/14014086/what-is-difference-between-crudrepository-and-jparepository-interfaces-in-spring
 // JpaRepository extends PagingAndSortingRepository which in turn extends CustomRepository.

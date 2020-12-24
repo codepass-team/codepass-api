@@ -2,7 +2,6 @@ package com.codepass.user.service;
 
 import com.codepass.user.dao.DockerRepository;
 import com.codepass.user.dao.entity.DockerEntity;
-import com.codepass.user.dao.entity.QuestionEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

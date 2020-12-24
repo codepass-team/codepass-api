@@ -3,7 +3,6 @@ package com.codepass.user.service;
 import com.codepass.user.dao.FollowUserRepository;
 import com.codepass.user.dao.UserRepository;
 import com.codepass.user.dao.entity.FollowUserEntity;
-import com.codepass.user.dao.entity.QuestionEntity;
 import com.codepass.user.dao.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

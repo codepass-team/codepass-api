@@ -5,8 +5,6 @@ import com.codepass.user.dao.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -31,9 +29,9 @@ public class QuestionService {
     @Autowired
     CollectAnswerRepository collectAnswerRepository;
 
-    public QuestionEntity createQuestion(UserEntity questioner, String title) throws IOException {
+    public QuestionEntity createQuestion(UserEntity questioner, String title, String password) throws IOException {
         String dockerId = dockerService.createDocker(null);
-        dockerService.mountDocker(dockerId, questioner.getPassword());
+        dockerService.mountDocker(dockerId, password);
         QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setTitle(title);
         questionEntity.setQuestioner(questioner);
@@ -87,9 +85,7 @@ public class QuestionService {
         return questionRepository.findAll(PageRequest.of(page, 10));
     }
 
-    public void followQuestion(int questionId) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+    public void followQuestion(UserEntity userEntity, int questionId) {
         int userId = userEntity.getId();
         if (followQuestionRepository.existsByUserIdAndQuestionId(userId, questionId))
             return;
@@ -101,9 +97,7 @@ public class QuestionService {
         questionRepository.updateCollectCountBy(questionId, 1);
     }
 
-    public void unfollowQuestion(int questionId) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+    public void unfollowQuestion(UserEntity userEntity, int questionId) {
         int userId = userEntity.getId();
         if (!followQuestionRepository.existsByUserIdAndQuestionId(userId, questionId))
             return;
@@ -114,9 +108,7 @@ public class QuestionService {
         questionRepository.updateCollectCountBy(questionId, -1);
     }
 
-    public void likeQuestion(int questionId) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+    public void likeQuestion(UserEntity userEntity, int questionId) {
         int userId = userEntity.getId();
         if (likeQuestionRepository.existsByUserIdAndQuestionId(userId, questionId))
             return;
@@ -128,9 +120,7 @@ public class QuestionService {
         questionRepository.updateLikeBy(questionId, 1);
     }
 
-    public void unlikeQuestion(int questionId) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+    public void unlikeQuestion(UserEntity userEntity, int questionId) {
         int userId = userEntity.getId();
         if (!likeQuestionRepository.existsByUserIdAndQuestionId(userId, questionId))
             return;
@@ -141,9 +131,7 @@ public class QuestionService {
         questionRepository.updateLikeBy(questionId, -1);
     }
 
-    public int checkLike(int questionId) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+    public int checkLike(UserEntity userEntity, int questionId) {
         int userId = userEntity.getId();
         return likeQuestionRepository.existsByUserIdAndQuestionId(userId, questionId) ? 1 : 0;
     }

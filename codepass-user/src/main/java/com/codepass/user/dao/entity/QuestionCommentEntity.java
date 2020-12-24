@@ -14,7 +14,7 @@ public class QuestionCommentEntity {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }

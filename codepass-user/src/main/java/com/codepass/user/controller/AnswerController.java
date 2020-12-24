@@ -1,7 +1,10 @@
 package com.codepass.user.controller;
 
 import com.codepass.user.dao.UserRepository;
-import com.codepass.user.dao.entity.*;
+import com.codepass.user.dao.entity.AnswerEntity;
+import com.codepass.user.dao.entity.CollectAnswerEntity;
+import com.codepass.user.dao.entity.QuestionEntity;
+import com.codepass.user.dao.entity.UserEntity;
 import com.codepass.user.dto.AnswerDTO;
 import com.codepass.user.dto.PageChunk;
 import com.codepass.user.service.AnswerService;
@@ -42,7 +45,7 @@ public class AnswerController {
         try {
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
-            AnswerEntity answerEntity = answerService.createAnswer(userEntity, questionId);
+            AnswerEntity answerEntity = answerService.createAnswer(userEntity, questionId, userDetails.getPassword());
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "ok");
                 put("data", answerEntity);
@@ -61,10 +64,12 @@ public class AnswerController {
     @ApiResponse(responseCode = "200", description = "成功保存回答")
     public ResponseEntity<?> saveAnswer(@Parameter(description = "回答Id") @PathVariable int answerId,
                                         @Parameter(description = "回答内容") @RequestParam String content) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         try {
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "ok");
-                put("data", answerService.updateAnswer(answerId, content, false));
+                put("data", answerService.updateAnswer(userEntity, answerId, content, false));
             }});
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,10 +84,12 @@ public class AnswerController {
     @Operation(summary = "提交回答", description = "提交回答, 提交后不能再修改")
     @ApiResponse(responseCode = "200", description = "提交成功")
     public ResponseEntity<?> submitAnswer(@Parameter(description = "回答Id") @PathVariable int answerId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         try {
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "ok");
-                put("data", answerService.updateAnswer(answerId, null, true));
+                put("data", answerService.updateAnswer(userEntity, answerId, null, true));
             }});
         } catch (IOException e) {
             e.printStackTrace();
@@ -126,8 +133,9 @@ public class AnswerController {
     @Operation(summary = "获取数据库里的所有回答", description = "获取数据库里的所有回答", tags = "Admin")
     public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) throws RuntimeException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("admin")))
-            throw new RuntimeException("Not Administrator!");
+        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("admin"))) {
+            return ResponseEntity.status(401).build();
+        }
         Page<AnswerEntity> answerEntities = answerService.getAllAnswer(page);
         PageChunk answers = new PageChunk(answerEntities);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
@@ -177,7 +185,9 @@ public class AnswerController {
     @PostMapping("/like/{answerId}")
     @Operation(description = "点赞回答")
     public ResponseEntity<?> like(@PathVariable int answerId) {
-        answerService.likeAnswer(answerId);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        answerService.likeAnswer(userEntity, answerId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
         }});
@@ -186,7 +196,9 @@ public class AnswerController {
     @PostMapping("/unlike/{answerId}")
     @Operation(description = "取消点赞回答")
     public ResponseEntity<?> unlike(@PathVariable int answerId) {
-        answerService.unlikeAnswer(answerId);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        answerService.unlikeAnswer(userEntity, answerId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
         }});
@@ -195,7 +207,9 @@ public class AnswerController {
     @PostMapping("/collect/{answerId}")
     @Operation(description = "收藏回答")
     public ResponseEntity<?> collect(@PathVariable int answerId) {
-        answerService.collectAnswer(answerId);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        answerService.collectAnswer(userEntity, answerId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
         }});
@@ -204,7 +218,9 @@ public class AnswerController {
     @PostMapping("/uncollect/{answerId}")
     @Operation(description = "取消收藏回答")
     public ResponseEntity<?> uncollect(@PathVariable int answerId) {
-        answerService.uncollectAnswer(answerId);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        answerService.uncollectAnswer(userEntity, answerId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
         }});

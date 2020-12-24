@@ -56,7 +56,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     *
      * @param http
      * @throws Exception
      */
@@ -67,8 +66,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .cors()
                 .and().authorizeRequests()
-                .antMatchers("/api/hello1").permitAll() // for test
-                .antMatchers("/api/hello2").authenticated() // for test
                 .antMatchers("/oa/**").permitAll() // swagger doc
                 .antMatchers("/api/docker/**").permitAll()
                 .antMatchers("/api/login", "/api/register").permitAll()

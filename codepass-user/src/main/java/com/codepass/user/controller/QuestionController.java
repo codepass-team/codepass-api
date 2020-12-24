@@ -1,9 +1,9 @@
 package com.codepass.user.controller;
 
-import com.codepass.user.dao.LikeQuestionRepository;
 import com.codepass.user.dao.UserRepository;
-import com.codepass.user.dao.entity.*;
-import com.codepass.user.dto.AnswerDTO;
+import com.codepass.user.dao.entity.FollowQuestionEntity;
+import com.codepass.user.dao.entity.QuestionEntity;
+import com.codepass.user.dao.entity.UserEntity;
 import com.codepass.user.dto.PageChunk;
 import com.codepass.user.dto.QuestionPojoQuery;
 import com.codepass.user.service.QuestionService;
@@ -40,7 +40,7 @@ public class QuestionController {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userService.getUserByUsername(userDetails.getUsername());
         try {
-            QuestionEntity questionEntity = questionService.createQuestion(userEntity, title);
+            QuestionEntity questionEntity = questionService.createQuestion(userEntity, title, userDetails.getPassword());
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "ok");
                 put("data", questionEntity);
@@ -130,8 +130,10 @@ public class QuestionController {
     @GetMapping("/{questionId}")
     @Operation(summary = "获取问题", description = "获取某个问题的信息, 包括问题标题, 描述等, 还包括该问题所有回答的信息. 回答中不包括编辑中(status=0)的回答, 但自己提的问题忽略")
     public ResponseEntity<?> getQuestion(@Parameter(description = "问题Id") @PathVariable int questionId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         QuestionPojoQuery question = new QuestionPojoQuery(questionService.getQuestion(questionId));
-        question.setUlike(questionService.checkLike(questionId));
+        question.setUlike(questionService.checkLike(userEntity, questionId));
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
             put("data", question);
@@ -203,7 +205,9 @@ public class QuestionController {
     @PostMapping("/follow/{questionId}")
     @Operation(summary = "关注问题", description = "关注问题")
     public ResponseEntity<?> follow(@PathVariable int questionId) {
-        questionService.followQuestion(questionId);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        questionService.followQuestion(userEntity, questionId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
         }});
@@ -212,7 +216,9 @@ public class QuestionController {
     @PostMapping("/unfollow/{questionId}")
     @Operation(summary = "取消关注问题", description = "取消关注问题")
     public ResponseEntity<?> unfollow(@PathVariable int questionId) {
-        questionService.unfollowQuestion(questionId);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        questionService.unfollowQuestion(userEntity, questionId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
         }});
@@ -221,7 +227,9 @@ public class QuestionController {
     @PostMapping("/like/{questionId}")
     @Operation(summary = "点赞问题", description = "点赞问题")
     public ResponseEntity<?> like(@PathVariable int questionId) {
-        questionService.likeQuestion(questionId);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        questionService.likeQuestion(userEntity, questionId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
         }});
@@ -230,7 +238,9 @@ public class QuestionController {
     @PostMapping("/unlike/{questionId}")
     @Operation(summary = "取消点赞问题", description = "取消点赞问题")
     public ResponseEntity<?> unlike(@PathVariable int questionId) {
-        questionService.unlikeQuestion(questionId);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
+        questionService.unlikeQuestion(userEntity, questionId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
         }});

@@ -13,5 +13,5 @@ public class CodepassApplication {
         SpringApplication.run(CodepassApplication.class, args);
     }
 
-    
+
 }

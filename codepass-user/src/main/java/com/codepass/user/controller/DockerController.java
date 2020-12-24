@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -60,9 +61,9 @@ public class DockerController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("admin")))
             throw new RuntimeException("Not Administrator!");
-        UserEntity userEntity = (UserEntity) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         try {
-            DockerEntity dockerEntity = dockerService.mountDocker(dockerId, userEntity.getPassword());
+            DockerEntity dockerEntity = dockerService.mountDocker(dockerId, userDetails.getPassword());
             return ResponseEntity.ok(new HashMap<String, Object>() {{
                 put("status", "ok");
                 put("data", dockerEntity);
