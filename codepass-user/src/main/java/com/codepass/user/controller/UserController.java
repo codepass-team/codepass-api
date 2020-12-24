@@ -84,7 +84,7 @@ public class UserController {
     public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) throws RuntimeException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
-            throw new RuntimeException("Not Administrator!");
+            return ResponseEntity.status(401).build();
         Page<UserEntity> userEntities = userService.getAllUser(page);
         PageChunk users = new PageChunk(userEntities);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
@@ -98,7 +98,7 @@ public class UserController {
     public ResponseEntity<?> deleteQuestion(@Parameter(description = "用户Id") @PathVariable int userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
-            throw new RuntimeException("Not Administrator!");
+            return ResponseEntity.status(401).build();
         userService.deleteUser(userId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");

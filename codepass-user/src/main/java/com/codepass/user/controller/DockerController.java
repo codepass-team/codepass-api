@@ -34,7 +34,7 @@ public class DockerController {
     public ResponseEntity<?> listAllDocker(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) throws RuntimeException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
-            throw new RuntimeException("Not Administrator!");
+            return ResponseEntity.status(401).build();
         Page<DockerEntity> answerEntities = dockerService.getAllDocker(page);
         PageChunk dockers = new PageChunk(answerEntities);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
@@ -48,7 +48,7 @@ public class DockerController {
     public ResponseEntity<?> deleteQuestion(@Parameter(description = "Docker Id") @PathVariable String dockerId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
-            throw new RuntimeException("Not Administrator!");
+            return ResponseEntity.status(401).build();
         dockerService.deleteDocker(dockerId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
@@ -60,7 +60,7 @@ public class DockerController {
     public ResponseEntity<?> startDocker(@Parameter(description = "Docker Id") @PathVariable String dockerId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
-            throw new RuntimeException("Not Administrator!");
+            return ResponseEntity.status(401).build();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         try {
             DockerEntity dockerEntity = dockerService.mountDocker(dockerId, userDetails.getPassword());
