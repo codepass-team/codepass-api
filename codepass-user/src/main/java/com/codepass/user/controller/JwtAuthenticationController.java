@@ -69,6 +69,7 @@ public class JwtAuthenticationController {
             put("status", "ok");
             put("data", new HashMap<String, Object>() {{
                 put("token", token);
+                put("isAdmin", userEntity.getIsAdmin());
             }});
         }});
     }
