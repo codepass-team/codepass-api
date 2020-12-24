@@ -83,7 +83,7 @@ public class UserController {
     @Operation(summary = "获取数据库里的所有用户", description = "获取数据库里的所有用户", tags = "Admin")
     public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) throws RuntimeException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("admin")))
+        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
             throw new RuntimeException("Not Administrator!");
         Page<UserEntity> userEntities = userService.getAllUser(page);
         PageChunk users = new PageChunk(userEntities);
@@ -97,7 +97,7 @@ public class UserController {
     @Operation(summary = "删除用户", description = "删除一个用户", tags = "Admin")
     public ResponseEntity<?> deleteQuestion(@Parameter(description = "用户Id") @PathVariable int userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("admin")))
+        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
             throw new RuntimeException("Not Administrator!");
         userService.deleteUser(userId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{

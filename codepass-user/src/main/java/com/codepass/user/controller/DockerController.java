@@ -31,9 +31,9 @@ public class DockerController {
 
     @GetMapping("/listAll")
     @Operation(summary = "获取数据库里的docker信息", description = "获取数据库里的所有回答", tags = "Admin")
-    public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) throws RuntimeException {
+    public ResponseEntity<?> listAllDocker(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) throws RuntimeException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("admin")))
+        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
             throw new RuntimeException("Not Administrator!");
         Page<DockerEntity> answerEntities = dockerService.getAllDocker(page);
         PageChunk dockers = new PageChunk(answerEntities);
@@ -47,7 +47,7 @@ public class DockerController {
     @Operation(summary = "删除docker容器", description = "删除一个docker容器", tags = "Admin")
     public ResponseEntity<?> deleteQuestion(@Parameter(description = "Docker Id") @PathVariable String dockerId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("admin")))
+        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
             throw new RuntimeException("Not Administrator!");
         dockerService.deleteDocker(dockerId);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
@@ -59,7 +59,7 @@ public class DockerController {
     @Operation(summary = "启动docker容器", description = "启动一个docker容器", tags = "Admin")
     public ResponseEntity<?> startDocker(@Parameter(description = "Docker Id") @PathVariable String dockerId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("admin")))
+        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
             throw new RuntimeException("Not Administrator!");
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         try {

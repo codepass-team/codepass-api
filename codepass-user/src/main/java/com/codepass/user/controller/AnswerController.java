@@ -133,7 +133,7 @@ public class AnswerController {
     @Operation(summary = "获取数据库里的所有回答", description = "获取数据库里的所有回答", tags = "Admin")
     public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) throws RuntimeException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("admin"))) {
+        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             return ResponseEntity.status(401).build();
         }
         Page<AnswerEntity> answerEntities = answerService.getAllAnswer(page);
