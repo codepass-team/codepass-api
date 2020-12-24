@@ -56,7 +56,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * https://www.cnblogs.com/xxzhuang/p/5960001.html
      *
      * @param http
      * @throws Exception
