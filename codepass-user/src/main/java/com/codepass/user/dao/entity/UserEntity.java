@@ -2,6 +2,8 @@ package com.codepass.user.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
@@ -121,42 +123,5 @@ public class UserEntity {
 
     public void setIsAdmin(Integer isAdmin) {
         this.isAdmin = isAdmin;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        UserEntity that = (UserEntity) o;
-
-        if (id != that.id) return false;
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (username != null ? !username.equals(that.username) : that.username != null) return false;
-        if (gender != null ? !gender.equals(that.gender) : that.gender != null) return false;
-        if (job != null ? !job.equals(that.job) : that.job != null) return false;
-        if (tech != null ? !tech.equals(that.tech) : that.tech != null) return false;
-        if (age != null ? !age.equals(that.age) : that.age != null) return false;
-        if (followerCount != null ? !followerCount.equals(that.followerCount) : that.followerCount != null)
-            return false;
-        if (isAdmin != null ? !isAdmin.equals(that.age) : that.isAdmin != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + (gender != null ? gender.hashCode() : 0);
-        result = 31 * result + (job != null ? job.hashCode() : 0);
-        result = 31 * result + (tech != null ? tech.hashCode() : 0);
-        result = 31 * result + (age != null ? age.hashCode() : 0);
-        result = 31 * result + (followerCount != null ? followerCount.hashCode() : 0);
-        result = 31 * result + (isAdmin != null ? isAdmin.hashCode() : 0);
-        return result;
     }
 }
