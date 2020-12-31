@@ -45,7 +45,7 @@ public class DockerController {
 
     @DeleteMapping("/{dockerId}")
     @Operation(summary = "删除docker容器", description = "删除一个docker容器", tags = "Admin")
-    public ResponseEntity<?> deleteQuestion(@Parameter(description = "Docker Id") @PathVariable String dockerId) {
+    public ResponseEntity<?> deleteDocker(@Parameter(description = "Docker Id") @PathVariable String dockerId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
             return ResponseEntity.status(401).build();
