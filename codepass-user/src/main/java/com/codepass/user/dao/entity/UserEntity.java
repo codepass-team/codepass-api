@@ -2,12 +2,14 @@ package com.codepass.user.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
 @Entity
+@DynamicInsert // 插入时只指定需要的列, 否则db侧的默认值会被忽略
+@DynamicUpdate // 更新时只指定有变化的列
 @Table(name = "user", schema = "codepass", catalog = "")
 public class UserEntity {
     private int id;

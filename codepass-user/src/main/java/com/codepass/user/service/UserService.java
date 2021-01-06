@@ -48,7 +48,6 @@ public class UserService {
         UserEntity newUser = new UserEntity();
         newUser.setUsername(username);
         newUser.setPassword(bcryptEncoder.encode(password));
-        newUser.setFollowerCount(0);
         userRepository.save(newUser);
         return newUser;
     }
