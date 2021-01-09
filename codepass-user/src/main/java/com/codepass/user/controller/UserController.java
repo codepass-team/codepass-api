@@ -81,7 +81,7 @@ public class UserController {
 
     @GetMapping("/listAll")
     @Operation(summary = "获取数据库里的所有用户", description = "获取数据库里的所有用户", tags = "Admin")
-    public ResponseEntity<?> listAllQuestions(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) throws RuntimeException {
+    public ResponseEntity<?> listAllUsers(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) throws RuntimeException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
             return ResponseEntity.status(401).build();
@@ -95,7 +95,7 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     @Operation(summary = "删除用户", description = "删除一个用户", tags = "Admin")
-    public ResponseEntity<?> deleteQuestion(@Parameter(description = "用户Id") @PathVariable int userId) {
+    public ResponseEntity<?> deleteUser(@Parameter(description = "用户Id") @PathVariable int userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
             return ResponseEntity.status(401).build();
