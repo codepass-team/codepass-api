@@ -70,7 +70,7 @@ public class QuestionService {
     }
 
     public List<QuestionEntity> searchQuestion(String keywords, int page) {
-        return questionRepository.findByTitleLike(keywords, PageRequest.of(page, 4)).toList();//根据页面显示情况修改页大小
+        return questionRepository.findByTitleLikeOrContentLike(keywords, keywords, PageRequest.of(page, 4)).toList();//根据页面显示情况修改页大小
     }
 
     public QuestionEntity getQuestion(int questionId) {
