@@ -88,7 +88,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/question/follow/**", "/api/question/unfollow/**",
                         "/api/answer/follow/**", "/api/answer/unfollow/**",
                         "/api/question/listFollow", "/api/question/listMy").authenticated()
-                .antMatchers("/api/question/**", "/api/answer/**", "/api/comment/**").permitAll()
+                .antMatchers("/api/question/**", "/api/answer/**", "/api/comment/**", "/api/reset/**").permitAll()
 
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()

@@ -32,4 +32,25 @@ public class MiscController {
         String baseUri = request.getHeader("Host");
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header(HttpHeaders.LOCATION, dockerService.getUri(dockerId, baseUri)).build();
     }
+
+
+    @PostMapping("/api/reset/email")
+    @Operation(summary = "发送密码重置邮件", description = "发送密码重置邮件")
+    public ResponseEntity<?> sendEmail(@Parameter(description = "用户id") @RequestParam(required = true) String name) {
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", userService.sendEmail(name));
+        }});
+    }
+
+    @PostMapping("/api/reset/password")
+    @Operation(summary = "重置密码", description = "重置密码")
+    public ResponseEntity<?> resetPassword(@Parameter(description = "用户id") @RequestParam(required = true) String name,
+                                           @Parameter(description = "新密码") @RequestParam(required = true) String password,
+                                           @Parameter(description = "验证码") @RequestParam(required = true) int captcha) {
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", userService.resetPassword(name, password, captcha));
+        }});
+    }
 }
