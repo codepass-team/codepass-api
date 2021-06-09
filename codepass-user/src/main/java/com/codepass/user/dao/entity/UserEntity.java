@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @DynamicInsert // 插入时只指定需要的列, 否则db侧的默认值会被忽略
@@ -22,6 +23,28 @@ public class UserEntity {
     private Integer age;
     private Integer followerCount;
     private Integer isAdmin;
+    private Timestamp raiseTime;
+    private Integer captcha;
+
+    @Basic
+    @Column(name = "captcha", unique = false)
+    public Integer getCaptcha() {
+        return captcha;
+    }
+
+    public void setCaptcha(Integer captcha) {
+        this.captcha = captcha;
+    }
+
+    @Basic
+    @Column(name = "raise_time", unique = false)
+    public Timestamp getRaiseTime() {
+        return raiseTime;
+    }
+
+    public void setRaiseTime(Timestamp raiseTime) {
+        this.raiseTime = raiseTime;
+    }
 
     @Id
     @Column(name = "id")

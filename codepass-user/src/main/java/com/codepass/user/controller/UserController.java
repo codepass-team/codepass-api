@@ -79,6 +79,26 @@ public class UserController {
         return ResponseEntity.ok("Ok");
     }
 
+    @PostMapping("/reset/email")
+    @Operation(summary = "发送密码重置邮件", description = "发送密码重置邮件")
+    public ResponseEntity<?> sendEmail(@Parameter(description = "用户id") @RequestParam(required = true) int id) {
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", userService.sendEmail(id));
+        }});
+    }
+
+    @PostMapping("/reset/password")
+    @Operation(summary = "重置密码", description = "重置密码")
+    public ResponseEntity<?> resetPassword(@Parameter(description = "用户id") @RequestParam(required = true) int id,
+                                           @Parameter(description = "新密码") @RequestParam(required = true) String password,
+                                           @Parameter(description = "验证码") @RequestParam(required = true) int captcha) {
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", userService.resetPassword(id, password, captcha));
+        }});
+    }
+
     @GetMapping("/listAll")
     @Operation(summary = "获取数据库里的所有用户", description = "获取数据库里的所有用户", tags = "Admin")
     public ResponseEntity<?> listAllUsers(@Parameter(description = "页码, 从0开始") @RequestParam(defaultValue = "0") int page) throws RuntimeException {
