@@ -40,12 +40,13 @@ public class UserController {
                                             @Parameter(description = "用户性别") @RequestParam(required = false) String gender,
                                             @Parameter(description = "用户工作") @RequestParam(required = false) String job,
                                             @Parameter(description = "用户职业") @RequestParam(required = false) String tech,
-                                            @Parameter(description = "用户年龄") @RequestParam(required = false) Integer age) {
+                                            @Parameter(description = "用户年龄") @RequestParam(required = false) Integer age,
+                                            @Parameter(description = "用户邮箱") @RequestParam(required = false) String email) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
-            put("data", userService.updateUser(userEntity.getId(), username, gender, job, tech, age));
+            put("data", userService.updateUser(userEntity.getId(), username, gender, job, tech, age, email));
         }});
     }
 
@@ -77,26 +78,6 @@ public class UserController {
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
         userService.notFollowUser(userEntity.getId(), userId);
         return ResponseEntity.ok("Ok");
-    }
-
-    @PostMapping("/reset/email")
-    @Operation(summary = "发送密码重置邮件", description = "发送密码重置邮件")
-    public ResponseEntity<?> sendEmail(@Parameter(description = "用户id") @RequestParam(required = true) int id) {
-        return ResponseEntity.ok(new HashMap<String, Object>() {{
-            put("status", "ok");
-            put("data", userService.sendEmail(id));
-        }});
-    }
-
-    @PostMapping("/reset/password")
-    @Operation(summary = "重置密码", description = "重置密码")
-    public ResponseEntity<?> resetPassword(@Parameter(description = "用户id") @RequestParam(required = true) int id,
-                                           @Parameter(description = "新密码") @RequestParam(required = true) String password,
-                                           @Parameter(description = "验证码") @RequestParam(required = true) int captcha) {
-        return ResponseEntity.ok(new HashMap<String, Object>() {{
-            put("status", "ok");
-            put("data", userService.resetPassword(id, password, captcha));
-        }});
     }
 
     @GetMapping("/listAll")

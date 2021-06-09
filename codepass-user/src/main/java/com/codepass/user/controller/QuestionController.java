@@ -127,6 +127,26 @@ public class QuestionController {
         }});
     }
 
+    @PostMapping("/reset/email")
+    @Operation(summary = "发送密码重置邮件", description = "发送密码重置邮件")
+    public ResponseEntity<?> sendEmail(@Parameter(description = "用户id") @RequestParam(required = true) String name) {
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", userService.sendEmail(name));
+        }});
+    }
+
+    @PostMapping("/reset/password")
+    @Operation(summary = "重置密码", description = "重置密码")
+    public ResponseEntity<?> resetPassword(@Parameter(description = "用户id") @RequestParam(required = true) String name,
+                                           @Parameter(description = "新密码") @RequestParam(required = true) String password,
+                                           @Parameter(description = "验证码") @RequestParam(required = true) int captcha) {
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", userService.resetPassword(name, password, captcha));
+        }});
+    }
+
     @GetMapping("/{questionId}")
     @Operation(summary = "获取问题", description = "获取某个问题的信息, 包括问题标题, 描述等, 还包括该问题所有回答的信息. 回答中不包括编辑中(status=0)的回答, 但自己提的问题忽略")
     public ResponseEntity<?> getQuestion(@Parameter(description = "问题Id") @PathVariable int questionId) {

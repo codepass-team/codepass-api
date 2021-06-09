@@ -32,13 +32,14 @@ public class UserService {
     @Autowired
     private PasswordEncoder bcryptEncoder;
 
-    public UserEntity updateUser(int userId, String username, String gender, String job, String tech, Integer age) {
+    public UserEntity updateUser(int userId, String username, String gender, String job, String tech, Integer age, String email) {
         UserEntity userEntity = userRepository.findById(userId).orElseGet(UserEntity::new);
         if (username != null) userEntity.setUsername(username);
         if (gender != null) userEntity.setGender(gender);
         if (job != null) userEntity.setJob(job);
         if (tech != null) userEntity.setTech(tech);
         if (age != null) userEntity.setAge(age);
+        if (email != null) userEntity.setEmail(email);
         userRepository.save(userEntity);
         return userEntity;
     }
@@ -85,10 +86,10 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    public String sendEmail(int userId) {
-        UserEntity userEntity = userRepository.findById(userId).orElseGet(UserEntity::new);
-        if (userEntity.getEmail() == null || userEntity.getEmail().equals(""))
-            return "此用户未设置邮箱，请联系管理员处理。";
+    public String sendEmail(String name) {
+        UserEntity userEntity = userRepository.findByUsername(name);
+        if (userEntity == null || userEntity.getEmail() == null || userEntity.getEmail().equals(""))
+            return "未找到此用户或此用户未设置邮箱，请联系管理员处理。";
         try {
             // 收件人电子邮箱
             String to = userEntity.getEmail();
@@ -136,14 +137,16 @@ public class UserService {
         return "邮件发送成功，请至您设置的邮箱查看。";
     }
 
-    public String resetPassword(int userId, String password, int captcha) {
-        UserEntity userEntity = userRepository.findById(userId).orElseGet(UserEntity::new);
-        if(userEntity.getCaptcha()==captcha && System.currentTimeMillis()<userEntity.getRaiseTime().getTime()){
+    public String resetPassword(String name, String password, int captcha) {
+        UserEntity userEntity = userRepository.findByUsername(name);
+        if (userEntity == null)
+            return "未找到此用户名。";
+        if (userEntity.getCaptcha() == captcha && System.currentTimeMillis() < userEntity.getRaiseTime().getTime()) {
             userEntity.setPassword(password);
             userEntity.setRaiseTime(new Timestamp(System.currentTimeMillis()));
             userRepository.save(userEntity);
             return "密码重置成功！";
-        }else {
+        } else {
             return "验证码不正确或已过期，请重新输入。";
         }
     }
