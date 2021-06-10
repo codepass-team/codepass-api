@@ -102,6 +102,13 @@ public class UserService {
             // 设置邮件服务器
             properties.setProperty("mail.smtp.host", host);
             properties.put("mail.smtp.auth", "true");
+
+            //阿里云服务器禁用25端口，所以服务器上改为465端口
+	        properties.put("mail.smtp.socketFactory.port", "465");
+	        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+	        properties.setProperty("mail.smtp.socketFactory.fallback", "false");
+	        properties.setProperty("mail.smtp.socketFactory.port", "465");
+
 //            MailSSLSocketFactory sf = new MailSSLSocketFactory();
 //            sf.setTrustAllHosts(true);
 //            properties.put("mail.smtp.ssl.enable", "true");
