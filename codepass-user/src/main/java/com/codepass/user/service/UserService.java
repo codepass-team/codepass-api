@@ -133,7 +133,7 @@ public class UserService {
             userRepository.save(userEntity);
 
             // 设置消息体
-            message.setText("您的验证码是 " + userEntity.getCaptcha().toString() + " ，请在十分钟内输入");
+            message.setText("您的验证码是 " + userEntity.getCaptcha().toString() + " ，十分钟内有效，请尽快输入。若验证码无效则请重新申请发送邮件。");
             // 发送消息
             Transport.send(message);
             System.out.println("Sent message successfully.");
