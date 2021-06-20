@@ -52,10 +52,11 @@ public class UserService {
         return userRepository.findById(id).get();
     }
 
-    public UserEntity createNewUser(String username, String password) {
+    public UserEntity createNewUser(String username, String password, String email) {
         UserEntity newUser = new UserEntity();
         newUser.setUsername(username);
         newUser.setPassword(bcryptEncoder.encode(password));
+        newUser.setEmail(email);
         userRepository.save(newUser);
         return newUser;
     }

@@ -80,8 +80,9 @@ public class JwtAuthenticationController {
     @PostMapping("/register")
     @Operation(summary = "用户注册", description = "用户注册接口")
     public ResponseEntity<?> register(@Parameter(description = "用户名") @RequestParam String username,
-                                      @Parameter(description = "用户密码") @RequestParam String password) {
-        UserEntity userEntity = userService.createNewUser(username, password);
+                                      @Parameter(description = "用户密码") @RequestParam String password,
+                                      @Parameter(description = "用户邮箱") @RequestParam String email) {
+        UserEntity userEntity = userService.createNewUser(username, password, email);
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
             put("data", userEntity);
