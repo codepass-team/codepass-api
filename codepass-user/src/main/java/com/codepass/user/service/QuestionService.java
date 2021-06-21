@@ -85,7 +85,7 @@ public class QuestionService {
     }
 
     public Page<QuestionEntity> getAllQuestion(int page) {
-        return questionRepository.findAll(PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "raise_time")));
+        return questionRepository.findAll(PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "raiseTime")));
     }
 
     public void followQuestion(UserEntity userEntity, int questionId) {

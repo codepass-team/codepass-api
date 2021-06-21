@@ -40,7 +40,7 @@ public class CommentService {
         QuestionCommentEntity questionCommentEntity = new QuestionCommentEntity();
         questionCommentEntity.setQuestionId(questionId);
         questionCommentEntity.setContent(content);
-        questionCommentEntity.setCommenter(userEntity.getId());
+        questionCommentEntity.setCommenter(userEntity);
         questionCommentEntity.setCommentTime(new Timestamp(System.currentTimeMillis()));
         questionCommentRepository.save(questionCommentEntity);
         questionRepository.updateCommentCountBy(questionId, 1);
@@ -49,7 +49,7 @@ public class CommentService {
 
     public void uncommentQuestion(UserEntity userEntity, int commentId) {
         QuestionCommentEntity questionCommentEntity = questionCommentRepository.findById(commentId).get();
-        if (questionCommentEntity.getCommenter() != userEntity.getId()) {
+        if (questionCommentEntity.getCommenter().getId() != userEntity.getId()) {
             throw new RuntimeException("不能删除别人的评论");
         }
         questionRepository.updateCommentCountBy(questionCommentEntity.getQuestionId(), -1);

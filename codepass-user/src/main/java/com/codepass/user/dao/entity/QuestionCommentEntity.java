@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 public class QuestionCommentEntity {
     private int id;
     private int questionId;
-    private int commenter;
+    private UserEntity commenter;
     private String content;
     private Timestamp commentTime;
 
@@ -33,13 +33,15 @@ public class QuestionCommentEntity {
         this.questionId = questionId;
     }
 
-    @Basic
-    @Column(name = "commenter")
-    public int getCommenter() {
+    //    @Basic
+//    @Column(name = "commenter")
+    @OneToOne()
+    @JoinColumn(name = "commenter")//, referencedColumnName = "id")
+    public UserEntity getCommenter() {
         return commenter;
     }
 
-    public void setCommenter(int commenter) {
+    public void setCommenter(UserEntity commenter) {
         this.commenter = commenter;
     }
 
@@ -83,9 +85,11 @@ public class QuestionCommentEntity {
     public int hashCode() {
         int result = id;
         result = 31 * result + questionId;
-        result = 31 * result + commenter;
+        result = 31 * result + commenter.getId();
         result = 31 * result + (content != null ? content.hashCode() : 0);
         result = 31 * result + (commentTime != null ? commentTime.hashCode() : 0);
         return result;
     }
+
+//    private UserEntity user;
 }
