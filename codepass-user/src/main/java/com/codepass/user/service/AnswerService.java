@@ -40,6 +40,8 @@ public class AnswerService {
         answerEntity.setDockerId(newDockerId);
         answerEntity.setAnswerTime(new Timestamp(System.currentTimeMillis()));
         answerEntity.setLikeCount(0);
+        answerEntity.setCollectCount(0);
+        answerEntity.setCommentCount(0);
         answerEntity.setStatus(0);
         answerEntity.setDiff(dockerService.getDiff(dockerId, newDockerId));
         answerRepository.save(answerEntity);

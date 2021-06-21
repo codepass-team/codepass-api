@@ -11,9 +11,9 @@ public interface QuestionRepository extends CustomRepository<QuestionEntity, Int
 
     Page<QuestionEntity> findByTitleLike(String keywords, Pageable pageable);
 
-    Page<QuestionEntity> findByQuestioner(UserEntity questioner, Pageable pageable);
+    Page<QuestionEntity> findByQuestionerOrderByRaiseTimeDesc(UserEntity questioner, Pageable pageable);
 
-    Page<QuestionEntity> findByTitleLikeOrContentLike(String keyword1, String keyword2, Pageable pageable);
+    Page<QuestionEntity> findByTitleLikeOrContentLikeOrderByRaiseTimeDesc(String keyword1, String keyword2, Pageable pageable);
     @Modifying
     @Query("update QuestionEntity set likeCount = likeCount + ?2 where id = ?1")
     int updateLikeBy(int id, int count);

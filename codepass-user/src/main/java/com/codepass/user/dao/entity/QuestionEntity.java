@@ -87,6 +87,7 @@ public class QuestionEntity {
 
     @Basic
     @Column(name = "like_count")
+    @ColumnDefault("0")
     public Integer getLikeCount() {
         return likeCount;
     }

@@ -36,7 +36,7 @@ public class MiscController {
 
     @PostMapping("/api/reset/email")
     @Operation(summary = "发送密码重置邮件", description = "发送密码重置邮件")
-    public ResponseEntity<?> sendEmail(@Parameter(description = "用户id") @RequestParam(required = true) String name) {
+    public ResponseEntity<?> sendEmail(@Parameter(description = "用户名") @RequestParam(required = true) String name) {
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
             put("data", userService.sendEmail(name));
@@ -45,7 +45,7 @@ public class MiscController {
 
     @PostMapping("/api/reset/password")
     @Operation(summary = "重置密码", description = "重置密码")
-    public ResponseEntity<?> resetPassword(@Parameter(description = "用户id") @RequestParam(required = true) String name,
+    public ResponseEntity<?> resetPassword(@Parameter(description = "用户名") @RequestParam(required = true) String name,
                                            @Parameter(description = "新密码") @RequestParam(required = true) String password,
                                            @Parameter(description = "验证码") @RequestParam(required = true) int captcha) {
         return ResponseEntity.ok(new HashMap<String, Object>() {{

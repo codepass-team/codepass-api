@@ -7,7 +7,7 @@ spring:
   application:
     name: ${APP_NAME:codepass}
   datasource:
-    url: jdbc:mysql://katty.top:3306/codepass?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://mzzhu.com:3306/codepass?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: codepass
     password: codepass
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -23,7 +23,7 @@ spring:
     hibernate:
       ddl-auto: update
   redis:
-    host: katty.top
+    host: mzzhu.com
     port: 6379
     password: codepassTJ2020
     database: 0

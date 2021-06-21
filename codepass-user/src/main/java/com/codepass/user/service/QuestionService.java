@@ -5,6 +5,7 @@ import com.codepass.user.dao.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -38,6 +39,8 @@ public class QuestionService {
         questionEntity.setStatus(0);
         questionEntity.setDockerId(dockerId);
         questionEntity.setLikeCount(0);
+        questionEntity.setCollectCount(0);
+        questionEntity.setCommentCount(0);
         questionEntity.setRaiseTime(new Timestamp(System.currentTimeMillis()));
         questionRepository.save(questionEntity);
         return questionEntity;
@@ -70,7 +73,7 @@ public class QuestionService {
     }
 
     public List<QuestionEntity> searchQuestion(String keywords, int page) {
-        return questionRepository.findByTitleLikeOrContentLike(keywords, keywords, PageRequest.of(page, 4)).toList();//根据页面显示情况修改页大小
+        return questionRepository.findByTitleLikeOrContentLikeOrderByRaiseTimeDesc(keywords, keywords, PageRequest.of(page, 4)).toList();//根据页面显示情况修改页大小
     }
 
     public QuestionEntity getQuestion(int questionId) {
@@ -78,11 +81,11 @@ public class QuestionService {
     }
 
     public List<QuestionEntity> getUserQuestion(UserEntity user, int page) {
-        return questionRepository.findByQuestioner(user, PageRequest.of(page, 10)).toList();
+        return questionRepository.findByQuestionerOrderByRaiseTimeDesc(user, PageRequest.of(page, 10)).toList();
     }
 
     public Page<QuestionEntity> getAllQuestion(int page) {
-        return questionRepository.findAll(PageRequest.of(page, 10));
+        return questionRepository.findAll(PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "raise_time")));
     }
 
     public void followQuestion(UserEntity userEntity, int questionId) {
