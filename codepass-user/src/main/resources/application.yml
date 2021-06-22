@@ -4,6 +4,8 @@ server:
   port: ${APP_PORT:8000}
 
 spring:
+  jackson:
+    time-zone: GMT+8
   application:
     name: ${APP_NAME:codepass}
   datasource:

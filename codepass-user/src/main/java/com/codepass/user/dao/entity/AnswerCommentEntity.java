@@ -1,5 +1,7 @@
 package com.codepass.user.dao.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -10,6 +12,8 @@ public class AnswerCommentEntity {
     private Integer answerId;
     private Integer commenter;
     private String content;
+
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Timestamp commentTime;
 
     @Id

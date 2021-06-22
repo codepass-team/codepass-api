@@ -64,7 +64,6 @@ public class CommentController {
         }
     }
 
-
     @GetMapping("/answer/{answerId}")
     @Operation(summary = "获取回答评论", description = "获取对一个回答的所有评论")
     public ResponseEntity<?> getAnswerComment(@Parameter(description = "回答Id") @PathVariable int answerId,
