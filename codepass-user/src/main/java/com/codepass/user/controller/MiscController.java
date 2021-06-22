@@ -1,6 +1,7 @@
 package com.codepass.user.controller;
 
 import com.codepass.user.dao.DockerRepository;
+import com.codepass.user.dao.UserRepository;
 import com.codepass.user.service.DockerService;
 import com.codepass.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +25,8 @@ public class MiscController {
     DockerService dockerService;
     @Autowired
     UserService userService;
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping("/api/docker/{dockerId}")
     @Operation(summary = "进入容器", description = "进入容器")
@@ -51,6 +54,24 @@ public class MiscController {
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");
             put("data", userService.resetPassword(name, password, captcha));
+        }});
+    }
+
+    @PostMapping("/api/existname")
+    @Operation(summary = "验证用户名存在", description = "验证用户名存在")
+    public ResponseEntity<?> existName(@Parameter(description = "用户名") @RequestParam(required = true) String name) {
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", userRepository.findByUsername(name) != null);
+        }});
+    }
+
+    @PostMapping("/api/existemail")
+    @Operation(summary = "验证邮箱存在", description = "验证邮箱存在")
+    public ResponseEntity<?> existEmail(@Parameter(description = "邮箱") @RequestParam(required = true) String email) {
+        return ResponseEntity.ok(new HashMap<String, Object>() {{
+            put("status", "ok");
+            put("data", userRepository.findByEmail(email) != null);
         }});
     }
 }

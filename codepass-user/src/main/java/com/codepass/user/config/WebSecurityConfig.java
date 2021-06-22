@@ -78,6 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/oa/**").permitAll() // swagger doc
                 .antMatchers("/api/docker/**").permitAll()
                 .antMatchers("/api/login", "/api/register").permitAll()
+                .antMatchers("/api/existname", "/api/existemail").permitAll()
 
                 // 前面的会覆盖后面的, 什么鬼
                 .antMatchers(
