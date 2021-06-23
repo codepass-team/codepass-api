@@ -132,7 +132,7 @@ public class QuestionController {
     public ResponseEntity<?> getQuestion(@Parameter(description = "问题Id") @PathVariable int questionId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername());
-        QuestionPojoQuery question = new QuestionPojoQuery(questionService.getQuestion(questionId));
+        QuestionPojoQuery question = new QuestionPojoQuery(questionService.getQuestion(questionId).sortAnswer());
         question.setUlike(questionService.checkLike(userEntity, questionId));
         return ResponseEntity.ok(new HashMap<String, Object>() {{
             put("status", "ok");

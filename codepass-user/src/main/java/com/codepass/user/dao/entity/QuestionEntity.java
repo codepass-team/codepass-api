@@ -118,6 +118,11 @@ public class QuestionEntity {
         this.answer = answer;
     }
 
+    public QuestionEntity sortAnswer() {
+        this.answer.sort((x, y) -> y.getAnswerTime().compareTo(x.getAnswerTime()));
+        return this;
+    }
+
     @Basic
     @Column(name = "comment_count")
     @ColumnDefault("0")

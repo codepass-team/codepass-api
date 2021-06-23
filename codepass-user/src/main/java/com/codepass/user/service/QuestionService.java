@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,7 +86,10 @@ public class QuestionService {
     }
 
     public Page<QuestionEntity> getAllQuestion(int page) {
-        return questionRepository.findAll(PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "raiseTime")));
+        List<Sort.Order> orders = new ArrayList<Sort.Order>();
+        orders.add(new Sort.Order(Sort.Direction.DESC, "likeCount"));
+        orders.add(new Sort.Order(Sort.Direction.DESC, "raiseTime"));
+        return questionRepository.findAll(PageRequest.of(page, 10, Sort.by(orders)));
     }
 
     public void followQuestion(UserEntity userEntity, int questionId) {
